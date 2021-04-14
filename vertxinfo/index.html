@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Vert.x介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Vert.x介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-01&nbsp;&nbsp;13:58:41</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Vert-x/">Vert.x</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,078</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-vertx不是一个框架而是一个工具包"><a class="markdownIt-Anchor" href="#1-vertx不是一个框架而是一个工具包"></a> 1 Vert.x不是一个框架，而是一个工具包</h2>
+<p>Vert.x是基于Netty项目——一个基于JVM的高性能异步网络库，它的核心库定义了编写异步网络应用的基本API，你可以为应用程序选择有用的模块（如数据库链接、监控、认证、日志、服务发现、集群支持等），同时它也可以内嵌到现有的应用中（如springboot项目中）既能体验Vert.x的高效又兼顾spring的泛用性</p>
+<a id="more"></a> 
+<p>vertx并不是针对特定应用的框架，它其实很大程度上就是netty的一个最佳实践的封装。在java上实现了类似于node.js的异步处理框架。</p>
+<h2 id="2-vertx是多语言的"><a class="markdownIt-Anchor" href="#2-vertx是多语言的"></a> 2 Vert.x是多语言的</h2>
+<p>Vert.x运行在Java虚拟机上，支持多种编程语言，Vert.x是高度模块化的，同一个应用，你可以选择多种编程语言同时开发。它支持广泛的流行的JVM语言：Java、Groovy、Scala、Kotlin、JavaScript、Ruby及Ceylon。</p>
+<h2 id="3-完善的生态体系"><a class="markdownIt-Anchor" href="#3-完善的生态体系"></a> 3 完善的生态体系</h2>
+<p>与我们熟悉的spring类似，Vert.x拥有完善的生态，使用vert.x可以完成一个应用的所有开发工作，可以实现一个完全异步处理的应用。它拥有类似于spring全家桶的生态体系，具体如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132241.png" alt="image"></p>
+<h4 id="31-核心模块vertx-core"><a class="markdownIt-Anchor" href="#31-核心模块vertx-core"></a> 3.1 核心模块：Vert.x-core</h4>
+<p>Vert.x核心模块包含一些基础的功能，如HTTP，TCP，文件系统访问，EventBus、WebSocket、延时与重复执行、缓存等其他基础的功能，你可以在你自己的应用程序中直接使用。可以通过vertx-core模块引用即可。</p>
+<h4 id="32-支持web开发vertx-web"><a class="markdownIt-Anchor" href="#32-支持web开发vertx-web"></a> 3.2 支持web开发：Vert.x-Web</h4>
+<p>Vert.x Core 提供了一系列底层的功能用于操作 HTTP，对于一部分应用来是足够的。<br>
+Vert.x Web 基于 Vert.x Core，提供了一系列更丰富的功能以便更容易地开发实际的 Web 应用。</p>
+<h4 id="33-vertx提供多种数据访问的api封装"><a class="markdownIt-Anchor" href="#33-vertx提供多种数据访问的api封装"></a> 3.3 Vert.x提供多种数据访问的Api封装</h4>
+<p>Vert.x提供了对关系型数据库、NoSQL、消息中间件的支持，传统的客户端因为是阻塞的，会严重影响系统的性能，因此Vert.x提供了对以上客户端的异步支持。具体支持的数据访问如下：</p>
+<ul>
+<li>MongoDB client</li>
+<li>JDBC client</li>
+<li>SQL common</li>
+<li>Redis client</li>
+<li>MySQL/PostgreSQLclient</li>
+</ul>
+<h4 id="35-微服务的支持服务发现-熔断器"><a class="markdownIt-Anchor" href="#35-微服务的支持服务发现-熔断器"></a> 3.5 微服务的支持：服务发现、熔断器</h4>
+<ul>
+<li>Vert.x Service Discovery：一个服务发现的基础组件，用来发布和发现各种类型的资源</li>
+<li>Vert.x Circuit Breaker：是<code>熔断器模式</code>的Vert.x实现。可与springcloud种的Hystrix对比</li>
+<li>Vert.x Config：提供了一种配置 Vert.x 应用的方式。</li>
+</ul>
+<h4 id="36-vertx整合了常用的消息驱动vertx-integration"><a class="markdownIt-Anchor" href="#36-vertx整合了常用的消息驱动vertx-integration"></a> 3.6 Vert.x整合了常用的消息驱动：Vert.x Integration</h4>
+<ul>
+<li>Vert.x Mail Client：提供了一简单STMP邮件客户端，所以你可以在应用程序中发送电子邮件</li>
+<li>Vert.x STOMP Client &amp; Server：提供了STOMP协议的实现包括客户端与服务端。</li>
+<li>Vert.x JCA Adaptor：提供了Java连接器架构适配器，这允许同任意JavaEE应用服务器进行互操作。</li>
+<li>Vert.x RabbitMQ Client：消息队里的客户端支持</li>
+<li>Vert.x Kafka Client：消息队里的客户端支持</li>
+<li>Vert.x Consul Client：google开源的一个使用go语言开发的服务发现、配置管理中心服务。内置了服务注册与发现框 架、分布一致性协议实现、健康检查、Key/Value存储、多数据中心方案。</li>
+</ul>
+<h4 id="37-身份验证和授权"><a class="markdownIt-Anchor" href="#37-身份验证和授权"></a> 3.7 身份验证和授权：</h4>
+<p>Vert.x提供了简单API用于在应用中提供认证和授权。</p>
+<ul>
+<li>Auth common：通用的认证API，可以通过重写AuthProvider类来实现自己的认证</li>
+<li>JDBC auth： 后台为JDBC的认证实现</li>
+<li>JWT auth： 用JSON Web tokens认证实现</li>
+<li>Shiro auth： 使用Apache Shiro认证实现</li>
+<li>MongoDB auth： MongoDB认证实现</li>
+<li>OAuth 2： Oauth2协义认证实现</li>
+<li>htdigest auth： 这个是新增一种认证的支持</li>
+</ul>
+<h2 id="5-vertx-lambda-jdk8"><a class="markdownIt-Anchor" href="#5-vertx-lambda-jdk8"></a> 5 Vert.x、lambda、JDK8</h2>
+<p>Vert.x异步也带来了编码上的复杂性，想要编写优美的异步代码，就需要对lambda表达式、函数式编程、Reactive等技术非常熟悉才行，否则很容易导致你的代码一团糟，完全没有可读性。<br>
+在JDK8中引入了lambda表达式后，使用Java开发Vert.x应用就变得十分顺畅。</p>
+<h2 id="6-vertx核心概念"><a class="markdownIt-Anchor" href="#6-vertx核心概念"></a> 6 Vert.x核心概念</h2>
+<ul>
+<li>Verticle
+<ul>
+<li>Vert.x中的部署单元称为Verticle。Verticle是Vert.x中的一个核心概念。如果说Vertx是“应用”，那么Verticle就是应用中的一个服务。另一个更形象一点的比喻，如果说Vertx是一个机架，那么Veticle就是机架上的服务器。Verticle可以被传递一些配置信息（如证书、网络地址等），而且Verticle可以被多次部署,Verticle可以部署其它Verticle</li>
+<li>verticle分两种，一种是基于EventLoop的适合I/O密集型的，还有一种是适合CPU密集型的worker verticle</li>
+</ul>
+</li>
+<li>EvenLoop
+<ul>
+<li>事件循环（EventLoop）是异步编程模型中是特有的,一个Verticle通过一个事件循环（EventLoop）处理接收到的事件，这些事件可以是任何事情，如接收网络缓冲、调度事件或由其它Verticle发送的消息,事件循环（EventLoop）中执行时，不能进行线程阻塞操作</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132320.png" alt=""></p>
+<ul>
+<li>EvenBus
+<ul>
+<li>事件总线(EvenBus)是在不同Verticle之间通过异步消息传递进行通讯的主要工具</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132346.png" alt=""></p>
+<h2 id="其他介绍"><a class="markdownIt-Anchor" href="#其他介绍"></a> 其他介绍</h2>
+<p>Vert.x 的定义是 “用来在JVM上构建反应式（reactive）应用程序的工具箱”。</p>
+<p>Vert.x并不是一个应用服务器，一个容器或者一个框架。 它也并不是一个JavaScript开发库。Vert.x是一个朴素的老的 jar文件，所以一个Vert.x应用程序实际上是一个使用这个 jar 文件的程序。 Vert.x并不强制一个打包的方式。所有Vert.x 模块(components) 都是朴素 平淡 的 jar 文件。 这将怎样影响你的应用程序呢？让我们想象你在使用一个项目构建工具，比方说Maven或者Gradle, 去建立你的应用，一个 Vert.x 应用程序，其实就是吧 vertx-core 加入到依赖项里。 你想使用其他的 Vert.x 组件吗？请把它+到你的依赖项里。这很简单，毫无负担，不是吗。 启动这个程序就是启动一个简单实现了 public static void main(String[] args) 的类。我们不需要任何特殊的IDE或者插件去安装和开始使用 Vert.x。</p>
+<h2 id="反应式-响应式编程-响应式系统"><a class="markdownIt-Anchor" href="#反应式-响应式编程-响应式系统"></a> 反应式、响应式编程、响应式系统</h2>
+<p>Vert.x 是 反应式 。它就是要用来建立反应式应用程序，或者更贴切的说法是反应式系统</p>
+<p>再次，Vert.x 是一个事件驱动和非阻塞的。事件被投递到一个永不阻塞的事件循环（EventLoop） 里。Vert.x只使用非常少的线程。 有一些线程是事件循环, 它们在处理器（Handlers） 之间派发事件。如果你把某个线程阻塞了，事件将不能继续派发。这个执行模式将影响你如何写代码，不同于传统的阻塞代码，你的代码将是异步的和非阻塞的。</p>
+<p>举一个例子，如果你要得到一个基于URL的资源，你需要这么做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">URL site = new URL(&quot;http://vertx.io/&quot;);</span><br><span class="line">BufferedReader in = new BufferedReader(new InputStreamReader(site.openStream()));</span><br><span class="line"> </span><br><span class="line">String inputLine;</span><br><span class="line">while ((inputLine = in.readLine()) != null) &#123;</span><br><span class="line">  System.out.println(inputLine);</span><br><span class="line">&#125;</span><br><span class="line">in.close();</span><br></pre></td></tr></table></figure>
+<p>但是用 Vert.x 的话，就很简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vertx.createHttpClient().getNow(80, &quot;vertx.io&quot;, &quot;&quot;, response -&gt; &#123;</span><br><span class="line">  response.bodyHandler(System.out::println);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>对于异步编程的理解，比如ajax与Vert.x</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//ajax代码</span><br><span class="line">console.log(&quot;1&quot;);</span><br><span class="line"> </span><br><span class="line">$.ajax(&#123;</span><br><span class="line">	&quot;url&quot; : &quot;/hello&quot;,</span><br><span class="line">	&quot;type&quot; : &quot;post&quot;,</span><br><span class="line">	&quot;dataType&quot; : &quot;json&quot;,</span><br><span class="line">	&quot;success&quot; : function(val) &#123;</span><br><span class="line">		console.log(&quot;2&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line">console.log(&quot;3&quot;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//vert.x代码</span><br><span class="line">System.out.println(&quot;1&quot;)</span><br><span class="line"> </span><br><span class="line">WebClient</span><br><span class="line">    .create(vertx)</span><br><span class="line">    .postAbs(REQUEST_URL) // 这里指定的是请求的地址</span><br><span class="line">    .sendBuffer(buffer, res -&gt; &#123; // buffer是请求的数据</span><br><span class="line"> </span><br><span class="line">        if (res.succeeded()) &#123;  </span><br><span class="line">            // 请求远程服务成功</span><br><span class="line">            System.out.println(&quot;2&quot;)</span><br><span class="line">            </span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 请求失败</span><br><span class="line">            resultHandler.handle(Future.failedFuture(&quot;请求服务器失败...&quot;));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"> </span><br><span class="line">System.out.println(&quot;3&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="学习资料"><a class="markdownIt-Anchor" href="#学习资料"></a> 学习资料</h2>
+<p><a href="http://vertxchina.github.io/vertx-translation-chinese/" target="_blank" rel="noopener">Vert.x 官方文档中文翻译</a></p>
+<p><a href="https://blog.csdn.net/elinespace/article/category/7675648/" target="_blank" rel="noopener">A gentle guide to asynchronous programming with Eclipse Vert.x for Java developers中文翻译版</a></p>
+<p><a href="https://blog.csdn.net/king_kgh" target="_blank" rel="noopener">Vert.x CSDN教程专栏</a></p>
+<p><a href="http://www.sczyh30.com/vertx-blueprint-microservice/cn/index.html" target="_blank" rel="noopener">Vert.x 蓝图 - Micro-Shop 微服务实战</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/vertxinfo/" target="_blank" title="Vert.x介绍">https://www.larscheng.com/vertxinfo/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Vert-x/"><i class="fa-fw fa fa-tags"></i> Vert.x</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/sb2i18n/">SpringBoot项目中实现国际化</a>
+            
+            
+            <a class="next" rel="next" href="/select-info/">毕设选题项目本地运行环境搭建教程</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

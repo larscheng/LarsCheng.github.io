@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>推荐一款博客一文多发的良心工具OpenWrite | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">推荐一款博客一文多发的良心工具OpenWrite</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-08-28&nbsp;&nbsp;10:56:39</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/生活/">生活</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">717</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">2min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<blockquote>
+<p>许多网友想看一文多发的<a href="https://www.openwrite.cn/" target="_blank" rel="noopener">OpenWrite</a>，今天，它来了！别问落地价，因为内测无价！</p>
+<blockquote>
+<p>这款实用工具，可支持十大博客平台一键发布，是博主们的发文神器</p>
+<blockquote>
+<p>你看它多种平台、一键管理、后台界面优雅、还有签到计划</p>
+<blockquote>
+<p>怎么样，还不来体验一下(<code>编不下去了😂</code>)</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Open Write官网：<a href="https://www.openwrite.cn" target="_blank" rel="noopener">https://www.openwrite.cn</a></p>
+<h1 id="题外话"><a class="markdownIt-Anchor" href="#题外话"></a> 题外话</h1>
+<p>我也是去年刚刚开始写博客的小菜鸡，虽然不会有人来爬我写的小白文(<code>有我也不知道哇😂</code>)</p>
+<p>但是出于技术博主的惯例，大家都希望自己的文章可以被更多人看到，于是写完一篇博客之后会有以下操作：</p>
+<blockquote>
+<p>思否发布-&gt;简书发布-&gt;CSDN发布-&gt;博客园发布-&gt;掘金发布-&gt;…</p>
+</blockquote>
+<p>呕心沥血创作一篇文章已经掉了很多头发了，没想到还要再重复发布操作N次，每次写完文章要发布时都<code>头皮发麻</code></p>
+<blockquote>
+<p>但是、But…救星来了，<font color="red"><a href="https://www.openwrite.cn/" target="_blank" rel="noopener">OpenWrite</a></font>，一款让你专注文章创作，而不用为文章发布而烦恼的平台工具。</p>
+</blockquote>
+<h1 id="目前支持的技术平台"><a class="markdownIt-Anchor" href="#目前支持的技术平台"></a> 目前支持的技术平台</h1>
+<ul>
+<li>思否</li>
+<li>CSDN</li>
+<li>掘金</li>
+<li>博客园</li>
+<li>简书</li>
+<li>知乎</li>
+<li>开源中国</li>
+<li>Spring4All</li>
+<li>技术社区</li>
+<li>今日头条</li>
+</ul>
+<p>据群内大佬们讨论，后期可能会加入其他渠道（个人博客等）</p>
+<blockquote>
+<p>目前已经支持微信公众号一键复制功能，大大节省了公众号文章的维护和处理。</p>
+</blockquote>
+<h1 id="特色功能"><a class="markdownIt-Anchor" href="#特色功能"></a> 特色功能</h1>
+<p>OpenWrite除了核心功能一文多发外，还有两个特色功能。</p>
+<h2 id="签到计划"><a class="markdownIt-Anchor" href="#签到计划"></a> 签到计划</h2>
+<p>签到计划是我们为每位博主提供的粘性工具，读者通过二维码扫描参与签到计划，而二维码可以由博主放置在任意平台的博文下，参考示例如<a href="https://mp.weixin.qq.com/s/yhQgYnLSagzCBVrIN3MZMQ" target="_blank" rel="noopener">自律到极致-人生才精致：第12期 点击链接查看</a></p>
+<h2 id="赞助平台"><a class="markdownIt-Anchor" href="#赞助平台"></a> 赞助平台</h2>
+<p>如果说签到计划是博主与读者的互动，那么赞助平台就是博主与赞助商的互动。</p>
+<p>举个栗子：</p>
+<p>我是一个<code>写博客的</code>,我有很多读者很多阅读量。<br>
+XXX是一个<code>出版社的</code>,需要为某本或者某批书做宣传。</p>
+<p>这里两个角色就达成了供求关系，博主就是流量主，出版社的就是赞助商。</p>
+<p>详细使用介绍可以参考<a href="https://mp.weixin.qq.com/s/qBwMFdxcdmMdY-qxAmwU6Q" target="_blank" rel="noopener">OpenWrite 赞助平台全流程说明</a></p>
+<h1 id="使用体验"><a class="markdownIt-Anchor" href="#使用体验"></a> 使用体验</h1>
+<p>目前OpenWrite还属于内测期间，功能也都在完善中，如果你也有一文多发的烦恼不妨来体验下</p>
+<blockquote>
+<p>我已经用了两个星期了，贼好用😁😁😁</p>
+</blockquote>
+<p>Open Write官网：<a href="https://www.openwrite.cn" target="_blank" rel="noopener">https://www.openwrite.cn</a></p>
+<p>Open Write内测入口：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/life/20190828105258.png" alt=""></p>
+<h1 id="感谢"><a class="markdownIt-Anchor" href="#感谢"></a> 感谢</h1>
+<p>最后还是要感谢各位OpenWrite的开发大佬 <a href="http://blog.didispace.com/" target="_blank" rel="noopener">程序猿DD</a>、<a href="https://www.bysocket.com/" target="_blank" rel="noopener">泥瓦匠</a>，等等其他大佬们。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/openwrite/" target="_blank" title="推荐一款博客一文多发的良心工具OpenWrite">https://www.larscheng.com/openwrite/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/工具介绍/"><i class="fa-fw fa fa-tags"></i> 工具介绍</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/insertion/">排序1：直接插入排序</a>
+            
+            
+            <a class="next" rel="next" href="/study-plan/">近期学习计划</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>DockerFile介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">DockerFile介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-30&nbsp;&nbsp;11:26:41</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Docker/">Docker</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,160</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">4min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>DockerFile文件通常用来构建自定义镜像，举个不恰当的栗子：</p>
+<a id="more"></a> 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">比如果现在有一个纯净版的windows10镜像，使用这个镜像我安装了一个纯净版的win10到我的电脑，</span><br><span class="line">接着我安装了杀毒软件、IDEA、JDK、mysql、Redis、MongoDb、qq、微信等一些基础应用，</span><br><span class="line">后来我的系统损坏了（无法修复），需要重装系统，</span><br><span class="line">于是我又用纯净版的win10镜像重新装一次系统，</span><br><span class="line">然后又重新安装一次杀毒软件、IDEA、JDK、mysql、Redis、MongoDb、qq、微信...</span><br><span class="line"></span><br><span class="line">那我能不能自己创建一个自定义的系统镜像，就以win10纯净版为基础，</span><br><span class="line">预装上IDEA、JDK、Mysql、Redis这些应用，下次重装系统时，安装完系统这些软件就装好了，答案是当然可以啊。</span><br></pre></td></tr></table></figure>
+<p>那么docker中同理，我想以jdk为基础镜像创建一个自定义镜像，把自定义创建过程写成一个脚本，通过这个脚本来一键生成自定义镜像，这个脚本就是<code>DockerFile</code>，调用这个脚本的Docker命令就是<code>Docker build</code></p>
+<h3 id="dockerfile语法"><a class="markdownIt-Anchor" href="#dockerfile语法"></a> DockerFile语法</h3>
+<h4 id="from-镜像名"><a class="markdownIt-Anchor" href="#from-镜像名"></a> FROM &lt;镜像名&gt;</h4>
+<p>所有的 Dockerfile 都用该以 FROM 开头，FROM 命令指明 Dockerfile 所创建的镜像文件以什么镜像为基础，FROM 以后的所有指令都会在 FROM 的基础上进行创建镜像；可以在同一个 Dockerfile 中多次使用 FROM 命令用于创建多个镜像。</p>
+<pre><code>FROM 10.200.0.230:5000/openjdk:8-jre
+FROM ubuntu
+</code></pre>
+<h4 id="maintainer-你的名字邮箱"><a class="markdownIt-Anchor" href="#maintainer-你的名字邮箱"></a> MAINTAINER &lt;你的名字邮箱&gt;</h4>
+<p>用于指定镜像创建者和联系方式。</p>
+<pre><code>MAINTAINER zhengql zhengql@test.com
+MAINTAINER lky6666 lky6666@test.com
+</code></pre>
+<h4 id="run-命令"><a class="markdownIt-Anchor" href="#run-命令"></a> RUN &lt;命令&gt;</h4>
+<p>用于容器内部执行命令。每个 RUN 命令相当于在原有的镜像基础上添加了一个改动层，原有的镜像不会有变化。</p>
+<pre><code>RUN echo zql666
+</code></pre>
+<h4 id="add-原始位置目标位置"><a class="markdownIt-Anchor" href="#add-原始位置目标位置"></a> ADD &lt;原始位置&gt;&lt;目标位置&gt;</h4>
+<p>用于从将原始位置的文件复制到目标位置文件：<code>原始位置</code> 是相对被构建的源目录的相对路径，可以是文件或目录的路径，也可以是一个远程的文件 url，<code>目标位置</code> 是容器中的绝对路径。</p>
+<pre><code>COPY target/myDemo-1.0.0.jar /usr/src/
+</code></pre>
+<h4 id="cmd"><a class="markdownIt-Anchor" href="#cmd"></a> CMD</h4>
+<p>CMD 命令有三种格式：</p>
+<ul>
+<li>CMD [“executable”,“param1”,“param2”]：推荐使用的 exec 形式。</li>
+<li>CMD [“param1”,“param2”]：无可执行程序形式</li>
+<li>CMD command param1 param2：shell 形式。</li>
+</ul>
+<p>CMD 命令用于启动容器时默认执行的命令，CMD 命令可以包含可执行文件，也可以不包含可执行文件：不包含可执行文件的情况下就要用 ENTRYPOINT 指定一个，然后 CMD 命令的参数就会作为ENTRYPOINT的参数。</p>
+<pre><code>一个 Dockerfile 中只能有一个CMD，如果有多个，则最后一个生效。  
+CMD 的 shell 形式默认调用 /bin/sh -c 执行命令。  
+CMD命令会被 Docker 命令行传入的参数覆盖：
+            docker run busybox /bin/echo Hello Docker 会把 CMD 里的命令覆盖。
+</code></pre>
+<h4 id="entrypoint"><a class="markdownIt-Anchor" href="#entrypoint"></a> ENTRYPOINT</h4>
+<p>ENTRYPOINT 命令的字面意思是进入点，而功能也恰如其意：他可以让你的容器表现得像一个可执行程序一样。</p>
+<p>ENTRYPOINT 命令也有两种格式：</p>
+<ul>
+<li>
+<p>ENTRYPOINT [“executable”, “param1”, “param2”] ：推荐使用的 exec 形式</p>
+</li>
+<li>
+<p>ENTRYPOINT command param1 param2 ：shell 形式</p>
+<p>一个 Dockerfile 中只能有一个 ENTRYPOINT，如果有多个，则最后一个生效。</p>
+</li>
+</ul>
+<h4 id="expose"><a class="markdownIt-Anchor" href="#expose"></a> EXPOSE</h4>
+<p>用来指定对外开放的端口。</p>
+<pre><code>EXPOSE 80 3306
+</code></pre>
+<h4 id="workdir"><a class="markdownIt-Anchor" href="#workdir"></a> WORKDIR</h4>
+<p>WORKDIR /path/to/work/dir 配合 RUN，CMD，ENTRYPOINT 命令设置当前工作路径。<br>
+可以设置多次，如果是相对路径，则相对前一个 WORKDIR 命令。默认路径为/。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu</span><br><span class="line">WORKDIR /etc</span><br><span class="line">WORKDIR ..</span><br><span class="line">WORKDIR usr</span><br><span class="line">WORKDIR lib</span><br><span class="line">ENTRYPOINT pwd</span><br></pre></td></tr></table></figure>
+<p>启动容器后得到/usr/lib</p>
+<h4 id="user-uid用户名"><a class="markdownIt-Anchor" href="#user-uid用户名"></a> USER &lt;UID/用户名&gt;</h4>
+<p>容器内指定 CMD RUN ENTRYPOINT 命令运行时的用户名或UID</p>
+<h4 id="vloume"><a class="markdownIt-Anchor" href="#vloume"></a> VLOUME</h4>
+<p>允许容器之间互相访问目录，VOLUME [’/data’] 允许其他容器访问当前容器的目录。</p>
+<h4 id="env"><a class="markdownIt-Anchor" href="#env"></a> ENV</h4>
+<p>指定环境变量，会被RUN指令使用，并在容器运行时保存</p>
+<pre><code>ENV LC_ALL en_US.UTF-8
+</code></pre>
+<h3 id="栗子分析"><a class="markdownIt-Anchor" href="#栗子分析"></a> 栗子分析</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#基于私有仓库中openjdk为基础镜像</span><br><span class="line">FROM 10.200.0.230:5000/openjdk:8-jre</span><br><span class="line"></span><br><span class="line">#设置工作路径</span><br><span class="line">WORKDIR /usr/src/</span><br><span class="line"></span><br><span class="line">#将jar包复制到指定目录</span><br><span class="line">COPY target/myDemo-1.0.0.jar /usr/src/</span><br><span class="line"></span><br><span class="line">#设置容器启动时要执行的命令</span><br><span class="line">CMD [&quot;java&quot;, &quot;-Duser.timezone=GMT+08&quot;, &quot;-jar&quot;, &quot;myDemo-1.0.0.jar&quot;, &quot;--spring.profiles.active=dev&quot;]</span><br><span class="line"></span><br><span class="line">#设置镜像所运行的时区</span><br><span class="line">RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line"></span><br><span class="line">#设置环境变量</span><br><span class="line">ENV LANG C.UTF-8</span><br><span class="line"></span><br><span class="line">#暴露端口</span><br><span class="line">EXPOSE 9041</span><br></pre></td></tr></table></figure>
+<h3 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h3>
+<p><a href="https://docs.docker.com/v17.09/engine/reference/builder/#usage" target="_blank" rel="noopener">dockerFile官网手册</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/dockerfile-info/" target="_blank" title="DockerFile介绍">https://www.larscheng.com/dockerfile-info/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/DockerFile/"><i class="fa-fw fa fa-tags"></i> DockerFile</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/java3feature/">Java中面向对象的三大特征：继承、封装、多态</a>
+            
+            
+            <a class="next" rel="next" href="/docker-gitlab/">Docker环境下安装Gitlab</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

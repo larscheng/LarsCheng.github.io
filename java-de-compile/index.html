@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java中的编译、反编译和反编译工具全家桶分享 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java中的编译、反编译和反编译工具全家桶分享</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-05-30&nbsp;&nbsp;17:00:13</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,558</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">5min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>本文介绍到的反编译工具下载地址：<a href="https://pan.baidu.com/s/1Q6LAWLzsedjP-mkDr5kt_w" target="_blank" rel="noopener">反编译工具全家桶</a> , 提取码：<a href="">oxor</a></p>
+<a id="more"></a> 
+<h3 id="编程语言"><a class="markdownIt-Anchor" href="#编程语言"></a> 编程语言</h3>
+<p>编程语言分为低级语言和高级语言</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">编程语言--&gt;低级语言</span><br><span class="line">编程语言--&gt;高级语言</span><br><span class="line">低级语言--&gt;机器语言</span><br><span class="line">低级语言--&gt;汇编语言</span><br><span class="line">高级语言--&gt;C/C++/Java/Python....</span><br></pre></td></tr></table></figure>
+<p>最早的程序员都是用机器语言在写代码，那时候应该不叫代码，叫写十六进制串，这样的编程十分复杂不方便而且出错率高</p>
+<p>后来有一个偷懒的程序员把机器语言中一组一组通用的十六进制用助记符来代替，这种通过助记符的方式被称作汇编语言，用助记符和部分机器语编写程序，最终执行前让汇编器将助记符转换成机器语言。</p>
+<p>然鹅，无论是机器语言还是汇编语言，后来的程序员觉得还是很麻烦，于是又有几个偷懒的程序员他们先后创造了c、c++、java、python…</p>
+<h3 id="编译"><a class="markdownIt-Anchor" href="#编译"></a> 编译</h3>
+<p>程序员编程是通过高级语言，而计算机执行程序只认识机器语言，那么将高级语言翻译成机器语言的过程就叫做编译。负责执行这一过程的工具叫做编译器</p>
+<p>举个例子：</p>
+<p>Java语言属于高级语言，计算机不认识</p>
+<p>.class文件属于编译后的Java虚拟机认识的字节码文件</p>
+<p>Java文件通过Java语言中的<code>编译器javac</code>编译后生成.class字节码文件</p>
+<p>说明：字节码并不是机器语言，要想让机器能够执行，还需要把字节码翻译成机器指令。这个过程是Java虚拟机做的，这个过程也叫编译。是更深层次的编译。</p>
+<h3 id="反编译"><a class="markdownIt-Anchor" href="#反编译"></a> 反编译</h3>
+<p>反编译当然就是编译的逆向操作了，将机器认识的机器语言转换成程序员认识的高级语言。</p>
+<p>举个例子：<br>
+Java种将.class文件转换成Java文件，这一过程就是反编译。</p>
+<h3 id="java中常用的反编译工具"><a class="markdownIt-Anchor" href="#java中常用的反编译工具"></a> Java中常用的反编译工具</h3>
+<h4 id="javap"><a class="markdownIt-Anchor" href="#javap"></a> javap</h4>
+<p>javap是JDK自带的反汇编器，可以查看java编译器为我们生成的字节码。它的作用就是根据class字节码文件，反解析出当前类对应的code区（汇编指令）、本地变量表、异常表和代码行偏移量映射表、常量池等等信息。</p>
+<p>用法：<code>javap &lt;options&gt; &lt;classes&gt;</code></p>
+<p>javap命令算是java自己原装的反编译工具，但是他反编译后的代码阅读性不太好，我们也可以用其他方式进行反编译。</p>
+<h4 id="jd-gui"><a class="markdownIt-Anchor" href="#jd-gui"></a> JD-GUI</h4>
+<p>JD-GUI是一个独立的图形实用程序，支持Windows、Linux和苹果Mac Os三个平台，可对“.class”文件进行反编译。可以使用JD-GUI浏览重建的源代码，以便即时访问方法和字段。</p>
+<p><img src="https://camo.githubusercontent.com/8286f65f4b148a27de05a78fa366074543e89ce3/687474703a2f2f6a642e62656e6f772e63612f696d672f73637265656e73686f7431372e706e67" alt="jd-dui官方示意图"></p>
+<p>JD-GUI在<code>1.4.0</code>版本后停止更新了很久，当时的版本对于Java1.7以后的代码兼容性很差，不过最近JD-GUI的恢复更新，并兼容Java9<br>
+JD-GUI现在最新的版本是<code>1.5.1</code>，下载<code>jd-gui-1.5.1.jar</code>直接双击执行即可。</p>
+<p><a href="https://github.com/java-decompiler/jd-gui" target="_blank" rel="noopener">github地址</a></p>
+<h4 id="cfr"><a class="markdownIt-Anchor" href="#cfr"></a> CFR</h4>
+<p>在JD-GUI断更期间，CFR就被大家广泛使用了。</p>
+<pre><code>CFR will decompile modern Java features - up to and including much of Java 9, 10, 12 and beyond, but is written entirely in Java 6, so will work anywhere!
+</code></pre>
+<p>作者表示，CFR可以反编译目前Java 9,10,12及更高版本的大部分功能，但完全用Java 6编写，因此可以在任何地方使用！</p>
+<p>CFR的使用也是十分方便，直接下载<code>jar</code>包，通过<code>java -jar</code>执行即可，如下：</p>
+<pre><code>java -jar cfr-0.144.jar Demo.class  
+</code></pre>
+<p>最新jar包下载和其他参数使用可参考<a href="http://www.benf.org/other/cfr/" target="_blank" rel="noopener">CFR官网</a></p>
+<h4 id="procyon"><a class="markdownIt-Anchor" href="#procyon"></a> Procyon</h4>
+<p>Procyon就很有趣了，它的作者和<code>CFR作者</code>就职同一公司，他们俩在进行一场友谊赛，看看谁能提供更好的反编译器。</p>
+<p>Procyon-Decompiler支持JDK1.8类的反编译，并且支持：字符串的Switch、枚举声明方面、注解方面、匿名类、内部类、Java8新接口规范、Java8 Lambda表达式、Java8 方法传递等。</p>
+<p>Procyon和CFR的运行方式相同，如下：</p>
+<pre><code>java -jar procyon-decompiler-0.5.30.jar Demo.class
+</code></pre>
+<p>最新jar包下载和其他参数使用可参考<a href="https://bitbucket.org/mstrobel/procyon/wiki/Java%20Decompiler" target="_blank" rel="noopener">Procyon地址</a></p>
+<p><em><strong>Procyon拥有一款第三方的GUI：luyten</strong></em></p>
+<p>如果你习惯像JD-GUI那样操作方便的GUI的话，你可以选择使用<code>Luyten</code>，它是基于Procyon的一款反编译工具，推荐使用哦~<br>
+<a href="https://github.com/deathmarine/Luyten" target="_blank" rel="noopener">Luyten官方网址</a></p>
+<p><img src="https://camo.githubusercontent.com/ee810f18540a53b9226ea6281eea8bcccbbbd76d/68747470733a2f2f692e696d6775722e636f6d2f706863353957362e706e67" alt="Luyten官方示意图"></p>
+<h4 id="fernflower"><a class="markdownIt-Anchor" href="#fernflower"></a> Fernflower</h4>
+<p>Fernflower相信经常使用IDEA的同学应该很眼熟叭，他是IDEA自带的反编译工具，我们通过IDEA看到的<code>.class</code>文件内容都是通过Fernflower反编译后的。IDEA中效果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/decompiler/20190530162952.png" alt=""></p>
+<p><a href="http://the.bytecode.club/fernflower.jar" target="_blank" rel="noopener">Fernflower.jar下载地址</a>，也可以拉取官方的项目自己在本地进行gradle构建</p>
+<p>下好fernflower.jar后也准备好需要编译的jar包。</p>
+<p>使用命令行 java -jar fernflower.jar  &lt;目标&gt;.jar &lt;文件夹名&gt;/</p>
+<pre><code>java -jar fernflower.jar Demo.jar demo/
+</code></pre>
+<p>编译成功后demo文件夹下是一个&lt;文件名&gt;.jar。</p>
+<p>可以看到比刚才的目标jar包小一些，解压此jar包就可以查看源码了！</p>
+<p><a href="https://github.com/JetBrains/intellij-community/tree/master/plugins/java-decompiler/engine" target="_blank" rel="noopener">Fernflower github地址</a></p>
+<h4 id="bytecode-viewer逆向必备"><a class="markdownIt-Anchor" href="#bytecode-viewer逆向必备"></a> bytecode-viewer(逆向必备!!!)</h4>
+<p>bytecode-viewer（字节码查看器）一款轻量级的Java字节码查看器，它可以反编译jar包，.class文件、Android APK，并且支持多种反编译器</p>
+<p>你可以用CFR、Procyon、Fernflower等同时编译同一个.class文件，并进行结果查看和对比。如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/decompiler/20190530164104.png" alt=""></p>
+<p>是不是很方便呐，<a href="https://github.com/Konloch/bytecode-viewer/releases" target="_blank" rel="noopener">github地址</a> 快去下载试试吧。</p>
+<h4 id="在线反编译"><a class="markdownIt-Anchor" href="#在线反编译"></a> 在线反编译</h4>
+<p><a href="http://www.javadecompilers.com/" target="_blank" rel="noopener">Java decompiler online</a></p>
+<p><a href="http://javare.cn/" target="_blank" rel="noopener">JAVA反向工程网</a></p>
+<p><em><strong>ps:</strong></em><br>
+部分官网和仓库需要翻墙才可以下载，我这边已经为大家准备好了<a href="https://pan.baidu.com/s/1Q6LAWLzsedjP-mkDr5kt_w" target="_blank" rel="noopener">反编译工具全家桶</a> , 提取码：<a href="">oxor</a></p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>了解编译和反编译的基本概念后，其实反编译可以使我们更好的了解Java代码真实的面目，Java中有很多的语法糖，通过反编译可以很好的了解和学习这些语法糖的实现原理。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java-de-compile/" target="_blank" title="Java中的编译、反编译和反编译工具全家桶分享">https://www.larscheng.com/java-de-compile/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"><i class="fa-fw fa fa-tags"></i> Java</a>
+                    
+                        <a href="/tags/编译/"><i class="fa-fw fa fa-tags"></i> 编译</a>
+                    
+                        <a href="/tags/反编译/"><i class="fa-fw fa fa-tags"></i> 反编译</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/about-blog/">About-blog</a>
+            
+            
+            <a class="next" rel="next" href="/java-finalize/">finalize()的生命周期（执行过程）</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

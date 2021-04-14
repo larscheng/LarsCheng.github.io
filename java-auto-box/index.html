@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java中的自动拆装箱、装箱缓存 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java中的自动拆装箱、装箱缓存</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-06-17&nbsp;&nbsp;17:40:03</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,126</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">9min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>Java 是一种面向对象的编程语言，Java 中的类把方法与数据类型连接在一起，构成了自包含式的处理单元。但在 Java 中不能定义基本类型对象，为了能将基本类型视为对象处理，并能连接相关方法，Java 为每个基本数据类型都提供了包装类，如 int 型数值的包装类 Integer，boolean 型数值的包装类 Boolean 等。这样便可以把这些基本类型转换为对象来处理了。</p>
+<a id="more"></a> 
+<p>在Java中包含了8种基本数据类型，与之相对应的还有8种包装类，他们之间的对应关系如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">基本数据类型</th>
+<th style="text-align:center">包装类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">byte</td>
+<td style="text-align:center">Byte</td>
+</tr>
+<tr>
+<td style="text-align:center">short</td>
+<td style="text-align:center">Short</td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:center">Integer</td>
+</tr>
+<tr>
+<td style="text-align:center">long</td>
+<td style="text-align:center">Long</td>
+</tr>
+<tr>
+<td style="text-align:center">float</td>
+<td style="text-align:center">Float</td>
+</tr>
+<tr>
+<td style="text-align:center">double</td>
+<td style="text-align:center">Double</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">Boolean</td>
+</tr>
+<tr>
+<td style="text-align:center">char</td>
+<td style="text-align:center">Character</td>
+</tr>
+</tbody>
+</table>
+<h3 id="什么是自动拆装箱"><a class="markdownIt-Anchor" href="#什么是自动拆装箱"></a> 什么是自动拆装箱</h3>
+<p>Java中不能定义基本数据类型的对象，因此我们可以使用包装类，每种基本数据类型都有自己对应的包装类。<br>
+基本数据类型与包装类之间的转换过程就涉及到了自动拆装箱。</p>
+<ul>
+<li>基本数据类型转换为包装类的过程称作<code>自动装箱</code></li>
+<li>包装类转换为基本数据类型的过程称作<code>自动拆箱</code></li>
+</ul>
+<h3 id="自动拆装箱的实现原理"><a class="markdownIt-Anchor" href="#自动拆装箱的实现原理"></a> 自动拆装箱的实现原理</h3>
+<p>举一个栗子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AutoBoxing</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line">        <span class="comment">//装箱</span></span><br><span class="line">        Integer ii = i;</span><br><span class="line">        <span class="comment">//拆箱</span></span><br><span class="line">        <span class="keyword">int</span> iii = ii;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码实际上就是Java中的语法糖，通过对.class文件进行反编译之后就可以看到代码的真面目：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AutoBoxing</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] arrstring)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = <span class="number">10</span>;</span><br><span class="line">        Integer n2 = Integer.valueOf(n);</span><br><span class="line">        <span class="keyword">int</span> n3 = n2.intValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从反编译后的代码可以看到，int类型到Integer的装箱过程是通过<code>Integer.valueOf()</code>实现，Integer到int的拆箱过程是通过<code>intValue()</code>实现。</p>
+<p>刚好我们测试下其他七种数据类型的拆装箱过程是怎么样的，代码如下<code>AutoBox.java</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AutoBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer aa = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> aaa = aa;</span><br><span class="line"></span><br><span class="line">        Byte bb = <span class="number">20</span>;</span><br><span class="line">        <span class="keyword">byte</span> bbb = bb;</span><br><span class="line"></span><br><span class="line">        Short cc = <span class="number">30</span>;</span><br><span class="line">        <span class="keyword">short</span> ccc = cc;</span><br><span class="line"></span><br><span class="line">        Long d = <span class="number">40L</span>;</span><br><span class="line">        <span class="keyword">long</span> dd = d;</span><br><span class="line"></span><br><span class="line">        Float e = <span class="number">50f</span>;</span><br><span class="line">        <span class="keyword">float</span> ee = e;</span><br><span class="line"></span><br><span class="line">        Double f = <span class="number">60</span>d;</span><br><span class="line">        <span class="keyword">double</span> ff = f;</span><br><span class="line"></span><br><span class="line">        Character g = <span class="string">'a'</span>;</span><br><span class="line">        <span class="keyword">char</span> gg = g;</span><br><span class="line"></span><br><span class="line">        Boolean h = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">boolean</span> hh = h;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接对AutoBox.java文件进行编译后，对AutoBox.class文件反编译分析，命令如下</p>
+<pre><code>//编译
+javac AutoBox.java
+//反编译分析
+javap -c AutoBox.class
+</code></pre>
+<p>结果如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">Compiled from <span class="string">"AutoBox.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">zhengql</span>.<span class="title">practice</span>.<span class="title">autoBox</span>.<span class="title">AutoBox</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.zhengql.practice.autoBox.AutoBox();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: bipush        <span class="number">10</span></span><br><span class="line">       2: invokestatic  #2                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">       <span class="number">5</span>: astore_1</span><br><span class="line">       <span class="number">6</span>: aload_1</span><br><span class="line">       7: invokevirtual #3                  // Method java/lang/Integer.intValue:()I</span><br><span class="line">      <span class="number">10</span>: istore_2</span><br><span class="line">      <span class="number">11</span>: bipush        <span class="number">20</span></span><br><span class="line">      13: invokestatic  #4                  // Method java/lang/Byte.valueOf:(B)Ljava/lang/Byte;</span><br><span class="line">      <span class="number">16</span>: astore_3</span><br><span class="line">      <span class="number">17</span>: aload_3</span><br><span class="line">      18: invokevirtual #5                  // Method java/lang/Byte.byteValue:()B</span><br><span class="line">      <span class="number">21</span>: istore        <span class="number">4</span></span><br><span class="line">      <span class="number">23</span>: bipush        <span class="number">30</span></span><br><span class="line">      25: invokestatic  #6                  // Method java/lang/Short.valueOf:(S)Ljava/lang/Short;</span><br><span class="line">      <span class="number">28</span>: astore        <span class="number">5</span></span><br><span class="line">      <span class="number">30</span>: aload         <span class="number">5</span></span><br><span class="line">      32: invokevirtual #7                  // Method java/lang/Short.shortValue:()S</span><br><span class="line">      <span class="number">35</span>: istore        <span class="number">6</span></span><br><span class="line">      37: ldc2_w        #8                  // long 40l</span><br><span class="line">      40: invokestatic  #10                 // Method java/lang/Long.valueOf:(J)Ljava/lang/Long;</span><br><span class="line">      <span class="number">43</span>: astore        <span class="number">7</span></span><br><span class="line">      <span class="number">45</span>: aload         <span class="number">7</span></span><br><span class="line">      47: invokevirtual #11                 // Method java/lang/Long.longValue:()J</span><br><span class="line">      <span class="number">50</span>: lstore        <span class="number">8</span></span><br><span class="line">      52: ldc           #12                 // float 50.0f</span><br><span class="line">      54: invokestatic  #13                 // Method java/lang/Float.valueOf:(F)Ljava/lang/Float;</span><br><span class="line">      <span class="number">57</span>: astore        <span class="number">10</span></span><br><span class="line">      <span class="number">59</span>: aload         <span class="number">10</span></span><br><span class="line">      61: invokevirtual #14                 // Method java/lang/Float.floatValue:()F</span><br><span class="line">      <span class="number">64</span>: fstore        <span class="number">11</span></span><br><span class="line">      66: ldc2_w        #15                 // double 60.0d</span><br><span class="line">      69: invokestatic  #17                 // Method java/lang/Double.valueOf:(D)Ljava/lang/Double;</span><br><span class="line">      <span class="number">72</span>: astore        <span class="number">12</span></span><br><span class="line">      <span class="number">74</span>: aload         <span class="number">12</span></span><br><span class="line">      76: invokevirtual #18                 // Method java/lang/Double.doubleValue:()D</span><br><span class="line">      <span class="number">79</span>: dstore        <span class="number">13</span></span><br><span class="line">      <span class="number">81</span>: bipush        <span class="number">97</span></span><br><span class="line">      83: invokestatic  #19                 // Method java/lang/Character.valueOf:(C)Ljava/lang/Character;</span><br><span class="line">      <span class="number">86</span>: astore        <span class="number">15</span></span><br><span class="line">      <span class="number">88</span>: aload         <span class="number">15</span></span><br><span class="line">      90: invokevirtual #20                 // Method java/lang/Character.charValue:()C</span><br><span class="line">      <span class="number">93</span>: istore        <span class="number">16</span></span><br><span class="line">      <span class="number">95</span>: iconst_1</span><br><span class="line">      96: invokestatic  #21                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;</span><br><span class="line">      <span class="number">99</span>: astore        <span class="number">17</span></span><br><span class="line">     <span class="number">101</span>: aload         <span class="number">17</span></span><br><span class="line">     103: invokevirtual #22                 // Method java/lang/Boolean.booleanValue:()Z</span><br><span class="line">     <span class="number">106</span>: istore        <span class="number">18</span></span><br><span class="line">     <span class="number">108</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>经过测试，其他7种基本数据类型到包装类的装箱拆箱原理都与int/Integer相同,
+自动装箱都是通过包装类的valueOf()方法来实现的,
+自动拆箱都是通过包装类对象的xxxValue()来实现的
+</code></pre>
+<h3 id="什么时候用到自动拆装箱"><a class="markdownIt-Anchor" href="#什么时候用到自动拆装箱"></a> 什么时候用到自动拆装箱</h3>
+<ol>
+<li>赋值操作时</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Integer a = <span class="number">1</span>;<span class="comment">//Integer a = Integer.valueOf(1);//自动装箱</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>包装类之间运算时（±*/）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer a = <span class="number">1</span>;</span><br><span class="line">Integer b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> c = a + b;<span class="comment">//int c = a.intValue() + b.intValue();//自动拆箱</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>比较运算时</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer a=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">boolean</span> b = a==<span class="number">1</span>;<span class="comment">//boolean b = a.intValue()==1;自动拆箱</span></span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>向集合中添加基本数据类型时</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10</span>; i ++)&#123;</span><br><span class="line">    list.add(i);<span class="comment">//list.add(Integer.valueOf(i));自动装箱</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>方法调用、参数返回时</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AutoBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> i + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> a = test(i);<span class="comment">//int a = test(i.intvalue());自动拆箱</span></span><br><span class="line">        Integer b = test(<span class="number">1</span>);<span class="comment">//Integer b = Integer.valueOf(test(1));//自动装箱</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="装箱缓存"><a class="markdownIt-Anchor" href="#装箱缓存"></a> 装箱缓存</h3>
+<p>其实，在自动装箱过程中还存在一种缓存的操作，且看下面一道题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AutoBoxTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer a = <span class="number">30</span>;</span><br><span class="line">        Integer b = <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (a==b)&#123;</span><br><span class="line">            System.out.println(<span class="string">"a、b:内存地址相同"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"a、b:不同的两个对象"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Integer c = <span class="number">300</span>;</span><br><span class="line">        Integer d = <span class="number">300</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (c==d)&#123;</span><br><span class="line">            System.out.println(<span class="string">"c、d:内存地址相同"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"c、d:不同的两个对象"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这道题乍一看是不是觉得匪夷所思，怎么会有这种沙雕题目，两个对象类型用等号判断大小，很明显都是new出来的对象，肯定指向不同的内存地址啊，肯定不相等了。然鹅运行的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a、b:内存地址相同</span><br><span class="line">c、d:不同的两个对象</span><br></pre></td></tr></table></figure>
+<p>可以看到为什么同样的操作，c和d就符合判断逻辑，而a和b就偏偏指向同一个对象呢？</p>
+<pre><code>这是因为在自动装箱过程中，Integer对象通过使用相同的对象引用实现对象的缓存和重用。
+</code></pre>
+<p>那么问题又来了，既然有缓存操作，那为什么a、b有，c、d却没有呢？</p>
+<p>来看一下Integer自动装箱的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先判断入参i是否处于<code>[IntegerCache.low,IntegerCache.high]</code>区间内，如果i值在区间内，则从缓存<code>IntegerCache.cache</code>中读取某一个值返回，反之直接new一个Integer对象，这说明<strong>触发缓存操作是根据i值的范围决定的</strong>。</p>
+<p>那这个范围又是多少呢？阅读该方法的注释:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">This method will always cache values in the range -128 to 127,</span><br><span class="line">inclusive, and may cache other values outside of this range.</span><br></pre></td></tr></table></figure>
+<p>此方法默认缓存<code>[-128,127]</code>范围内的值，但也可以缓存范围外的其他值，这里是因为区间右侧的<code>IntegerCache.high</code>是可配置的。</p>
+<p>看到这里，终于明白，最开始的那道题目，为什么ab和cd的结果会完全不一样，是因为a、b的值在[-128,127]区间内，而c、d的值不在此范围内。</p>
+<p>那么，既然Integer有缓存这个骚操作，那其他的包装类是不是也有呢？直接去看每个包装类的<code>valueOf</code>方法就可以知道了。</p>
+<p>这里我就不贴源码了，查看后的结论是，<strong>其他的7种包装类中，所有的整数类型的类，在自动装箱时都有类似于Integer的这种缓存操作，只不过他们各自的触发情况不同</strong>，结果整理如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">包装类</th>
+<th style="text-align:center">缓存机制</th>
+<th style="text-align:center">触发条件</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Byte</td>
+<td style="text-align:center">ByteCache</td>
+<td style="text-align:center">[-128,127]</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Short</td>
+<td style="text-align:center">ShortCache</td>
+<td style="text-align:center">[-128,127]</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Integer</td>
+<td style="text-align:center">IntegerCache</td>
+<td style="text-align:center">[-128,127]</td>
+<td style="text-align:center">最大值可配置</td>
+</tr>
+<tr>
+<td style="text-align:center">Long</td>
+<td style="text-align:center">LongCache</td>
+<td style="text-align:center">[-128,127]</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Float</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Double</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Boolean</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Character</td>
+<td style="text-align:center">CharacterCache</td>
+<td style="text-align:center">[0,127]</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>自动装箱和拆箱方便了我们开发人员，但是在使用自动拆装箱时也有很多<strong>翻车现场</strong>，最容易出现的就是<strong>空指针</strong>，所以在使用自动拆装箱时一定要防止空指针。</p>
+<p>自动装箱过程中涉及到对象的创建等操作，如果在循环体中大量的拆装箱操作，势必会<strong>浪费资源</strong>，所以何时使用合理的使用自动拆装箱是尤为重要。</p>
+<h3 id="参考和感谢"><a class="markdownIt-Anchor" href="#参考和感谢"></a> 参考和感谢</h3>
+<p>Java中整型的缓存机制：<a href="https://www.hollischuang.com/archives/1174" target="_blank" rel="noopener">https://www.hollischuang.com/archives/1174</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java-auto-box/" target="_blank" title="Java中的自动拆装箱、装箱缓存">https://www.larscheng.com/java-auto-box/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"><i class="fa-fw fa fa-tags"></i> Java</a>
+                    
+                        <a href="/tags/自动拆装箱/"><i class="fa-fw fa fa-tags"></i> 自动拆装箱</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/java-equals==/">Java中==和equals方法的分析</a>
+            
+            
+            <a class="next" rel="next" href="/about-blog/">About-blog</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

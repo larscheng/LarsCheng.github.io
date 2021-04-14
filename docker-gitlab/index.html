@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Docker环境下安装Gitlab | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Docker环境下安装Gitlab</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-30&nbsp;&nbsp;11:26:29</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Docker/">Docker</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,307</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">5min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>在Docker中我们同样可以部署自己专属的代码仓库GitLab，下面简单介绍一下安装流程。</p>
+<a id="more"></a>
+<h3 id="安装前提"><a class="markdownIt-Anchor" href="#安装前提"></a> 安装前提</h3>
+<ul>
+<li>内存大于 2G 的linux虚拟机或者云服务器皆可（我用的虚拟机）</li>
+<li>已安装Docker服务，若未安装可参考博客： <a href="https://blog.csdn.net/qq_33619378/article/details/89460088" target="_blank" rel="noopener">Centos7下两种方式安装Docker-CE</a></li>
+</ul>
+<p>说明：我的虚拟机ip：10.200.0.230，安装过程中涉及到的ip配置可替换成你的ip地址</p>
+<h3 id="安装步骤"><a class="markdownIt-Anchor" href="#安装步骤"></a> 安装步骤</h3>
+<h4 id="拉取gitlab镜像"><a class="markdownIt-Anchor" href="#拉取gitlab镜像"></a> 拉取GitLab镜像</h4>
+<p>GitLab的镜像有很多，官方镜像：<code>gitlab/gitlab-ce</code>,网友汉化版镜像：<code>twang2218/gitlab-ce-zh</code>,此处以官方镜像进行安装介绍，下面拉取镜像到本地。</p>
+<pre><code>docker pull gitlab/gitlab-ce
+</code></pre>
+<h4 id="启动gitlab容器"><a class="markdownIt-Anchor" href="#启动gitlab容器"></a> 启动gitlab容器</h4>
+<pre><code>docker run -d \
+-p 9443:443 \
+-p 9080:80 \
+-p 222:22 \
+--name gitlab \
+--restart always \
+--hostname 10.200.0.230 \
+-v /home/gitlab/config:/etc/gitlab  \
+-v /home/gitlab/logs:/var/log/gitlab  \
+-v /home/gitlab/data:/var/opt/gitlab  \
+gitlab/gitlab-ce
+</code></pre>
+<p>说明：</p>
+<ul>
+<li>-d 后台启动，打印容器id</li>
+<li>-p 9080:80 将宿主机的端口映射至容器暴露的端口</li>
+<li>–name gitlab 设置容器名称为gitlab</li>
+<li>–restart always 设置容器重启策略：在容器退出时总是重启容器</li>
+<li>–hostname 10.200.0.230 设置容器主机名为10.200.0.230（<code>此处修改为你相应的虚拟机ip</code>）</li>
+<li>-v 挂载目录至宿主机，方便备份</li>
+</ul>
+<p>出现如下图所示时表示启动成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130731.png" alt=""></p>
+<h4 id="配置gitlab服务器的访问地址"><a class="markdownIt-Anchor" href="#配置gitlab服务器的访问地址"></a> 配置gitlab服务器的访问地址</h4>
+<p>按照上面的方式，让gitlab容器运行起来是没有问题的，但是当在gitlab上创建项目的时候，生成项目的URL访问地址是按容器的hostname来生成的，即容器的id。作为gitlab服务器，当然是需要一个固定的URL访问地址，于是需要配置gitlab.rb（宿主机上的路径为：/home/gitlab/config/gitlab.rb）配置文件里面的参数。执行如下命令：</p>
+<pre><code>vi /home/gitlab/config/gitlab.rb
+</code></pre>
+<p>可以看到，文件中的配置默认都是注释掉的，为修改方便，直接添加三条配置即可</p>
+<pre><code># 配置http协议所使用的访问地址
+external_url 'http://10.200.0.230'
+
+# 配置ssh协议所使用的访问地址和端口
+gitlab_rails['gitlab_ssh_host'] = '10.200.0.230'
+gitlab_rails['gitlab_shell_ssh_port'] = 222
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130753.png" alt=""></p>
+<p>保存文件后重启容器</p>
+<pre><code>docker restart gitlab
+</code></pre>
+<p>gitlab启动较慢，可以查看容器的状态来判断是否启动成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130811.png" alt=""></p>
+<p>starting：表示正在启动中</p>
+<p>healthy：表示已经启动成功</p>
+<h4 id="登录gitlab的web界面"><a class="markdownIt-Anchor" href="#登录gitlab的web界面"></a> 登录gitlab的web界面</h4>
+<p>浏览器访问 <a href="http://10.200.0.230:9080" target="_blank" rel="noopener">http://10.200.0.230:9080</a> ，可以看到第一次登录需要设置一个密码，账号默认是<code>root</code>,设置完后直接登录即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130827.png" alt=""></p>
+<p>登录成功后进入管理页面，我们通过<code>Create a project</code>创建一个项目先。</p>
+<p>项目内容如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130842.png" alt=""></p>
+<p>创建成功，查看克隆地址，仔细观察http的url还是有问题<code>http://10.200.0.230/root/testdemo.git</code>，此处仍使用的默认80端口，所以还是得接着修改配置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130907.png" alt=""></p>
+<p>修改gitlab.yml(位于宿主机/home/gitlab/data/gitlab-rails/etc/)</p>
+<pre><code>vi /home/gitlab/data/gitlab-rails/etc/gitlab.yml
+</code></pre>
+<p>修改<code>GitLab settings</code>下的port为<code>9080</code>,如下:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029130957.png" alt=""></p>
+<p>保存修改后重启容器，等待容器启动成功，进入web页面查看，可以看到此时克隆地址已经ok了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131011.png" alt=""></p>
+<h3 id="git拉取提交测试"><a class="markdownIt-Anchor" href="#git拉取提交测试"></a> Git拉取提交测试</h3>
+<h4 id="通过http拉取项目"><a class="markdownIt-Anchor" href="#通过http拉取项目"></a> 通过Http拉取项目</h4>
+<p>本地电脑上通过<code>git bash</code> 来拉取刚才创建的项目</p>
+<pre><code>git clone http://10.200.0.230:9080/root/testdemo.git（此处可替换为你的url地址）
+</code></pre>
+<p>如下图所示，即为克隆成功，首次拉取需要验证账号密码（gitlab的账号密码，root+设置的密码）<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131030.png" alt=""></p>
+<h4 id="通过ssh拉取项目"><a class="markdownIt-Anchor" href="#通过ssh拉取项目"></a> 通过SSH拉取项目</h4>
+<ol>
+<li>
+<p>生成私钥和公钥（若已有可跳过）</p>
+<p>git bash中查看是否有已生成的私钥公钥<br>
+cd ~/.ssh</p>
+</li>
+</ol>
+<p>如图所示表示已有私钥和公钥文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131045.png" alt=""></p>
+<p>当然你可以重新生成，步骤如下：</p>
+<p>设置Git的user name和email：</p>
+<pre><code>git config --global user.name &quot;zhengql&quot;
+git config --global user.email &quot;zhengql@test.com&quot;
+</code></pre>
+<p>生成私钥和公钥（需要你设置一个密码，此处建议不进行设置，直接三次回车）</p>
+<pre><code>ssh-keygen -t rsa -C &quot;zhengql@test.com&quot;
+</code></pre>
+<p>下图为生成步骤图解</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131119.png" alt=""></p>
+<p>成功之后。查看生成的文件夹内有两个文件，查看公钥文件内容</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131135.png" alt=""></p>
+<ol start="2">
+<li>在gitlab中配置公钥</li>
+</ol>
+<p>直接进入gitlab的web页面，复制我们刚刚生成的公钥内容添加至gitlab，操作如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131148.png" alt=""></p>
+<ol start="3">
+<li>
+<p>通过git bash 克隆项目至本地</p>
+<p>git clone ssh://git@10.200.0.230:222/root/testdemo.git（此处可以替换为你的ssh地址）</p>
+</li>
+</ol>
+<p>成功图示如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131204.png" alt=""></p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>至此，Docker中搭建GitLab流程和两种方式克隆项目的测试就介绍完毕了。</p>
+<p>其实在搭建过程中有很多配置上的小坑，例如在修改80端口的映射后<code>external_url</code>是否需要加上端口<br>
+测试发现如果在<code>external_url</code>设置为<code>ip+端口</code>，会导致无法访问gitlab的web页面，所以目前我的解决方法是手动修改启动后生成的<code>gitlab.yml</code>中的配置，然后让容器重新读取配置，这样的弊端就是当通过<code>docker restart gitlab</code>重启容器后，修改的gitlab.yml会被覆盖。</p>
+<h3 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h3>
+<p><a href="https://www.jianshu.com/p/d707f70c60d2" target="_blank" rel="noopener">利用GitLab Docker images安装GitLab（填坑）</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/docker-gitlab/" target="_blank" title="Docker环境下安装Gitlab">https://www.larscheng.com/docker-gitlab/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/GitLab安装/"><i class="fa-fw fa fa-tags"></i> GitLab安装</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/dockerfile-info/">DockerFile介绍</a>
+            
+            
+            <a class="next" rel="next" href="/docker-registry/">Docker中私有仓库的搭建流程</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

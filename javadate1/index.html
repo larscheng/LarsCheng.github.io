@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java时间处理1----Date和Calendar方法探究(Java8以前) | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java时间处理1----Date和Calendar方法探究(Java8以前)</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-11-21&nbsp;&nbsp;14:56:21</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,553</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">6min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>时间的处理在Java中会经常用到，Java中常用的时间处理类有如下两种：</p>
+<a id="more"></a>
+<ul>
+<li>Date: <code>日期类</code>
+<ul>
+<li>用来表示瞬时时间，精确到毫秒，他表示的是某一刹那的时间。Date不存在时区概念。</li>
+<li>由于Date类不易于实现国际化，所以逐渐不被推荐使用，并且废弃了大部分方法。</li>
+</ul>
+</li>
+<li>Calendar: <code>日历类</code>，可以理解为计算机历
+<ul>
+<li>一方面是为了弥补Date的国际化缺陷，另一方面是将时间以日历的形式来表示和处理</li>
+<li>Calendar包含时区和语言的概念</li>
+<li>Calendar将时间细分成了<code>年月日时分秒毫秒上午下午夏时令等</code>概念，并提供这些概念的相关操作方法。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>下面我们来康康这两个工具类的一些常用方法。</p>
+</blockquote>
+<h2 id="date"><a class="markdownIt-Anchor" href="#date"></a> Date 📅</h2>
+<blockquote>
+<p>Date类位于<code>java.util</code>包下，是JDK中最早的时间处理类，但由于Date类不易于实现国际化，后不被推荐使用。</p>
+<p>Date源自于JDK1.0，到如今Date类中的大部分构造函数和方法都已经废弃不推荐使用(<code>Deprecated</code>)</p>
+</blockquote>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/java8date/20191121115207.png" style="zoom: 50%;">
+<p>目前还在使用的方法如下：</p>
+<table>
+<thead>
+<tr>
+<th>方法 : 返回值</th>
+<th>参数说明</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Date()</td>
+<td>构造器</td>
+<td>当前时间的Date对象</td>
+</tr>
+<tr>
+<td>Date(long date)</td>
+<td>构造器,<code>date</code>:与GMT1970年1月1日00:00:00之间的时间差(ms)</td>
+<td>创建指定时间的Date对象</td>
+</tr>
+<tr>
+<td>after(Date when):boolean</td>
+<td><code>when</code>:待判断的Date对象</td>
+<td>某一Date是否在when之后</td>
+</tr>
+<tr>
+<td>before(Date when):boolean</td>
+<td><code>when</code>:待判断的Date对象</td>
+<td>某一Date是否在when之前</td>
+</tr>
+<tr>
+<td>compareTo(Date anotherDate):int</td>
+<td><code>anotherDate</code>:待比较的Date对象</td>
+<td>Date对象与参数中的Date进行比较 ，<br><code>a.compareTo(b)</code>：a&gt;b:<code>正数</code>， a=b:<code>0</code>，a&lt;b:<code>负数</code></td>
+</tr>
+<tr>
+<td>getTime():long</td>
+<td></td>
+<td>返回Date对象的时间戳</td>
+</tr>
+<tr>
+<td>setTime(long time):void</td>
+<td><code>time</code>:时间戳</td>
+<td>设置Date对象的时间</td>
+</tr>
+</tbody>
+</table>
+<p>Date对象的使用示例如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:</span></span><br><span class="line"><span class="comment"> * Date的常用方式</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> larscheng</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019/11/21 13:46</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DateTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Date date1  = <span class="keyword">new</span> Date();</span><br><span class="line">        Date date2 = <span class="keyword">new</span> Date(System.currentTimeMillis()+<span class="number">1000</span>);</span><br><span class="line">        System.out.println(<span class="string">"date1: "</span>+date1);<span class="comment">//date1: Thu Nov 21 13:54:52 CST 2019</span></span><br><span class="line">        System.out.println(<span class="string">"date2: "</span>+date2);<span class="comment">//date2: Thu Nov 21 13:54:53 CST 2019</span></span><br><span class="line">        System.out.println(<span class="string">"date1.compareTo(date2): "</span>+date1.compareTo(date2));<span class="comment">//-1</span></span><br><span class="line">        System.out.println(<span class="string">"date1.after(date2): "</span>+date1.after(date2));<span class="comment">//false</span></span><br><span class="line">        System.out.println(<span class="string">"date1.before(date2): "</span>+date1.before(date2));<span class="comment">//true</span></span><br><span class="line">        System.out.println(<span class="string">"date1.getTime(): "</span>+date1.getTime());<span class="comment">//1574315692607</span></span><br><span class="line">        date1.setTime(System.currentTimeMillis());</span><br><span class="line">        System.out.println(<span class="string">"setTime() ==&gt; date1.getTime(): "</span>+date1.getTime());<span class="comment">//1574315692628</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="calendar"><a class="markdownIt-Anchor" href="#calendar"></a> Calendar 📆</h2>
+<blockquote>
+<p>在JDK1.1后，处理时间时，推荐使用<code>Calendar</code>类，Calendar包含Date中所有的功能，并且比Date更复杂更强大。</p>
+<p>Calendar是一个抽象类，不可以直接实例化它，但可以通过他提供的<code>getInstance</code>方法进行创建</p>
+</blockquote>
+<p>Calendar类在Date原有功能基础上，加强了对时间的处理和自定义等。其常用方法如下：</p>
+<table>
+<thead>
+<tr>
+<th>方法 : 返回值</th>
+<th>参数说明</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getInstance():Calendar</td>
+<td></td>
+<td>对外提供Calendar的创建入口<br>(该方法还有<code>两个重载方法</code>，<br>主要用于自定义时区，语言环境)</td>
+</tr>
+<tr>
+<td>after(Object when):boolean</td>
+<td><code>when</code>:待判断的Calendar对象</td>
+<td>某一Date是否在when之后</td>
+</tr>
+<tr>
+<td>before(Object when):boolean</td>
+<td><code>when</code>:待判断的Calendar对象</td>
+<td>某一Date是否在when之前</td>
+</tr>
+<tr>
+<td>compareTo(Calendar a):int</td>
+<td><code>a</code>:待比较的Calendar对象</td>
+<td>Date对象与参数中的Date进行比较 ，<br><code>a.compareTo(b)</code>：a&gt;b:<code>正数</code>， a=b:<code>0</code>，a&lt;b:<code>负数</code></td>
+</tr>
+<tr>
+<td>getTime():Date</td>
+<td></td>
+<td>将Calendar日期对象转换为Date对象</td>
+</tr>
+<tr>
+<td>setTime(Date date):void</td>
+<td><code>date</code>:Date对象</td>
+<td>将Date对象表示的时间值设置给Calendar日期对象</td>
+</tr>
+<tr>
+<td>getTimeInMillis():long</td>
+<td></td>
+<td>返回Calendar日期对象的时间戳</td>
+</tr>
+<tr>
+<td>setTimeInMillis(long millis):void</td>
+<td><code>millis</code>:时间戳</td>
+<td>用给定long值设置日历的当前时间</td>
+</tr>
+<tr>
+<td>get(int field):int</td>
+<td><code>field</code>:日历字段(Calendar.YEAR)</td>
+<td>获取指定日历字段的值</td>
+</tr>
+<tr>
+<td>set(int field, int val):void</td>
+<td><code>field</code>:日历字段,<code>val</code>:具体值</td>
+<td>设置日历字段的值</td>
+</tr>
+<tr>
+<td>add(int field, int amount):void</td>
+<td><code>field</code>:日历字段,<code>amount</code>:加减值</td>
+<td>基于日历的规则实现日期加减。amout可为负数</td>
+</tr>
+<tr>
+<td>roll(int field, boolean up):void</td>
+<td><code>field</code>:日历字段,<code>up</code>:T加/F减</td>
+<td>在指定日历字段上添加或减去<code>1个时间单元</code></td>
+</tr>
+<tr>
+<td>roll(int field, int amount):void</td>
+<td><code>field</code>:日历字段,<code>amount</code>:加减值</td>
+<td>在指定日历字段上添加或减去<code>指定的时间单元</code></td>
+</tr>
+</tbody>
+</table>
+<p>以上仅仅是Calendar类中的一部分常用方法，更多详细的方法大家可以参考源码</p>
+<blockquote>
+<p>Calendar类是基于日历的时间处理类，在使用他之前需要注意下面一些小细节：</p>
+</blockquote>
+<ul>
+<li>
+<p><code>Calendar.MONTH</code>: 初始值为0，最大值11，所以在格式化时间时<code>记得+1</code></p>
+</li>
+<li>
+<p>在使用set方法时，<code>Calendar.HOUR</code>为12小时制，<code>Calendar.HOUR_OF_DAY</code>为24小时制</p>
+</li>
+<li>
+<p>add与roll都可以实现指定字段的加减，两者的区别在于<u><strong>add会进位而roll不会</strong></u>，例子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//add与roll的区别</span></span><br><span class="line">SimpleDateFormat sf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</span><br><span class="line">   Calendar ca1 = Calendar.getInstance();<span class="comment">//2019-11-21 16:24:31</span></span><br><span class="line">   Calendar ca2 = Calendar.getInstance();<span class="comment">//2019-11-21 16:24:31</span></span><br><span class="line">   ca1.add(Calendar.MONTH,<span class="number">3</span>);<span class="comment">//add加3个月</span></span><br><span class="line">   ca2.roll(Calendar.MONTH,<span class="number">3</span>);<span class="comment">//roll加3个月</span></span><br><span class="line">   System.out.println(sf.format(ca1.getTime()));<span class="comment">//进位：2020-02-21 16:24:31</span></span><br><span class="line">   System.out.println(sf.format(ca2.getTime()));<span class="comment">//不进位：2019-02-21 16:24:31</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Calendar类的常用方法使用示例如下：</p>
+<h3 id="add"><a class="markdownIt-Anchor" href="#add"></a> add</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//add:基于日历规则实现日期加减</span></span><br><span class="line">System.out.println(<span class="string">"#################### add #####################"</span>);</span><br><span class="line">Calendar cal = Calendar.getInstance();</span><br><span class="line">System.out.println(<span class="string">"当前月份："</span>+(cal.get(Calendar.MONTH)+<span class="number">1</span>));</span><br><span class="line">cal.add(Calendar.MONTH,<span class="number">2</span>);</span><br><span class="line">System.out.println(<span class="string">"加上2个月："</span>+(cal.get(Calendar.MONTH)+<span class="number">1</span>));</span><br><span class="line">cal.add(Calendar.MONTH,-<span class="number">2</span>);</span><br><span class="line">System.out.println(<span class="string">"再加上-2个月："</span>+(cal.get(Calendar.MONTH)+<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
+<h3 id="set"><a class="markdownIt-Anchor" href="#set"></a> set</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//set:设置日历字段的值</span></span><br><span class="line">System.out.println(<span class="string">"#################### set #####################"</span>);</span><br><span class="line">Calendar calendar = Calendar.getInstance();</span><br><span class="line">calendar.set(Calendar.YEAR,<span class="number">2018</span>);</span><br><span class="line">System.out.println(<span class="string">"修改年份后："</span>+calendar.get(Calendar.YEAR));</span><br><span class="line">calendar.set(<span class="number">2018</span>, Calendar.MAY,<span class="number">13</span>,<span class="number">15</span>,<span class="number">1</span>,<span class="number">11</span>);</span><br><span class="line">System.out.println(<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>).format(calendar.getTime()));</span><br></pre></td></tr></table></figure>
+<h3 id="get"><a class="markdownIt-Anchor" href="#get"></a> get</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get:返回指定日历字段的值</span></span><br><span class="line">System.out.println(<span class="string">"#################### get #####################"</span>);</span><br><span class="line">System.out.println(<span class="string">"当前日期:"</span>+calendar.get(Calendar.YEAR)+<span class="string">"-"</span>+calendar.get(Calendar.MONTH)</span><br><span class="line">        +<span class="string">"-"</span>+calendar.get(Calendar.DATE));</span><br><span class="line">System.out.println(<span class="string">"当前时间:"</span>+calendar.get(Calendar.HOUR_OF_DAY)+<span class="string">":"</span>+calendar.get(Calendar.MINUTE)</span><br><span class="line">        +<span class="string">":"</span>+calendar.get(Calendar.SECOND)+<span class="string">":"</span>+calendar.get(Calendar.MILLISECOND));</span><br><span class="line">System.out.println(<span class="string">"12小时制:"</span>+calendar.get(Calendar.HOUR));</span><br><span class="line">System.out.println(<span class="string">"24小时制:"</span>+calendar.get(Calendar.HOUR_OF_DAY));</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文主要对时间处理类进行了方法梳理和说明，实际的使用中还会掺杂着时区和时间格式化等操作。</p>
+<p>下篇文章我们接着来了解下Java中时区类TimeZone的基本使用。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/javadate1/" target="_blank" title="Java时间处理1----Date和Calendar方法探究(Java8以前)">https://www.larscheng.com/javadate1/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/时间处理/"><i class="fa-fw fa fa-tags"></i> 时间处理</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/javadate2/">Java时间处理2----时区TimeZone类方法探究(Java8以前)</a>
+            
+            
+            <a class="next" rel="next" href="/fastjson-api/">FastJson中JSONString、JavaBean、JSONObject、JSONArray的转换关系及API示例</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

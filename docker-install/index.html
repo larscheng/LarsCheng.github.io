@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Centos7下两种方式安装Docker-CE | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Centos7下两种方式安装Docker-CE</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-25&nbsp;&nbsp;17:22:52</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Docker/">Docker</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">669</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">3min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>Docker 提供了两个版本：社区版 (CE) 和企业版 (EE)。</p>
+<p>Docker 社区版 (CE) 是开发人员和小型团队开始使用 Docker 并尝试使用基于容器的应用的理想之选。</p>
+<p>本文介绍下Docker 社区版 (CE) 在CentOS 7系统中的里两种安装方式</p>
+<a id="more"></a> 
+<h3 id="安装前提"><a class="markdownIt-Anchor" href="#安装前提"></a> 安装前提</h3>
+<ul>
+<li>64 位版本的 CentOS 7</li>
+<li>CentOS 系统的内核版本高于 3.10（<code>uname -r</code>命令可查看系统内核版本）</li>
+</ul>
+<h3 id="安装-docker-ce"><a class="markdownIt-Anchor" href="#安装-docker-ce"></a> 安装 Docker CE</h3>
+<ol>
+<li>设置 Docker 的镜像仓库并从中进行安装</li>
+<li>下载 RPM 软件包并手动进行安装（例如，在不能访问互联网的隔离系统中安装 Docker）</li>
+</ol>
+<h3 id="从镜像仓库安装"><a class="markdownIt-Anchor" href="#从镜像仓库安装"></a> 从镜像仓库安装</h3>
+<h4 id="确保-yum-包更新到最新"><a class="markdownIt-Anchor" href="#确保-yum-包更新到最新"></a> 确保 yum 包更新到最新:</h4>
+<pre><code>sudo yum update
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131537.png" alt=""></p>
+<h4 id="安装一些必要的系统工具"><a class="markdownIt-Anchor" href="#安装一些必要的系统工具"></a> 安装一些必要的系统工具：</h4>
+<ul>
+<li>yum-utils 提供了 <code>yum-config-manager</code> 实用程序，用于设置yum源</li>
+<li>devicemapper 存储驱动需要 <code>device-mapper-persistent-data</code> 和 <code>lvm2</code></li>
+</ul>
+<pre class="highlight"><code class="">sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131550.png" alt=""></p>
+<h4 id="设置镜像仓库"><a class="markdownIt-Anchor" href="#设置镜像仓库"></a> 设置镜像仓库：</h4>
+<p>阿里云仓库地址（推荐）</p>
+<pre><code>sudo yum-config-manager \
+ --add-repo \
+ http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre>
+<p>官方仓库地址</p>
+<pre><code>sudo yum-config-manager \
+ --add-repo \
+ https://download.docker.com/linux/centos/docker-ce.repo
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131608.png" alt=""></p>
+<h4 id="更新-yum-软件包索引"><a class="markdownIt-Anchor" href="#更新-yum-软件包索引"></a> 更新 yum 软件包索引。</h4>
+<pre><code>sudo yum makecache fast
+</code></pre>
+<h4 id="查看仓库中所有docker版本"><a class="markdownIt-Anchor" href="#查看仓库中所有docker版本"></a> 查看仓库中所有docker版本</h4>
+<pre><code>sudo yum list docker-ce --showduplicates | sort -r
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131625.png" alt=""></p>
+<h4 id="安装-docker-ce-最新版本sudo-yum-install-docker-ce"><a class="markdownIt-Anchor" href="#安装-docker-ce-最新版本sudo-yum-install-docker-ce"></a> 安装 Docker CE 最新版本：<code>sudo yum install docker-ce</code></h4>
+<pre><code>sudo yum install docker-ce
+</code></pre>
+<h4 id="安装-docker-ce-指定版本sudo-yum-install-docker-ce-版本号"><a class="markdownIt-Anchor" href="#安装-docker-ce-指定版本sudo-yum-install-docker-ce-版本号"></a> 安装 Docker-ce 指定版本：<code>sudo yum install docker-ce-版本号</code></h4>
+<pre><code>sudo yum -y install docker-ce-18.03.1.ce-1.el7.centos
+</code></pre>
+<h4 id="启动-docker"><a class="markdownIt-Anchor" href="#启动-docker"></a> 启动 Docker</h4>
+<pre><code>sudo systemctl start docker 启动
+sudo systemctl restart docker 重启
+sudo systemctl enable docker 加入开机启动
+</code></pre>
+<h4 id="docker-版本信息查看"><a class="markdownIt-Anchor" href="#docker-版本信息查看"></a> Docker 版本信息查看</h4>
+<pre><code>sudo docker version
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131640.png" alt=""></p>
+<h4 id="测试运行-hello-world"><a class="markdownIt-Anchor" href="#测试运行-hello-world"></a> 测试运行 hello-world</h4>
+<pre><code>sudo docker run hello-world
+</code></pre>
+<p>docekr拉取<code>hello-world</code>镜像并启动，后打印出<code>Hello from Docker!</code><br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131658.png" alt=""></p>
+<h4 id="卸载-docker-ce"><a class="markdownIt-Anchor" href="#卸载-docker-ce"></a> 卸载 Docker CE</h4>
+<pre><code>sudo yum remove docker-ce
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131713.png" alt=""></p>
+<h4 id="删除所有镜像-容器和存储卷"><a class="markdownIt-Anchor" href="#删除所有镜像-容器和存储卷"></a> 删除所有镜像、容器和存储卷</h4>
+<pre><code>sudo rm -rf /var/lib/docker
+</code></pre>
+<h3 id="rpm软件包进行安装"><a class="markdownIt-Anchor" href="#rpm软件包进行安装"></a> RPM软件包进行安装</h3>
+<h4 id="wget安装"><a class="markdownIt-Anchor" href="#wget安装"></a> wget安装</h4>
+<pre><code>yum -y install wget
+</code></pre>
+<h4 id="下载rpm安装文件"><a class="markdownIt-Anchor" href="#下载rpm安装文件"></a> 下载rpm安装文件</h4>
+<p>官方镜像（国内下载较慢）</p>
+<pre><code>wget -P /tmp https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm
+</code></pre>
+<p>阿里云镜像（推荐）</p>
+<pre><code>wget -P /tmp https://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/stable/Packages/docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029131729.png" alt=""></p>
+<h4 id="进入rpm文件目录安装docker"><a class="markdownIt-Anchor" href="#进入rpm文件目录安装docker"></a> 进入rpm文件目录，安装docker</h4>
+<pre><code>cd tmp/
+yum install docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm
+</code></pre>
+<h4 id="启动docker"><a class="markdownIt-Anchor" href="#启动docker"></a> 启动docker</h4>
+<pre><code>sudo systemctl start docker 启动
+sudo systemctl restart docker 重启
+sudo systemctl enable docker 加入开机启动
+</code></pre>
+<p>至此，docker-ce在Centos7下的安装介绍已经完成，目前docker不仅限于Linux系列，它还支持Windows、Mac以及AWS和Azure等平台的使用。更多的用法和介绍有兴趣的同学可以在官网进一步了解。</p>
+<h3 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h3>
+<p><a href="https://docs.docker.com/install/" target="_blank" rel="noopener">Docker官网文档</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/docker-install/" target="_blank" title="Centos7下两种方式安装Docker-CE">https://www.larscheng.com/docker-install/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Docker安装/"><i class="fa-fw fa fa-tags"></i> Docker安装</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/docker-registry/">Docker中私有仓库的搭建流程</a>
+            
+            
+            <a class="next" rel="next" href="/vertx-http/">Vert.x创建一个Http服务</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

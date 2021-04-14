@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="author" content="jsons.cn">
+    <meta name="Copyright" content="jsons.cn">
+
+    <title>各种排序算法的动画比较动态演示-冒泡排序在线工具</title>
+    <meta name="keywords" content="排序算法的动画比较动态演示,排序算法动态演示,冒泡排序工具,在线冒泡排序,在线插入排序,在线归并排序,在线选择排序">
+    <meta name="description" content="在线排序算法的动画比较动态演示:在线冒泡排序,在线插入排序,在线归并排序,在线希尔排序,在线选择排序,排序算法动态演示在线工具">
+
+    <!--<link rel="icon" href="/myfavicon.ico" mce_href="/myfavicon.ico" type="image/x-icon">-->
+    <link rel="shortcut icon" href="myfavicon.ico">
+    <link href="bootstrap3.css" rel="stylesheet" type="text/css">
+    <link href="mainmin.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/Style/js/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/Style/js/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="custom.css" rel="stylesheet" type="text/css">
+
+    <style>
+        tbody {
+            display: none
+        }
+
+        table {
+            margin: auto
+        }
+    </style>
+</head>
+<body onload="init();" class="VisualizationMainPage">
+
+
+<!--内容开始-->
+<div class="container" style="height: auto !important;">
+    <div class="row" style="height: auto !important;">
+        <div class="col-md-12 col10main" style="height: auto !important; min-height: 0px !important;">
+
+            <div class="accordion" id="accordion2" style="height: auto !important;">
+                <div class="accordion-group">
+
+
+                    <ul class="nav nav-tabs hbflag">
+
+                        <li role="presentation" class="active"><a href="#">排序算法演示</a></li>
+                    </ul>
+
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        各种排序算法的动画比较动态演示（排序算法动态演示功能，让你对各种排序算法有更深刻的了解）
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-body">
+                            <form id="form1" class="form-horizontal" action="/sort/" method="post">
+                                <div class="form-group">
+                                    <label class="col-sm-12 control-label">
+                                        <div id="container">
+                                            <div id="mainContent">
+                                                <div id="algoControlSection">
+                                                    <table id="AlgorithmSpecificControls">
+                                                        <td><input type="Button" value="混排队列" name="混排队列"></td>
+                                                        <td><input type="Button" value="插入排序" name="插入排序"></td>
+                                                        <td><input type="Button" value="选择排序" name="选择排序"></td>
+                                                        <td><input type="Button" value="冒泡排序" name="冒泡排序"></td>
+                                                        <td><input type="Button" value="快速排序" name="快速排序"></td>
+                                                        <td><input type="Button" value="归并排序" name="归并排序"></td>
+                                                        <td><input type="Button" value="希尔排序" name="希尔排序"></td>
+                                                        <td><input type="Button" value="调整队列大小" name="调整队列大小"></td>
+                                                    </table>
+                                                </div>
+                                                <br/>
+                                                <div id="generalAnimationControlSection">
+                                                    <table id="GeneralAnimationControls">
+                                                        <td><input type="Button" value="跳回最初" disabled="disabled"></td>
+                                                        <td><input type="Button" value="后退一步" disabled="disabled"></td>
+                                                        <td><input type="Button" value="暂停"></td>
+                                                        <td><input type="Button" value="向前一步" disabled="disabled"></td>
+                                                        <td><input type="Button" value="跳到最后" disabled="disabled"></td>
+                                                        <td>
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div display="inline-block" float="left"
+                                                                             class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"
+                                                                             style="width:200px"><a href="#"
+                                                                                                    class="ui-slider-handle ui-state-default ui-corner-all"
+                                                                                                    style="left: 75%;"></a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="center">动画速度</td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td> 宽:</td>
+                                                        <td><input type="Text" value="1000" size="4"></td>
+                                                        <td> 高:</td>
+                                                        <td><input type="Text" value="500" size="4"></td>
+                                                        <td><input type="Button" value="调整画布大小"></td>
+                                                    </table>
+                                                </div>
+                                                <canvas id="canvas" width="1000" height="500"></canvas>
+                                            </div>
+                                            <div id="footer">
+                                                <p>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="jquery-1_002.js" type="text/javascript"></script>
+<script src="bootstrap3.js" type="text/javascript"></script>
+<script src="FileSave.js" type="text/javascript"></script>
+<script src="clipboard.js" type="text/javascript"></script>
+<script src="mainjs.js" type="text/javascript"></script>
+
+<script src="jquery-1.js" type="text/javascript"></script>
+<script type="application/javascript" src="jquery-ui-1.js"></script>
+<script type="application/javascript" src="CustomEvents.js"></script>
+<script type="application/javascript" src="UndoFunctions.js"></script>
+<script type="application/javascript" src="AnimatedObject.js"></script>
+<script type="application/javascript" src="AnimatedLabel.js"></script>
+<script type="application/javascript" src="AnimatedCircle.js"></script>
+<script type="application/javascript" src="AnimatedRectangle.js"></script>
+<script type="application/javascript" src="AnimatedLinkedList.js"></script>
+<script type="application/javascript" src="HighlightCircle.js"></script>
+<script type="application/javascript" src="Line.js"></script>
+<script type="application/javascript" src="ObjectManager.js"></script>
+<script type="application/javascript" src="AnimationMain.js"></script>
+<script type="application/javascript" src="Algorithm.js"></script>
+<script type="application/javascript" src="ComparisonSort.js"></script>
+
+
+</body>
+</html>

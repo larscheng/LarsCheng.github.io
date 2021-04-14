@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>排序6：快速排序 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">排序6：快速排序</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-09-10&nbsp;&nbsp;19:43:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/算法/">算法</a>
+                            
+                                <a href="/categories/算法/排序/">排序</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,882</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>原文作者：<a href="https://itimetraveler.github.io" target="_blank" rel="noopener">Mr.Seven</a><br>
+原文地址：<a href="https://itimetraveler.github.io/2017/07/18/%E5%85%AB%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93%E4%B8%8Ejava%E5%AE%9E%E7%8E%B0/" target="_blank" rel="noopener">八大排序算法总结与java实现</a><br>
+<a href="https://www.larscheng.com/others/allsort/style/">❤查看排序算法动态演示❤查看排序算法动态演示❤查看排序算法动态演示</a></p>
+</blockquote>
+<h1 id="快速排序-quick-sort"><a class="markdownIt-Anchor" href="#快速排序-quick-sort"></a> 快速排序 （Quick Sort）</h1>
+<p>快速排序的名字起的是简单粗暴，因为一听到这个名字你就知道它存在的意义，就是快，而且效率高！</p>
+<p>快速排序是一种<code>分而治之</code>思想在排序算法上的典型应用。快速排序是在<code>冒泡排序</code>的基础上进行的改良，快排在面试中也是常客。</p>
+<h1 id="基本思想"><a class="markdownIt-Anchor" href="#基本思想"></a> 基本思想</h1>
+<p>快速排序的基本思想：<strong>挖坑填数+分治法</strong>。</p>
+<p>先选择一个元素作为基准，通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以<code>递归</code>进行，以此达到整个数据变成有序序列。</p>
+<p>动态演示如图，其中第一个基准元素位最后一个元素</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/sort/Sorting_quicksort_anim.gif" alt="快速排序"></p>
+<h1 id="算法描述"><a class="markdownIt-Anchor" href="#算法描述"></a> 算法描述</h1>
+<p>快速排序使用分治策略来把一个序列（list）分为两个子序列（sub-lists）。步骤为：</p>
+<ol>
+<li>从数列中挑出一个元素，称为”基准”（pivot）。</li>
+<li>重新排序数列，所有比基准值小的元素摆放在基准前面，所有比基准值大的元素摆在基准后面（相同的数可以到任一边）。在这个分区结束之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</li>
+<li>递归地（recursively）把小于基准值元素的子数列和大于基准值元素的子数列排序。</li>
+</ol>
+<p>递归到最底部时，数列的大小是0或1，也就是已经排序好了。这个算法一定会结束，因为在每次的迭代（iteration）中，它至少会把一个元素摆到它最后的位置去。</p>
+<p>如图所示：数组[7,5,6,3,5,1,2,9,5,8,4],以第一个元素7为基准</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/sort/quicksort1.gif" alt="快速排序分区1"></p>
+<p>首次分区后可以得到<code>[5,6,3,5,1,2,4,5]</code>和<code>[7,8,9]</code>两组数据，继续以<code>第一个元素为基准</code>进行两个数组的分区</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/sort/quicksort2.gif" alt="快速排序分区2"></p>
+<p>如此循环往复，即可得到有序序列</p>
+<h1 id="java实现"><a class="markdownIt-Anchor" href="#java实现"></a> Java实现</h1>
+<p>用伪代码描述如下：</p>
+<ol>
+<li>i = L; j = R; 将基准数挖出形成第一个坑a[i]。（L:左侧下标起点，R:右侧下标起点）</li>
+<li>j–，由后向前找比它小的数，找到后挖出此数填前一个坑a[i]中。</li>
+<li>i++，由前向后找比它大的数，找到后也挖出此数填到前一个坑a[j]中。</li>
+<li>再重复执行2，3二步，直到i==j，将基准数填入a[i]中</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">49</span>, <span class="number">38</span>, <span class="number">65</span>, <span class="number">97</span>, <span class="number">26</span>, <span class="number">13</span>, <span class="number">27</span>, <span class="number">49</span>, <span class="number">55</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        System.out.println(<span class="string">"排序前:"</span> + Arrays.toString(arr));</span><br><span class="line">        <span class="keyword">int</span>[] a = Arrays.copyOf(arr, arr.length);</span><br><span class="line"></span><br><span class="line">        quicksort1(a, <span class="number">0</span>, a.length - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quicksort1</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span> || low &gt;= high) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> leftIndex = low;</span><br><span class="line">        <span class="keyword">int</span> rightIndex = high;</span><br><span class="line">        <span class="comment">//挖坑1：保存基准的值</span></span><br><span class="line">        <span class="keyword">int</span> temp = arr[leftIndex];</span><br><span class="line">        <span class="keyword">while</span> (leftIndex &lt; rightIndex) &#123;</span><br><span class="line">            <span class="comment">//坑2：从后向前找到比基准小的元素，插入到基准位置坑1中</span></span><br><span class="line">            <span class="keyword">while</span> (leftIndex &lt; rightIndex &amp;&amp; arr[rightIndex] &gt;= temp) &#123;</span><br><span class="line">                <span class="comment">//不做交换</span></span><br><span class="line">                rightIndex--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//右侧数据小于基准，进行交换</span></span><br><span class="line">            arr[leftIndex] = arr[rightIndex];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">//坑3：从前往后找到比基准大的元素，放到刚才挖的坑2中</span></span><br><span class="line">            <span class="keyword">while</span> (leftIndex &lt; rightIndex &amp;&amp; arr[leftIndex] &lt;= temp) &#123;</span><br><span class="line">                leftIndex++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//左侧数据大于基准，进行交换</span></span><br><span class="line">            arr[rightIndex] = arr[leftIndex];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//基准值填补到坑3中，准备分治递归快排</span></span><br><span class="line">        arr[leftIndex] = temp;</span><br><span class="line"></span><br><span class="line">        quicksort1(arr, low, leftIndex - <span class="number">1</span>);</span><br><span class="line">        quicksort1(arr, leftIndex + <span class="number">1</span>, high);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是<code>递归版</code>的快速排序：通过把<code>基准temp插入到合适的位置</code>来实现分治，并<code>递归</code>地对分治后的两个划分继续快排。</p>
+<blockquote>
+<p>那么非递归版的快排如何实现呢？</p>
+</blockquote>
+<p>因为<code>递归的本质是栈</code>，所以我们非递归实现的过程中，可以<code>借助栈</code>来保存中间变量就可以实现非递归了。在这里中间变量也就是<code>通过partition函数</code>划分区间之后分成左右两部分的首尾指针，只需要保存这两部分的首尾指针即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 快速排序（非递归）</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * ①. 从数列中挑出一个元素，称为"基准"（pivot）。</span></span><br><span class="line"><span class="comment"> * ②. 重新排序数列，所有比基准值小的元素摆放在基准前面，所有比基准值大的元素摆在基准后面（相同的数可以到任一边）。在这个分区结束之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</span></span><br><span class="line"><span class="comment"> * ③. 把分区之后两个区间的边界（low和high）压入栈保存，并循环①、②步骤</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> arr   待排序数组</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">49</span>, <span class="number">38</span>, <span class="number">65</span>, <span class="number">97</span>, <span class="number">26</span>, <span class="number">13</span>, <span class="number">27</span>, <span class="number">49</span>, <span class="number">55</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        System.out.println(<span class="string">"排序前:"</span> + Arrays.toString(arr));</span><br><span class="line"></span><br><span class="line">        quickSortByStack(Arrays.copyOf(arr, arr.length));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSortByStack</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">        stack.push(<span class="number">0</span>);</span><br><span class="line">        stack.push(arr.length - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!stack.empty()) &#123;</span><br><span class="line">            <span class="keyword">int</span> high = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> low = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> pivot = partition(arr, low, high);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (pivot &gt; low) &#123;</span><br><span class="line">                stack.push(low);</span><br><span class="line">                stack.push(pivot - <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (pivot &lt; high &amp;&amp; pivot &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                stack.push(pivot + <span class="number">1</span>);</span><br><span class="line">                stack.push(high);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"排序后:"</span> + Arrays.toString(arr));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span> || low &gt;= high) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> leftIndex = low;</span><br><span class="line">        <span class="keyword">int</span> rightIndex = high;</span><br><span class="line">        <span class="comment">//挖坑1：保存基准的值</span></span><br><span class="line">        <span class="keyword">int</span> pivot = arr[leftIndex];</span><br><span class="line">        <span class="keyword">while</span> (leftIndex &lt; rightIndex) &#123;</span><br><span class="line">            <span class="comment">//坑2：从后向前找到比基准小的元素，插入到基准位置坑1中</span></span><br><span class="line">            <span class="keyword">while</span> (leftIndex &lt; rightIndex &amp;&amp; arr[rightIndex] &gt;= pivot) &#123;</span><br><span class="line">                <span class="comment">//不做交换</span></span><br><span class="line">                rightIndex--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//右侧数据小于基准，进行交换</span></span><br><span class="line">            arr[leftIndex] = arr[rightIndex];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">//坑3：从前往后找到比基准大的元素，放到刚才挖的坑2中</span></span><br><span class="line">            <span class="keyword">while</span> (leftIndex &lt; rightIndex &amp;&amp; arr[leftIndex] &lt;= pivot) &#123;</span><br><span class="line">                leftIndex++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//左侧数据大于基准，进行交换</span></span><br><span class="line">            arr[rightIndex] = arr[leftIndex];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//基准值填补到坑3中，准备分治递归快排</span></span><br><span class="line">        arr[leftIndex] = pivot;</span><br><span class="line">        <span class="keyword">return</span> leftIndex;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="复杂度"><a class="markdownIt-Anchor" href="#复杂度"></a> 复杂度</h1>
+<p>快速排序是通常被认为在同数量级（O(nlog2n)）的排序方法中平均性能最好的。</p>
+<p>但若初始序列按关键码有序或基本有序时，快排序反而蜕化为冒泡排序。</p>
+<p>为改进之，通常以“三者取中法”来选取基准记录，即将排序区间的两个端点与中点三个记录关键码居中的调整为支点记录。快速排序是一个不稳定的排序方法。</p>
+<table>
+<thead>
+<tr>
+<th>平均时间复杂度</th>
+<th>最好情况</th>
+<th>最坏情况</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O(nlog2n)</td>
+<td>O(nlog2n)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<p>快速排序排序效率非常高。 虽然它运行最糟糕时将达到O(n²)的时间复杂度, 但通常平均来看, 它的时间复杂为O(nlogn), 比同样为O(nlogn)时间复杂度的归并排序还要快.</p>
+<h1 id="适用场景"><a class="markdownIt-Anchor" href="#适用场景"></a> 适用场景</h1>
+<p>快速排序似乎更偏爱乱序的数列, 越是乱序的数列, <code>它相比其他排序而言</code>, 相对效率更高.</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/quick-sort/" target="_blank" title="排序6：快速排序">https://www.larscheng.com/quick-sort/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/排序/"><i class="fa-fw fa fa-tags"></i> 排序</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/merge-sort/">排序7：归并排序</a>
+            
+            
+            <a class="next" rel="next" href="/bubble-sort/">排序5：冒泡排序</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>
