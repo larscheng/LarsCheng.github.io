@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>萌新入门Github请看这里，学不会远程教 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">萌新入门Github请看这里，学不会远程教</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-10-14&nbsp;&nbsp;13:11:02</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/教程/">教程</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,662</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">8min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="http://dingyue.nosdn.127.net/JcpLscAwNgVArlscUVGqvcI53bmIQlpy9TID6kp1NFk1d1540607416695compressflag.jpg" alt=""></p>
+<h1 id="一些废话"><a class="markdownIt-Anchor" href="#一些废话"></a> 一些废话</h1>
+<blockquote>
+<p>本文的主旨是为初次接触Github的同学提供一个入门的演示，如果你已经是Github老鸟，可以忽略本文哦，另外本文只是抛砖引玉，其实最好的教程是官方文档！！！</p>
+</blockquote>
+<ul>
+<li><a href="https://github.com/" target="_blank" rel="noopener">Github官网</a></li>
+<li><a href="https://guides.github.com/activities/hello-world/" target="_blank" rel="noopener">Github使用指南-Web页面</a></li>
+<li><a href="https://help.github.com/cn/enterprise/2.18/user" target="_blank" rel="noopener">Github官方中文版文档-ALL</a></li>
+</ul>
+<a id="more"></a> 
+<p>Github目前虽然十分火热，但是对于第一次接触这一类产品的同学来说，上手还是有一定难度的</p>
+<blockquote>
+<p>本文就聊一聊如何使用Github，相信读完本文，你一定可以掌握以下几点：</p>
+</blockquote>
+<ul>
+<li>Github是什么</li>
+<li>Github可以做什么</li>
+<li>Git与Github的关系</li>
+<li>本地项目上传至Github</li>
+<li>克隆远程仓库修改后提交</li>
+<li>举一反三Github、Gitee、Coding</li>
+</ul>
+<h1 id="github是什么"><a class="markdownIt-Anchor" href="#github是什么"></a> Github是什么</h1>
+<blockquote>
+<p>全球最大的同性交友平台—&gt;全球最大的程序猿交流平台—&gt;一个神奇的地方</p>
+</blockquote>
+<p>Github是目前最火的网站之一，在这里很多的用户都是从事程序相关工作，又被戏称为<code>全球最大的程序猿交流平台</code>, 从最初仅活跃在程序员圈子中发展到现在各行各业的使用，经常用Github你就会发现，这真的是个神奇的地方，这里有很多五花八门，有趣的仓库。</p>
+<p>那么Github到底是什么呢？<br>
+Wiki 百科上是这么说的</p>
+<blockquote>
+<p>GitHub 是一个共享虚拟主机服务，用于存放使用Git版本控制的软件代码和内容项目。它由GitHub公司（曾称Logical Awesome）的开发者Chris Wanstrath、PJ Hyett和Tom Preston-Werner 使用Ruby on Rails编写而成。</p>
+</blockquote>
+<p>官方是这么说的</p>
+<blockquote>
+<p>GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.</p>
+</blockquote>
+<p>用我的<code>工地英语</code>翻译过来意思就是</p>
+<blockquote>
+<p>GitHub是用于版本控制和协作的代码托管平台。它使您和其他人可以在任何地方共同处理项目。</p>
+</blockquote>
+<p>虽然官方概括的很精简，但是过于官方，以至于我也一脸懵*，不过我们脑海里可以对她有以下几点印象：</p>
+<ul>
+<li>存放代码、存放项目</li>
+<li>版本控制</li>
+<li>托管平台</li>
+<li>共同处理项目</li>
+</ul>
+<h1 id="github可以做什么"><a class="markdownIt-Anchor" href="#github可以做什么"></a> Github可以做什么</h1>
+<p>在了解了Github是什么后，如果你以为github就是个存代码的地方那你就太年轻了，你完全想不到全球网民的脑洞有多强大，Github都快玩出了花。</p>
+<p>除了最基础的可用来<code>存储和管理项目工程</code>外，Github还可以做很多其他事情：</p>
+<ul>
+<li>网站</li>
+<li>个人博客</li>
+<li>说明文档</li>
+<li>管理配置文件</li>
+<li>收集资料</li>
+<li>面试简历</li>
+<li>托管编程环境</li>
+<li>写书、写小说</li>
+<li>资源共享</li>
+<li>招聘信息发布</li>
+<li>老师布置作业，学生交作业</li>
+<li>公益活动</li>
+<li>等等等…五花八门千奇百怪</li>
+</ul>
+<h1 id="git与github的关系"><a class="markdownIt-Anchor" href="#git与github的关系"></a> Git与Github的关系</h1>
+<p>从GitHub的介绍上我们不难看出，GitHub托管的是Git代码仓库。</p>
+<blockquote>
+<p>这时候可能又有同学想问“这个Git又是什么鬼？他和Github又有什么关系”</p>
+</blockquote>
+<p>Git是一个分布式的版本控制系统，可以对项目进行版本管理。而GitHub可以托管各种git库，并提供一个web界面</p>
+<p>Git只是一个源代码管理工具（<code>管理代码的版本</code>） 并不能实现代码的共享。<br>
+而我们将本地的Git库（<code>使用Git版本控制的软件代码和内容项目</code>）上传到Github上，通过GitHub实现共享，达到不同之间的协同工作</p>
+<p>所以在正式使用Github之前，需要先学会使用Git管理项目工程，即学会版本控制</p>
+<blockquote>
+<p>Git的命令大全和原理性知识本文不做拓展，大家如有兴趣可以去<a href="https://git-scm.com/docs" target="_blank" rel="noopener">Git官方文档</a>翻阅学习哦</p>
+</blockquote>
+<h1 id="本地项目上传至github"><a class="markdownIt-Anchor" href="#本地项目上传至github"></a> 本地项目上传至Github</h1>
+<p>在开始本节介绍前呢需要大家准备以下环境和账号：</p>
+<ul>
+<li>Github账号</li>
+<li>本地电脑安装Git</li>
+</ul>
+<h3 id="在github中创建新的仓库"><a class="markdownIt-Anchor" href="#在github中创建新的仓库"></a> 在Github中创建新的仓库</h3>
+<p>直接进入创建仓库页面：<a href="https://github.com/new" target="_blank" rel="noopener">https://github.com/new</a></p>
+<p>或者通过按钮进入创建页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014111622.png" alt="新建仓库"></p>
+<p>具体的创建步骤如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014111956.png" alt="新建仓库"></p>
+<p>创建成功后会跳转到如下页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014112407.png" alt="GithubStudy"></p>
+<p>仔细看图上，不难发现，他已经告诉你接下来该怎么做，如何创建一个新的存储库（<code>create a new repository on the command line</code>）</p>
+<p>下面我们按照他给的方式，来试一下看看效果~</p>
+<h2 id="配置本地git环境"><a class="markdownIt-Anchor" href="#配置本地git环境"></a> 配置本地Git环境</h2>
+<blockquote>
+<p>如果是第一次使用 Git，你需要设置署名和邮箱</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;用户名&quot;</span><br><span class="line">$ git config --global user.email &quot;电子邮箱&quot;</span><br></pre></td></tr></table></figure>
+<p>设置成功后在Github提交记录中就会显示本次提交人的信息</p>
+<h2 id="创建本地项目"><a class="markdownIt-Anchor" href="#创建本地项目"></a> 创建本地项目</h2>
+<p>创建一个用于托管在Github中的项目工程</p>
+<h3 id="创建本地文件夹"><a class="markdownIt-Anchor" href="#创建本地文件夹"></a> 创建本地文件夹</h3>
+<p>创建一个名为 <code>GithubStudy</code> 的文件夹</p>
+<h3 id="本地git仓库初始化"><a class="markdownIt-Anchor" href="#本地git仓库初始化"></a> 本地git仓库初始化</h3>
+<p>进入 <code>GithubStudy</code> 文件夹 右键打开<code>git bash here</code>，执行如下命令，进行本地git仓库初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/gitinit.gif" alt="git init"></p>
+<p>完成后在当前项目里面会有一个.git文件夹 是用来记录当前本地仓库（如果看不到需要勾上显示隐藏文件）</p>
+<h3 id="创建文件"><a class="markdownIt-Anchor" href="#创建文件"></a> 创建文件</h3>
+<p>在文件夹下创建一个<code>README.md</code>，其内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### 1.学习使用Github：本地项目上传至Github</span><br></pre></td></tr></table></figure>
+<h3 id="添加到暂存区"><a class="markdownIt-Anchor" href="#添加到暂存区"></a> 添加到暂存区</h3>
+<p>此时把将项目的修改全部添加到暂存区 ，意思就是保存此次的所有修改</p>
+<p>在<code>GithubStudy</code> 文件夹 右键打开<code>git bash here</code>，执行如下命令<code>git add .</code>(注意有点…)</p>
+<blockquote>
+<p>ps: <code>git add .</code>：添加全部文件到暂存区，<code>git add README.md</code>：指定文件添加到暂存区</p>
+</blockquote>
+<h3 id="提交到本地仓库"><a class="markdownIt-Anchor" href="#提交到本地仓库"></a> 提交到本地仓库</h3>
+<p>把当前暂存区添加的文件提交到本地仓库（提交后就表示创建了一个代码的版本）</p>
+<p>在<code>GithubStudy</code> 文件夹 右键打开<code>git bash here</code>，执行如下命令 <code>git commit -m '提交日志'</code></p>
+<p>提交完成后就会把代码提交到.git文件夹（本地git仓库） 并且会自动创建一个代码的版本</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014111059.png" alt="git commit"></p>
+<h3 id="指定远程服务器仓库"><a class="markdownIt-Anchor" href="#指定远程服务器仓库"></a> 指定远程服务器仓库</h3>
+<p>继续在<code>git bash here</code>中执行命令:<code>git remote add origin {项目仓库地址}</code></p>
+<p>注意：这里的<code>项目仓库地址</code>是你在github创建完新仓库时自动生成的，比如我刚刚创建后生成的是：<code>https://github.com/larscheng/GithubStudy.git</code></p>
+<p>执行完上述命令后，远程仓库的地址就指定好了，我们随时都可以推送项目</p>
+<h2 id="推送至github"><a class="markdownIt-Anchor" href="#推送至github"></a> 推送至Github</h2>
+<p>所有准备工作都已完成，现在就需要我们将项目推送至GitHub，你也可以理解为上传。</p>
+<p>在<code>GithubStudy</code> 文件夹下右键打开<code>git bash here</code>，执行如下命令 <code>git push -u origin master</code></p>
+<p>注：初次提交时，会需要验证你的Github用户名和密码，根据命令提示输入后即可完成推送</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014114249.png" alt="推送"></p>
+<p>此时你再进入Github刚刚创建的仓库中，刷新页面后，看到的应该是如下的样子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014114413.png" alt="推送成功"></p>
+<h2 id="在线修改项目并提交"><a class="markdownIt-Anchor" href="#在线修改项目并提交"></a> 在线修改项目并提交</h2>
+<p>这里，我在项目中创建了一个新的文件夹名叫<code>update.txt</code> 修改操作可以参考如下动态图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/updata.gif" alt="新建文件"></p>
+<h2 id="拉取最新版本"><a class="markdownIt-Anchor" href="#拉取最新版本"></a> 拉取最新版本</h2>
+<p>此时我们本地的项目已经不是最新的了，如何进行版本同步，获取最新的代码呢，执行如下命令即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014115406.png" alt="git pull"></p>
+<p>执行成功后，本地代码即为最新咯</p>
+<h1 id="克隆远程仓库修改后提交"><a class="markdownIt-Anchor" href="#克隆远程仓库修改后提交"></a> 克隆远程仓库修改后提交</h1>
+<p>这一节，主要演示的是：当你已有一个github项目，如何将它克隆至本地，修改后推送至github</p>
+<p>这里还是以<code>GithubStudy</code>项目为演示,在Github下该仓库的首页中复制仓库地址：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014124046.png" alt="GithubStudy主页"></p>
+<h2 id="克隆"><a class="markdownIt-Anchor" href="#克隆"></a> 克隆</h2>
+<p>新建文件夹<code>GithubStudyClone</code></p>
+<p>在<code>GithubStudyClone</code> 文件夹下右键打开<code>git bash here</code>，执行如下命令 <code>git clone {项目仓库地址}</code></p>
+<p>注意：这里的<code>项目仓库地址</code>是你在github创建完新仓库时自动生成的，比如我创建后生成的是：<code>https://github.com/larscheng/GithubStudy.git</code>，每个人的地址都会有所不同，记得替换哦</p>
+<p>执行结果如下：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/clone.gif" alt="clone"></p>
+<h2 id="修改"><a class="markdownIt-Anchor" href="#修改"></a> 修改</h2>
+<p>修改文件<code>README.md</code>，在原有内容中加入如下信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### 2.学习使用Github：克隆远程仓库修改后提交</span><br></pre></td></tr></table></figure>
+<h2 id="添加提交推送"><a class="markdownIt-Anchor" href="#添加提交推送"></a> 添加+提交+推送</h2>
+<p>修改完成后，执行如下三条命令，即可推送至GitHub</p>
+<p>在<code>GithubStudyClone/GithubStudy</code> 目录下右键打开<code>git bash here</code>，依次执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line"></span><br><span class="line">git commit -m &apos;修改README&apos;</span><br><span class="line"></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/githubstudy/20191014125022.png" alt=""></p>
+<blockquote>
+<p>此时进入GitHub中查看<code>GithubStudy</code>,你会发现我们刚刚的修改已经生效</p>
+</blockquote>
+<h1 id="对比"><a class="markdownIt-Anchor" href="#对比"></a> 对比</h1>
+<p>上面对于Github的入门使用已经基本介绍完了，Github目前以被微软收入囊中，对于国内用户来说由于网络的原因访问Github时往往不是那么的顺畅。</p>
+<p>那么国内是否有Github同类型的产品呢？答案当然是有的</p>
+<ul>
+<li>码云(<a href="http://gitee.com" target="_blank" rel="noopener">gitee.com</a>)是 <a href="http://OSCHINA.NET" target="_blank" rel="noopener">OSCHINA.NET</a> 推出的代码托管平台,支持 Git 和 SVN,提供免费的私有仓库托管。</li>
+<li>Coding 是一个面向开发者的云端开发平台，目前提供代码托管，运行空间，质量控制，项目管理等功能。</li>
+</ul>
+<p>这两款产品作为代码托管平台来说与Github几乎一样，都是优秀的托管平台。</p>
+<p>如果你烦恼于GitHub的访问限制，那完全可以考虑使用Gitee、或者Coding</p>
+<blockquote>
+<p>所以问题来了，产品都换了，那怎么用呢？ GitHub我都是才学会，又要学Coding、Gitee</p>
+</blockquote>
+<p>不用担心，操作一摸一样，你完全可以用上面Github讲解的操作流程来使用Gitee、Coding。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<blockquote>
+<p>本文不是Git的安装教程、也不是原理分析文章，本文旨在为初次接触Github的同学提供一个容易上手的中文演示</p>
+</blockquote>
+<p>本文中也存在一些难点和坑点，例如</p>
+<ul>
+<li>Git命令的使用</li>
+<li>Github身份验证</li>
+<li>Github的其他功能使用</li>
+<li>等等…</li>
+</ul>
+<p>其实大家不用害怕，东西虽然多，但是都很好理解，当你遇到问题时要学会运用搜索引擎、学会阅读官方文档。</p>
+<p>当然如果有问题也可以留言或者邮件联系我哦</p>
+<blockquote>
+<p>如果阅读完本文后，你已经基本掌握了Github的使用，这里为大家提供一些高阶操作的文章：</p>
+</blockquote>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2018/10/git-internals.html" target="_blank" rel="noopener">Git原理入门-阮一峰</a></li>
+<li><a href="https://www.jianshu.com/p/360bdda5157f" target="_blank" rel="noopener">Git常用命令详解</a></li>
+<li><a href="https://help.github.com/cn/enterprise/2.18/user" target="_blank" rel="noopener">Github官方中文版文档-ALL</a></li>
+<li><a href="https://www.larscheng.com/create-blog/">基于hexo和coding免费搭建个人博客网站-larscheng</a></li>
+</ul>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/github-study/" target="_blank" title="萌新入门Github请看这里，学不会远程教">https://www.larscheng.com/github-study/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/GitHub/"><i class="fa-fw fa fa-tags"></i> GitHub</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/dp-overview/">设计模式总览</a>
+            
+            
+            <a class="next" rel="next" href="/hexo-principle/">Hexo的工作原理探究</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

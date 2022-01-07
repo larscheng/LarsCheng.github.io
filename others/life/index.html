@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>软件设计师备考计划 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <article class="post-wrap page">
+        
+        <h2 class="post-title">软件设计师备考计划</h2>
+        
+        <section class="post-content">
+            <p>2019年11月9日考试，距离现在还有 <span style="font-weight: bold;color: darkorange;" id="showInterval"></span></p>
+<script>
+
+    
+    
+    function getDistanceTime(time,showInterval){
+        var endTime= new Date(Date.parse(time.replace(/-/g, "/")));/*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
+        var nowTime = new Date();
+        var distance =endTime.getTime() - nowTime.getTime();/*getTime把一个date对象转换成毫秒*/
+
+        var day = 0;
+        var hour = 0;
+        var minute = 0;
+        var second = 0;
+
+        if(distance >= 0){
+            day = Math.floor(distance/1000/60/60/24);
+            hour = Math.floor(distance/1000/60/60%24);
+            minute = Math.floor(distance/1000/60%60);
+            second = Math.floor(distance/1000%60);
+        }else{
+            //alert("目标日期小于当前日期!")
+            document.getElementById(showInterval).innerHTML = 0 + "天" +  0 + "时" + 0 + "分" + 0 + "秒";
+        }
+
+        document.getElementById(showInterval).innerHTML = day + "天" +  hour + "时" + minute + "分" + second + "秒";
+    }
+    //    setInterval(function(){getDistanceTime('2016/05/19 12:00:00','showInterval');},0);
+    setInterval(function(){getDistanceTime('2019-11-09 00:00:00','showInterval');},0);
+</script>
+<h3 id="复习资料"><a class="markdownIt-Anchor" href="#复习资料"></a> 复习资料</h3>
+<ul>
+<li>《软件设计师教程》-第五版</li>
+<li>《软件设计师考试冲刺（习题与解答）》</li>
+<li>《软件设计师真题精析与命题密卷》</li>
+<li><a href="https://www.bilibili.com/video/av19665344/" target="_blank" rel="noopener">B站视频教程</a></li>
+<li><a href="https://pan.baidu.com/s/1zE9Q1uq4LYwgz-UwbUeKvw" target="_blank" rel="noopener">软件设计师资料包</a>, 提取码：<code>gnuc</code> : 内含视频(<code>年代久远</code>)、讲义、教程、真题、模拟题…等等等</li>
+</ul>
+<h3 id="备考安排如下"><a class="markdownIt-Anchor" href="#备考安排如下"></a> 备考安排如下：</h3>
+<ul>
+<li>step1😄: <s>考试大纲，考试内容、重难点梳理（8.18前结束）</s></li>
+<li>step2😋: <s>一轮复习+刷题（9.29前结束）</s>
+<ul>
+<li><s>根据《考试冲刺》中的<code>考点提炼</code>去《软件设计师教程》中复习知识，复习完后回来做《考试冲刺》中的习题，并纠错记录</s></li>
+</ul>
+</li>
+<li>step3😘: <s>二轮复习+刷题（10.27前结束）</s>
+<ul>
+<li><s>刷历年真题卷，刷题后回《软件设计师教程》复习总结</s></li>
+</ul>
+</li>
+<li>step4😎: <s>最后冲刺汇总知识点（11.9结束）</s>
+<ul>
+<li><s>刷冲刺题、模拟题。</s></li>
+</ul>
+</li>
+</ul>
+<h3 id="打卡计划"><a class="markdownIt-Anchor" href="#打卡计划"></a> 打卡计划：</h3>
+<ol>
+<li>每天至少2个小时复习时间</li>
+<li>每天记录当日学习内容</li>
+<li>每周总结复习进度</li>
+<li>总结<a href="https://www.processon.com/view/link/5d6b8a92e4b0b5cfa9d2aaf2" target="_blank" rel="noopener">每章知识点体系图(持续更新)</a></li>
+</ol>
+<h3 id="打卡记录表"><a class="markdownIt-Anchor" href="#打卡记录表"></a> 打卡记录表</h3>
+<style>
+table th:first-of-type {
+	width: 10%;
+}
+table th:nth-of-type(2) {
+	width: 11%;
+}
+table th:nth-of-type(3) {
+	width: 11%;
+}
+table th:nth-of-type(4) {
+	width: 11%;
+}
+table th:nth-of-type(5) {
+	width: 11%;
+}
+table th:nth-of-type(6) {
+	width: 11%;
+}
+table th:nth-of-type(7) {
+	width: 11%;
+}
+table th:nth-of-type(8) {
+	width: 11%;
+}
+table th:nth-of-type(9) {
+	width: 11%;
+}
+table td:first-of-type {
+	background: rgba(7,17,27,0.06);
+}
+
+table td:nth-of-type(9) {
+	background: rgba(128,203,196,0.251);
+}
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Plan</th>
+<th style="text-align:center">Mon</th>
+<th style="text-align:center">Tues</th>
+<th style="text-align:center">Wed</th>
+<th style="text-align:center">Thur</th>
+<th style="text-align:center">Fri</th>
+<th style="text-align:center">Sat</th>
+<th style="text-align:center">Sun</th>
+<th style="text-align:center">Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">step1😄</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">8.15<br>准备资料 <br></td>
+<td style="text-align:center">8.16<br>准备资料 <br></td>
+<td style="text-align:center">8.17<br>分析大纲，制定计划<br>准备资料 <br></td>
+<td style="text-align:center">🚀<strong>8.18</strong><br>梳理各章节知识点<br>复习章①<code>计算机基础知识</code>数的表示、进制转换、浮点数运算、体系结构、Flynn</td>
+<td style="text-align:center">🚩 <br>计划制定完成<br></td>
+</tr>
+<tr>
+<td style="text-align:center">step2😋</td>
+<td style="text-align:center">8.19<br>复习章①<code>计算机基础知识</code> 校验码、流水线、Cache、寻址方式、CISC/RISC<br><code>完成章①习题</code></td>
+<td style="text-align:center">8.20<br>复习章②<code>程序语言基础</code> 文法、有限自动机、正规式、表达式、编译步骤、传值传址<br><code>完成章②习题</code></td>
+<td style="text-align:center">8.21<br>复习章③<code>操作系统</code> 操作系统概述、分类及特点、进程管理、进程状态、三态五态七态、同步互斥、pv操作</td>
+<td style="text-align:center">8.22<br> 团建搁置 <br> 🐌</td>
+<td style="text-align:center">8.23<br>  团建搁置 <br>  🐌</td>
+<td style="text-align:center">8.24<br>   团建搁置  <br> 🐌</td>
+<td style="text-align:center">8.25<br>  复习章③<code>操作系统</code>  死锁、银行家算法、存储管理方案、页式、段式、段页式系统 <br><code>完成章x习题</code></td>
+<td style="text-align:center">🚩 <br> 本周完成了2章知识点的复习 <br>第3章完成50%</td>
+</tr>
+<tr>
+<td style="text-align:center">step2😋</td>
+<td style="text-align:center">8.26<br>复习章③<code>操作系统</code> 页面置换算法、磁盘管理、文件管理、相对绝对路径、位示图、作业管理、设备管理</td>
+<td style="text-align:center">8.27<br><code>完成章③习题</code> <br> 回顾操作系统章节知识点</td>
+<td style="text-align:center">8.28<br>复习章④<code>数据结构与算法基础</code> 数组与矩阵、稀疏矩阵、线性表、栈、队列、广义表</td>
+<td style="text-align:center">8.29<br>复习章④<code>数据结构与算法基础</code> 3种查找，8种排序，时间空间复杂度  <br><code>完成章④习题</code></td>
+<td style="text-align:center">8.30<br>总结前四章的知识点体系图</td>
+<td style="text-align:center">8.31<br>   复习章④<code>数据结构与算法基础</code> 二叉树知识点、图相关知识点,算法基础  <br><code>完成章④习题</code></td>
+<td style="text-align:center">9.01<br> 复习章⑤<code>软件工程基础知识</code> 软件生命周期、软件开发模型、软件开发方法论，需求分析，软件测试</td>
+<td style="text-align:center">🚩 <br> 本周完成了<code>操作系统</code>、<code>数据结构</code>、<code>软件工程</code> 三个章节的复习，这些章节都是考试中的难点，需要定期再次回顾复习，复习一定要稳扎稳打</td>
+</tr>
+<tr>
+<td style="text-align:center">step2😋</td>
+<td style="text-align:center">9.02<br>复习章⑥<code>结构化开发方法</code> 结构化分析、结构化开发、结构化设计，数据流图、数据字典 <br><code>完成章⑤习题</code></td>
+<td style="text-align:center">9.03<br>复习章⑦<code>面向对象技术</code> 面向对象基础，OO、OOA、OOD、OOP、OOPL的概念了解</td>
+<td style="text-align:center">9.04<br>复习章⑦<code>面向对象技术</code> UML、事务、5种关系的表示、13种图(了解复习)</td>
+<td style="text-align:center">9.05<br>复习章⑦<code>面向对象技术</code> 23种设计模式(了解复习)</td>
+<td style="text-align:center">9.06<br>复习章⑦<code>面向对象技术</code> 本章知识点总体汇总 <br> 完成本章习题</td>
+<td style="text-align:center">9.07<br>复习章⑧<code>数据库技术</code> 数据库三级模式两级映射、数据库设计过程、ER图、关系代数</td>
+<td style="text-align:center">9.08<br>复习章⑧<code>数据库技术</code> 规范化、SQL语言</td>
+<td style="text-align:center">🚩 <br> 本周完成了三个章节的复习，后2个各个章节都是考试的重难点，需要着重复习和回顾</td>
+</tr>
+<tr>
+<td style="text-align:center">step2😋</td>
+<td style="text-align:center">9.09<br>复习章⑧<code>数据库技术</code> SQL语言、<br>完成习题</td>
+<td style="text-align:center">9.10<br>复习章⑧<code>数据库技术</code> 关系代数运算、并发控制 <br>完成本章习题</td>
+<td style="text-align:center">9.11<br>复习章⑧<code>数据库技术</code>数据库范式、数据库完整性约束 <br>完成本章习题</td>
+<td style="text-align:center">9.12<br>复习章⑨<code>网络与信息安全基础</code> 参考模型、tcp/ip、ip分类、子网划分、网络规划</td>
+<td style="text-align:center">9.13<br>复习章⑨<code>网络与信息安全基础</code> 无线网、有线网、html/xml <br>  中秋提前溜了🍪</td>
+<td style="text-align:center">9.14<br>复习章⑨<code>网络与信息安全基础</code> 加密解密技术、网络安全、常见病毒与木马  <br>  完成两章的习题</td>
+<td style="text-align:center">9.15<br> 复习章⑩<code>多媒体基础知识</code>  音频、视频、图像、媒体种类、压缩技术、压缩计算</td>
+<td style="text-align:center">🚩 <br> 一轮复习已过大半，复习节奏有些松懈，望坚持…</td>
+</tr>
+<tr>
+<td style="text-align:center">step2😋</td>
+<td style="text-align:center">9.16<br>复习章⑩<code>多媒体基础知识</code> <br>完成习题</td>
+<td style="text-align:center">9.17<br>复习章11<code>法律法规知识</code> <br> 知识产权、保护期限、侵权判定</td>
+<td style="text-align:center">9.18<br>复习章11<code>法律法规知识</code>、标准分类和编号 <br>完成习题</td>
+<td style="text-align:center">9.19<br>🕊</td>
+<td style="text-align:center">9.20<br>🕊</td>
+<td style="text-align:center">9.21<br>🕊</td>
+<td style="text-align:center">9.22<br>         🕊</td>
+<td style="text-align:center">🚩 <br> 复习进度停滞…需要尽快调整状态，冲刺一周！💪💪💪</td>
+</tr>
+<tr>
+<td style="text-align:center">step2😋</td>
+<td style="text-align:center">9.23<br>复习章12<code>数据流图</code> 基本概念、数据字典、数据平衡原则</td>
+<td style="text-align:center">9.24<br>复习章12<code>数据流图</code> 数据平衡原则，完成本章习题，总结答题技巧</td>
+<td style="text-align:center">9.25<br>复习章13<code>UML</code> 认识9种常考的图，了解每种图的作用和特征</td>
+<td style="text-align:center">9.26<br>复习章13<code>UML</code> 重点学习类图、用例图 完成本章的习题，总结答题技巧</td>
+<td style="text-align:center">9.27<br>复习章14<code>数据库分析与设计</code> 回顾前面的数据库章节，复习ER模型，ER模型转关系模式</td>
+<td style="text-align:center">9.28<br>复习章14<code>数据库分析与设计</code>  完成本章的习题，总结答题技巧</td>
+<td style="text-align:center">🚀<strong>9.29</strong><br>     复习章15<code>数据结构算法应用</code> 学习四种基础算法，分治、动态规划、贪心、回溯</td>
+<td style="text-align:center">🚩 <br> 未能在计划时间点前完成一轮复习，一轮延期</td>
+</tr>
+<tr>
+<td style="text-align:center">step3😘</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">10.06<br></td>
+<td style="text-align:center">🚩 <br> 十一溜了</td>
+</tr>
+<tr>
+<td style="text-align:center">step3😘</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">10.8<br>复习章15<code>数据结构与算法应用</code> 回顾四种基础算法的特征，作用场景</td>
+<td style="text-align:center">10.9<br>复习章15<code>数据结构与算法应用</code> 回顾四种基础算法,完成本章习题，总结做题技巧</td>
+<td style="text-align:center">10.10<br>复习章16<code>面向对象程序设计</code> 回顾设计模式、面向对象、Java语法</td>
+<td style="text-align:center">10.11<br>复习章16<code>面向对象程序设计</code> 完成习题，总结答题技巧</td>
+<td style="text-align:center">10.12<br>整理第一阶段复习的笔记、脑图、文件等，完成<code>2017年上半年</code>真题上午选择题</td>
+<td style="text-align:center">10.13<br>   完成<code>2017年上半年</code>真题下午题，对照答案批改错题</td>
+<td style="text-align:center">🚩 <br> 过了一个十一，感觉前学后忘，需要赶紧恢复记忆</td>
+</tr>
+<tr>
+<td style="text-align:center">step3😘</td>
+<td style="text-align:center">10.14<br>分析<code>2017上选择题</code>，完成<code>2017下综合题</code></td>
+<td style="text-align:center">10.15<br>分析<code>2017下综合题</code>，分析答题思路，整理2017上选择题错题知识点</td>
+<td style="text-align:center">10.16<br>回顾数据结构种的排序算法，整理笔记，整理知识点</td>
+<td style="text-align:center">10.17<br> 复习一轮中的计算机基础章节 ，整理笔记，整理知识点</td>
+<td style="text-align:center">10.18<br> 🕊</td>
+<td style="text-align:center">10.19<br> 完成<code>2016上选择题</code></td>
+<td style="text-align:center">10.20<br> 完成<code>2016上综合题</code>，分析选择题的错题知识点，总结答题技巧</td>
+<td style="text-align:center">🚩 <br> 一些一轮中的知识点复习的不够好，做题过程中经常似懂非懂。需要加强回顾</td>
+</tr>
+<tr>
+<td style="text-align:center">step3😘</td>
+<td style="text-align:center">10.21<br>复习章节 程序设计语言基础</td>
+<td style="text-align:center">10.22<br>复习章节 操作系统知识</td>
+<td style="text-align:center">10.23<br>复习章节 操作系统知识</td>
+<td style="text-align:center">10.24<br>复习章节 数据库技术</td>
+<td style="text-align:center">10.25<br>复习章节 数据库技术</td>
+<td style="text-align:center">10.26<br>复习章节 网络与信息安全基础知识</td>
+<td style="text-align:center">🚀<strong>10.27</strong><br> 完成<code>命题密卷</code>上午题和下午题，选择题错误较多</td>
+<td style="text-align:center">🚩 <br> 本周恶补了一下基础知识，但是数据结构、软件工程还没过</td>
+</tr>
+<tr>
+<td style="text-align:center">step4😎</td>
+<td style="text-align:center">10.28<br>完成<code>2018上</code>选择题,回顾一轮中的计算机存储知识</td>
+<td style="text-align:center">10.29<br>分析前一天的错题<code>（错32）</code>知识点，整理笔记，完成<code>2018上</code>综合题</td>
+<td style="text-align:center">10.30<br>分析前一天的综合题，整理笔记，完成<code>2018下</code>选择题</td>
+<td style="text-align:center">10.31<br>分析前一天的错题<code>（错30）</code>知识点，整理笔记，回顾一轮中的网络章节</td>
+<td style="text-align:center">11.01<br>回顾操作系统章节知识点，<code>进程管理</code>、<code>存储管理</code></td>
+<td style="text-align:center">11.02<br>回顾数据结构章节知识点 <code>线性结构</code>、<code>树</code>、<code>图</code></td>
+<td style="text-align:center">11.03<br>  回顾数据结构章节知识点  <code>排序算法</code>、<code>基础算法应用</code></td>
+<td style="text-align:center">🚩 <br>  距离考试还有一个礼拜，加强知识回顾，查漏补缺，整理解题套路</td>
+</tr>
+<tr>
+<td style="text-align:center">step4😎</td>
+<td style="text-align:center">11.04<br>完成<code>2016下</code>选择题,回顾软件开发模型知识点</td>
+<td style="text-align:center">11.05<br>完成<code>2016下</code>综合题,回顾软件工程相关知识点</td>
+<td style="text-align:center">11.06<br>复习设计模式相关概念</td>
+<td style="text-align:center">11.07<br>看做过的真题，看错题</td>
+<td style="text-align:center">出发考试</td>
+<td style="text-align:center">🚀<strong>11.09考试</strong></td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="加油"><a class="markdownIt-Anchor" href="#加油"></a> 加油!</h2>
+
+        </section>
+
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

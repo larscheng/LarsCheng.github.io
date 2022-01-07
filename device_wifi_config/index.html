@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>IoT系列（2）：WIFI设备常见配网方案介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">IoT系列（2）：WIFI设备常见配网方案介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2021-01-15&nbsp;&nbsp;9:39:34</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/物联网/">物联网</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,070</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">6min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>本文讨论目前市面上基于WIFI智能设备的配网方案，结合自身开发案例，对不同的配网方案进行对比介绍。</p>
+<p>阅读本文你可以了解到如下几种配网方案：</p>
+<ol>
+<li>一键配网</li>
+<li>设备热点配网</li>
+<li>零配</li>
+<li>手机热点配网</li>
+</ol>
+<a id="more"></a> 
+<h1 id="设备配网说明"><a class="markdownIt-Anchor" href="#设备配网说明"></a> 设备配网说明</h1>
+<p>提到设备配网这一流程，通俗的理解就是让设备连上网，本文主要就WIFI智能设备的配网展开讨论，目前市面上常见的配网方案都绕不开以下几个步骤：</p>
+<ul>
+<li>WIFI设备拿到某一wifi的SSID和Password</li>
+<li>APP拿到WIFI设备的唯一编号</li>
+<li>APP用户发起设备绑定请求</li>
+<li>WIFI设备发起入网请求</li>
+</ul>
+<p>下面我们针对不同的配网方案来注意分析器配网流程</p>
+<h1 id="一键配网"><a class="markdownIt-Anchor" href="#一键配网"></a> 一键配网</h1>
+<p>如果你近几年购买过一些智能灯具、智能插座等等WIFI设备，那么大概率他的配网方式就是<code>一键配网</code></p>
+<p>因为一键配网方案，用户操作简单，只需要录入wifi的ssid和password，即可等待设备完成配网。</p>
+<p>正如此一键配网几乎是智能设备的通用标准，但是它最大的痛点就是成功率低，特别低！！！</p>
+<p>下面一起来看下一键配网的实现原理：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/Iot20210115133232.png" alt="一键配网"></p>
+<ol>
+<li>手机提前连接至路由器wifi</li>
+<li>APP中输入ssid和密码点击配网，开始进行广播</li>
+<li>WIFI智能设备抓取广播包，拿到wifi信息，连接至路由器</li>
+<li>WIFI设备连接至路由器后，将自身唯一编号MAC进行局域网广播</li>
+<li>手机APP收到设备广播的MAC编号，向服务器发起设备绑定</li>
+</ol>
+<p>从步骤上来看，没有任何毛病，但是在实际的用户配网过程中会出现各种各样的问题，<strong>导致用户体验极差，配网成功率极低</strong></p>
+<ul>
+<li>路由器兼容性：部分型号的路由器不支持或者禁止发送广播包，直接导致配网永远无法成功，并且用户无法排查</li>
+<li>手机兼容性：WIFI设备连接的频段和手机连接的频段不同，导致双方无法收发广播包，例如5G和2.4G频段</li>
+<li>wifi同名：如果设备附近有多个同名的ssid信号，极有可能设备会无法连接到正确的路由器</li>
+<li>等等一些稀奇古怪的问题</li>
+</ul>
+<blockquote>
+<p>看似用户操作方便，并且使用率极高的配网方式，实际操作中有很苛刻的配网条件，这也是一键配网让人又爱又恨的地方</p>
+</blockquote>
+<p>如果有新的WIFI智能设备项目，不建议选用一键配网方案！</p>
+<h1 id="设备热点配网"><a class="markdownIt-Anchor" href="#设备热点配网"></a> 设备热点配网</h1>
+<p>既然一键配网成功率这么低，那有没有成功率高的方案呢，当然是有的：<code>设备热点配网</code></p>
+<p>由于它出众的配网成功率，很快成为wifi设备配网的新宠，像米家的摄像头就采用的这种配网方式</p>
+<p>一起来看看他的实现原理：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/Iot20210115133400.png" alt="设备热点配网"></p>
+<ol>
+<li>WIFI设备进入AP模式，对外提供一个wifi热点</li>
+<li>用户手机连接此wifi，然后通过APP将路由器的SSID和密码发送给WIFI设备</li>
+<li>WIFI设备收到SSID信息后将唯一编号MAC发送给APP</li>
+<li>手机APP收到MAC编号，向服务器发起设备绑定【预绑定】</li>
+<li>设备连接路由器联网，向服务器发起入网【激活绑定】</li>
+</ol>
+<p>设备热点配网时首先由设备AP模式，手机STA模式，去连接到设备热点上，进行数据传输</p>
+<p>整个过程不需要通过路由器广播数据，所以不存在路由器兼容性，也不存在信号频段问题</p>
+<p><strong>唯一的风险点就是用户通过APP输入SSID和密码错误，导致设备无法联网。</strong></p>
+<p>针对这一风险点，在绑定流程上设计了预绑定和激活绑定：<br>
+app携带用户id和设备mac发起预绑定，如果设备正常联网上线，那么绑定生效，设备激活；如果设备拿到了错误的ssid信息一定时间内没有上线，那么清除预绑定记录。</p>
+<blockquote>
+<p>设备热点配网相对于一键配网几乎没有任何额外的成本增加，在尽量不增加用户操作复杂度的前提下，极大的提高了配网成功率，这也是当下新的WIFI设备配网首选方案。</p>
+</blockquote>
+<h1 id="零配"><a class="markdownIt-Anchor" href="#零配"></a> 零配</h1>
+<p>零配，我最早在天猫精灵系列设备的配网方案中遇到过，这是一种特定场景的配网方案，大致思路是通过已经配网成功的设备（智能音箱）给新的设备进行配网，实现真正意义上的<strong>零配置配网</strong>。</p>
+<p>现在大部分的智能音箱联动场景中都支持零配方案。</p>
+<p>先看一下的的实现步骤：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/Iot20210115133533.png" alt="零配"></p>
+<blockquote>
+<p>前提：通过其他方式已经完成配网的智能设备（天猫精灵），与服务器连接正常，并存有路由器SSID信息</p>
+</blockquote>
+<ol>
+<li>手动触发WIFI设备将自己MAC信息通过Sniffer报文发送到天猫精灵</li>
+<li>天猫精灵收到设备MAC信息后，将本地保存的路由器SSID信息发送给WIFI设备</li>
+<li>天猫精灵向服务器发起该设备的预绑定请求</li>
+<li>WIFI设备连接路由器联网，并向服务器发起激活绑定请求</li>
+</ol>
+<p>该方案需要有一台已经联网的智能设备，并且该设备保存了用户信息和路由器SSID信息，优化掉了用户手动输入SSID和密码的步骤，进一步简化了用户配网操作。</p>
+<p>在实际使用中，用户开启WIFI设备后，只需要对天猫精灵说一句<code>“找队友”</code>即可完成配网，可以说用户的配网体验感很好。</p>
+<h1 id="手机热点配网"><a class="markdownIt-Anchor" href="#手机热点配网"></a> 手机热点配网</h1>
+<p>这种方案和设备热点配网方案比较相似，从名字能看出来，这种方案的热点是由手机提供。同样都是为了解决路由器兼容性而提出的解决方案。</p>
+<p>这种方案在阿里IoT中被作为一键配网失败后的补救措施。当一键配网失败后，用户可以通过手机设置特定的wifi热点，设备连接到手机热点上后进行信息交互。</p>
+<p>原理图如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/Iot20210115133623.png" alt="手机热点配网"></p>
+<p>流程基本上和设备热点方案类似，区别就是提供热点的是手机端</p>
+<p>不过在实际应用中，使用率不是很高，一方面用户操作复杂度过高，可能用户完全不知道如何开启手机热点。另一方面能想到手机热点配网方案，肯定会采用设备热点配网方案了。</p>
+<blockquote>
+<p>所以总的来说，该方案成功率相对较高，但是用户操作复杂度也随之增大，可以作为其他方案失败后的备选方案，但并不推荐使用，毕竟用户体验是第一位</p>
+</blockquote>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>总结一下上面提到的四种方案的特点：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>使用率</th>
+<th>成功率</th>
+<th>用户体验</th>
+<th>路由器兼容性</th>
+<th>频段兼容性</th>
+<th>手机兼容性</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一键配网</td>
+<td>高</td>
+<td>低</td>
+<td>优</td>
+<td>差（不支持广播）</td>
+<td>差（2.4G/5G）</td>
+<td>差</td>
+<td>不推荐使用</td>
+</tr>
+<tr>
+<td>设备热点配网</td>
+<td>高</td>
+<td>高</td>
+<td>优</td>
+<td>优</td>
+<td>优</td>
+<td>优</td>
+<td>WIFI配网首选方案</td>
+</tr>
+<tr>
+<td>零配</td>
+<td>中</td>
+<td>高</td>
+<td>优（免输入SSID信息）</td>
+<td>优</td>
+<td>优</td>
+<td>优</td>
+<td>音箱联动场景推荐</td>
+</tr>
+<tr>
+<td>手机热点配网</td>
+<td>低</td>
+<td>高</td>
+<td>差（手动开启热点）</td>
+<td>优</td>
+<td>优</td>
+<td>良</td>
+<td>不推荐使用</td>
+</tr>
+</tbody>
+</table>
+<p>以上四种配网方案也是我目前工作中接触到的一些常用方案，为了方便理解，简化了各种方案的细节，实际通讯和交互流程会更为复杂。</p>
+<p>当然除了这些，也有一些其他方案比如<code>路由器热点配网方案</code>、<code>WEB配网方案</code>等等，这些方案都因为需要特定场景和复杂流程等因素逐渐不被经常使用。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/device_wifi_config/" target="_blank" title="IoT系列（2）：WIFI设备常见配网方案介绍">https://www.larscheng.com/device_wifi_config/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/IoT/"><i class="fa-fw fa fa-tags"></i> IoT</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/find-job/">聊一下换工作</a>
+            
+            
+            <a class="next" rel="next" href="/what_is_iot/">IoT系列（1）：什么是物联网</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

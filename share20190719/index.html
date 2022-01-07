@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>20190719小组分享 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">20190719小组分享</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-06-19&nbsp;&nbsp;9:25:48</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/生活/">生活</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">448</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">2min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="本次分享内容"><a class="markdownIt-Anchor" href="#本次分享内容"></a> 本次分享内容</h2>
+<!-- .slide: data-transition="convex" data-background="#00C4B6" -->
+<ul>
+<li>技术分享：Nacos</li>
+<li>非技术分享：实用工具站点推荐</li>
+</ul>
+<p>==========</p>
+<h2 id="技术内容nacos"><a class="markdownIt-Anchor" href="#技术内容nacos"></a> 技术内容Nacos</h2>
+<!-- .slide: data-transition="zoom" data-background="#8a85c3" -->
+<p><a href="https://nacos.io/zh-cn/docs/what-is-nacos.html" target="_blank" rel="noopener">Naming-Config-Service</a></p>
+<p>==========</p>
+<h5 id="springcloud生态注册中心现状"><a class="markdownIt-Anchor" href="#springcloud生态注册中心现状"></a> SpringCloud生态注册中心现状</h5>
+<!-- .slide: data-transition="slide" data-background="#49B1F5" -->
+<p>(CAP 原则?)</p>
+<ul>
+<li>
+<p>Spring Cloud Eureka：内存、轮询、集群、2.0断更</p>
+</li>
+<li>
+<p>Spring Cloud Zookeeper：内存，瘫痪</p>
+</li>
+<li>
+<p>Spring Cloud Consul：生态、社区</p>
+</li>
+</ul>
+<p>==</p>
+<h5 id="springcloud生态配置中心现状"><a class="markdownIt-Anchor" href="#springcloud生态配置中心现状"></a> SpringCloud生态配置中心现状</h5>
+<!-- .slide: data-transition="slide" data-background="#00C4B6" -->
+<ul>
+<li>
+<p>Spring Cloud Config：git+Bus</p>
+</li>
+<li>
+<p>Spring Cloud Zookeeper：网络，cp模型</p>
+</li>
+<li>
+<p>Spring Cloud Consul：生态</p>
+</li>
+</ul>
+<p>==</p>
+<h5 id="nacos现状"><a class="markdownIt-Anchor" href="#nacos现状"></a> Nacos现状</h5>
+<!-- .slide: data-transition="concave" data-background="#49B1F5" -->
+<p>当前版本：1.1.0</p>
+<p>Spring、Spring Boot、Spring Cloud、</p>
+<p>Docker、Dubbo、{Kubernetes}</p>
+<p><a href="https://nacos.io/zh-cn/docs/roadmap.html" target="_blank" rel="noopener">roadmap</a></p>
+<p>==</p>
+<h5 id="未来趋势"><a class="markdownIt-Anchor" href="#未来趋势"></a> 未来趋势</h5>
+<!-- .slide: data-transition="concave" data-background="#00C4B6" -->
+<ul>
+<li>
+<p><a href="https://github.com/mercyblitz/tech-weekly/blob/master/2018.11.01%E3%80%8C%E5%B0%8F%E9%A9%AC%E5%93%A5%E6%8A%80%E6%9C%AF%E5%91%A8%E6%8A%A5%E3%80%8D-%20%E7%AC%AC%E5%85%AD%E6%9C%9F%E3%80%8A%E6%80%BB%E8%A7%88%20Spring%20Cloud%20Alibaba%200.2.0.RELEASE%E3%80%8B/2018.11.01%E3%80%8C%E5%B0%8F%E9%A9%AC%E5%93%A5%E6%8A%80%E6%9C%AF%E5%91%A8%E6%8A%A5%E3%80%8D-%20%E7%AC%AC%E5%85%AD%E6%9C%9F%E3%80%8A%E6%80%BB%E8%A7%88%20Spring%20Cloud%20Alibaba%200.2.0.RELEASE%E3%80%8B.pdf" target="_blank" rel="noopener">总览 Spring Cloud Alibaba </a></p>
+</li>
+<li>
+<p><a href="https://spring.io/projects/spring-cloud-netflix" target="_blank" rel="noopener">SCN</a>与<a href="https://github.com/alibaba/spring-cloud-alibaba/blob/master/README-zh.md" target="_blank" rel="noopener">SCA</a></p>
+</li>
+</ul>
+<p>SCA的宗旨，就是要替代SCN，成为Spring Cloud规范的默认实现方案</p>
+<p>==========</p>
+<h2 id="非技术内容"><a class="markdownIt-Anchor" href="#非技术内容"></a> 非技术内容</h2>
+<!-- .slide: data-transition="zoom" data-background="#33CCAE" -->
+<p>程序员的乐趣</p>
+<p>==========</p>
+<h5 id="实用工具篇"><a class="markdownIt-Anchor" href="#实用工具篇"></a> 实用工具篇</h5>
+<!-- .slide: data-transition="slide" data-background="#49B1F5" -->
+<p>==</p>
+<h5 id="图床工具"><a class="markdownIt-Anchor" href="#图床工具"></a> 图床工具</h5>
+<!-- .slide: data-transition="concave" data-background="#FFE4C4" -->
+<p><a href="https://github.com/Molunerfinn/PicGo" target="_blank" rel="noopener">PicGo</a></p>
+<p><img src="https://raw.githubusercontent.com/Molunerfinn/test/master/picgo/picgo-2.0.gif" alt="image"></p>
+<p>==</p>
+<h5 id="tampermonkey"><a class="markdownIt-Anchor" href="#tampermonkey"></a> Tampermonkey</h5>
+<!-- .slide: data-transition="concave" data-background="#008B8B" -->
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/27530-%E7%A0%B4%E8%A7%A3vip%E4%BC%9A%E5%91%98%E8%A7%86%E9%A2%91%E9%9B%86%E5%90%88" target="_blank" rel="noopener">免费观看</a></li>
+<li><a href="https://greasyfork.org/zh-CN/scripts/39504-%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E7%9B%B4%E9%93%BE%E4%B8%8B%E8%BD%BD%E5%8A%A9%E6%89%8B" target="_blank" rel="noopener">百度网盘</a></li>
+<li><a href="https://greasyfork.org/zh-CN/scripts/14178-ac-baidu-%E9%87%8D%E5%AE%9A%E5%90%91%E4%BC%98%E5%8C%96%E7%99%BE%E5%BA%A6%E6%90%9C%E7%8B%97%E8%B0%B7%E6%AD%8C%E6%90%9C%E7%B4%A2-%E5%8E%BB%E5%B9%BF%E5%91%8A-favicon-%E5%8F%8C%E5%88%97" target="_blank" rel="noopener">过滤百度推广</a></li>
+</ul>
+<p><a href="https://www.tampermonkey.net/" target="_blank" rel="noopener">Tampermonkey</a></p>
+<p>==</p>
+<h5 id="密码太多记不住"><a class="markdownIt-Anchor" href="#密码太多记不住"></a> 密码太多记不住</h5>
+<!-- .slide: data-transition="concave" data-background="#8B7B8B" -->
+<p><a href="https://chrome.google.com/webstore/detail/lastpass-free-password-ma/hdokiejnpimakedhajhdlcegeplioahd" target="_blank" rel="noopener">LastPass</a></p>
+<h1 id=""><a class="markdownIt-Anchor" href="#"></a> <img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/share/20190718201652.png" alt=""></h1>
+<h5 id="临时邮箱"><a class="markdownIt-Anchor" href="#临时邮箱"></a> 临时邮箱</h5>
+<!-- .slide: data-transition="slide" data-background="#388E8E" -->
+<p><a href="http://24mail.chacuo.net/" target="_blank" rel="noopener">ChaCuo SMTP Server</a></p>
+<p>填写邮箱时候，不想使用您的真实邮箱？那就使用临时邮箱</p>
+<p>==</p>
+<h5 id="git学习"><a class="markdownIt-Anchor" href="#git学习"></a> git学习</h5>
+<!-- .slide: data-transition="slide" data-background="#49B1F5" -->
+<p><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Git闯关学习</a></p>
+<p>==</p>
+<h5 id="github树形结构"><a class="markdownIt-Anchor" href="#github树形结构"></a> github树形结构</h5>
+<!-- .slide: data-transition="slide" data-background="#996600" -->
+<p><a href="https://github.com/buunguyen/octotree" target="_blank" rel="noopener">Octotree</a></p>
+<p><img src="https://github.com/ovity/octotree/raw/v3/docs/chrome-github.png" alt=""></p>
+<p>==</p>
+<h5 id="quickey-launcher"><a class="markdownIt-Anchor" href="#quickey-launcher"></a> Quickey Launcher</h5>
+<!-- .slide: data-transition="slide" data-background="#87CEEB" -->
+<p><a href="https://chrome.google.com/webstore/detail/quickey-launcher/nibepjokbndognmmejkdjcflfehkdhce" target="_blank" rel="noopener">键盘书签</a></p>
+<p>==</p>
+<h5 id="静态博客搭建"><a class="markdownIt-Anchor" href="#静态博客搭建"></a> 静态博客搭建</h5>
+<!-- .slide: data-transition="slide" data-background="#CDC0B0" -->
+<p><a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo</a></p>
+<p>10分钟搭建属于你自己的个人博客</p>
+<p>推荐主题：Next、Melody…</p>
+<p>==</p>
+<h5 id="markdown写书"><a class="markdownIt-Anchor" href="#markdown写书"></a> Markdown写书</h5>
+<!-- .slide: data-transition="slide" data-background="#CDC0B0" -->
+<ul>
+<li>
+<p>安装node.js</p>
+</li>
+<li>
+<p>npm install -g gitbook-cli</p>
+</li>
+<li>
+<p>gitbook init</p>
+</li>
+<li>
+<p>gitbook serve</p>
+</li>
+</ul>
+<p>ok了</p>
+<p>==</p>
+<h5 id="发现有趣项目"><a class="markdownIt-Anchor" href="#发现有趣项目"></a> 发现有趣项目</h5>
+<!-- .slide: data-transition="slide" data-background="#49B1F5" -->
+<p><a href="https://www.hellogithub.com/" target="_blank" rel="noopener">分享 GitHub 上有趣、入门级的开源项目</a></p>
+<p>==========</p>
+<h5 id="github篇"><a class="markdownIt-Anchor" href="#github篇"></a> GitHub篇</h5>
+<!-- .slide: data-transition="fade" data-background="#53868B" -->
+<p>盘点那些神奇的GitHub仓</p>
+<p>==</p>
+<h5 id="996icu"><a class="markdownIt-Anchor" href="#996icu"></a> 996.ICU</h5>
+<!-- .slide: data-transition="slide" data-background="#FA8072" -->
+<p><a href="https://github.com/996icu/996.ICU" target="_blank" rel="noopener">996.ICU</a></p>
+<p>==</p>
+<h5 id="chinese-sticker-pack"><a class="markdownIt-Anchor" href="#chinese-sticker-pack"></a> Chinese sticker pack</h5>
+<!-- .slide: data-transition="slide" data-background="#D2B48C" -->
+<p><a href="https://github.com/zhaoolee/ChineseBQB" target="_blank" rel="noopener">Chinese sticker pack </a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/share/20190715130608.png" alt=""></p>
+<p>==</p>
+<h5 id="hangzhou_house_knowledge"><a class="markdownIt-Anchor" href="#hangzhou_house_knowledge"></a> hangzhou_house_knowledge</h5>
+<!-- .slide: data-transition="convex" data-background="#33ffcc" -->
+<p><a href="https://github.com/houshanren/hangzhou_house_knowledge" target="_blank" rel="noopener">买房经历总结</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/share/20190715130345.png" alt=""></p>
+<p>==</p>
+<h5 id="网易云第三方"><a class="markdownIt-Anchor" href="#网易云第三方"></a> 网易云第三方</h5>
+<!-- .slide: data-transition="fade" data-background="#00ffff" -->
+<p><a href="https://github.com/listen1/listen1" target="_blank" rel="noopener">Listen 1</a></p>
+<p><a href="https://github.com/trazyn/ieaseMusic" target="_blank" rel="noopener">ieaseMusic</a></p>
+<p><img src="https://raw.githubusercontent.com/trazyn/ieaseMusic/dev/screenshots/downloader.png" alt="image"></p>
+<p><img src="https://camo.githubusercontent.com/8da192166de9c615772f8d7e6fa304f2c24326ec/687474703a2f2f692e696d6775722e636f6d2f696634434e72322e706e673f31" alt="image"></p>
+<p>==</p>
+<h5 id="全网视频站"><a class="markdownIt-Anchor" href="#全网视频站"></a> 全网视频站</h5>
+<!-- .slide: data-transition="zoom" data-background="#49B1F5" -->
+<p><a href="https://github.com/phobal/ivideo" target="_blank" rel="noopener">i视频</a></p>
+<p><img src="https://github.com/phobal/ivideo/raw/master/resources/showcase01.jpg" alt="image"></p>
+<p>==</p>
+<h5 id="百度网盘"><a class="markdownIt-Anchor" href="#百度网盘"></a> 百度网盘</h5>
+<!-- .slide: data-transition="slide" data-background="#00EEEE" -->
+<p><a href="https://github.com/peterq/pan-light" target="_blank" rel="noopener">百度网盘不限速客户端</a></p>
+<p><img src="https://camo.githubusercontent.com/8b5b2336d0e9562c6c3f7703b9bff7cd47c3e9b3/68747470733a2f2f71696e69752d63646e2e7065746572712e636e2f70616e2d6c696768742f696d672f73686f745f312e706e67" alt="image"></p>
+<p>==</p>
+<h5 id="福利"><a class="markdownIt-Anchor" href="#福利"></a> 福利</h5>
+<!-- .slide: data-transition="fade" data-background="#49B1F5" -->
+<p><a href="https://github.com/Alvin9999/new-pac/wiki" target="_blank" rel="noopener">new-pac</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/share/20190715130730.png" alt=""></p>
+<p>==</p>
+<h5 id="钢琴"><a class="markdownIt-Anchor" href="#钢琴"></a> 钢琴</h5>
+<!-- .slide: data-transition="slide" data-background="#00B2EE" -->
+<p><a href="https://github.com/WarpPrism/AutoPiano" target="_blank" rel="noopener">键盘钢琴</a></p>
+<p>==========</p>
+<h5 id="番外篇"><a class="markdownIt-Anchor" href="#番外篇"></a> 番外篇</h5>
+<!-- .slide: data-transition="fade" data-background="#53868B" -->
+<p>如何科学上网😏😏😏</p>
+<p>==</p>
+<h5 id="访问不了的原因"><a class="markdownIt-Anchor" href="#访问不了的原因"></a> 访问不了的原因</h5>
+<!-- .slide: data-transition="fade" data-background="#53868B" -->
+<ul>
+<li>
+<p>dns污染</p>
+</li>
+<li>
+<p>封ip</p>
+</li>
+<li>
+<p>封代理</p>
+</li>
+<li>
+<p>封vpn</p>
+</li>
+<li>
+<p>其他…</p>
+</li>
+</ul>
+<p>==</p>
+<h5 id="基本操作"><a class="markdownIt-Anchor" href="#基本操作"></a> 基本操作</h5>
+<!-- .slide: data-transition="slide" data-background="#FA8072" -->
+<ul>
+<li>
+<p>第三方免费VPN(赛风、蓝灯)</p>
+</li>
+<li>
+<p>公司VPN</p>
+</li>
+<li>
+<p>直翻通道</p>
+</li>
+<li>
+<p>免费SSR</p>
+</li>
+<li>
+<p>自建</p>
+</li>
+</ul>
+<p><a href="https://doubibackup.com/" target="_blank" rel="noopener">搭建教程</a></p>
+<p>==</p>
+<p>分享结束,感谢聆听…</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/share20190719/" target="_blank" title="20190719小组分享">https://www.larscheng.com/share20190719/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/nacosinfo/">Nacos（一）：Nacos介绍</a>
+            
+            
+            <a class="next" rel="next" href="/java-equals-hashcode/">Java中equals和HashCode方法的分析</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

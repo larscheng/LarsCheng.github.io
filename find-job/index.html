@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>聊一下换工作 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">聊一下换工作</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2021-03-13&nbsp;&nbsp;20:52:59</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/生活/">生活</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,280</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>近半年博客都没怎么更新和维护，一方面确实是忙，另一方面就是一直在为找工作奔波。</p>
+<p>终于工作也尘埃落定，马上也要入职，最近在处理工作交接的事情，就写一篇文章来记录下人生中第一次换工作的经历吧。</p>
+<a id="more"></a> 
+<blockquote>
+<p>首先这次工作是从杭州换到了上海，新工作解决了一些个人问题，薪资也达到了预期，新的开始祝自己一切顺利！</p>
+</blockquote>
+<p>我是从大三校招就进了老东家开始程序生涯、毕业就直接拿到了提前转正，说实话，老东家确实挺好的，无论是工作氛围、领导、同事都是无可挑剔的，我在这里生活了三年，和大家都很熟，这里就好像是我的舒适区，拿着够花的工资，过着朝九晚五的生活，周末和同事朋友约饭、游山玩水。在杭州这样的城市真的可以说是美滋滋，当然了前提是你没有外部压力（诸如房子、车子、等等）。</p>
+<blockquote>
+<p>老东家是杭州的一家<a href="https://www.lierda.com/" target="_blank" rel="noopener">物联网</a>公司，如果有需要内推的可直接发我<a href="mail:larscheng@foxmail.com" target="_blank" rel="noopener">邮箱</a>。</p>
+</blockquote>
+<p>跳槽、换工作在互联网公司实在是太普遍了，三年间送走了一批又一批，我所在的小组从我入职到现在，除了我之前的人已经全换了一批。以前都是我受邀参加同事的散伙饭，终于今天也到老同事们被我邀请，轮到他们送我，一伙人坐到桌前，仿佛有种不真实的感觉，一起聊着这几年的事，就仿佛都还是昨天…</p>
+<p>我差不多是从去年12月份开始陆陆续续投起了简历，然后截止到年前2月初陆陆续续面了大小共6家公司<br>
+其中有运气也有自己的因素，拿到了5份offer，最终在年后开工后确定了入职公司。<br>
+这也算是参加工作后的第一次换工作，一路上磕磕绊绊总算有了定论。</p>
+<p>扯了这么多，还是和大家分享下找工作需要的注意事项</p>
+<h3 id="时间"><a class="markdownIt-Anchor" href="#时间"></a> 时间</h3>
+<p>选择一个适合的时间段来执行你的计划是非常重要，都说金三银四、金九银十是跳槽的最佳时间，还是有一定道理的，每年三月份左右企业都过完新年刚开工，年前制定的招聘计划正是开展的时候，我就是在年底这个尴尬的时间点开始的，春招吧有点早，秋招吧有点晚，但是如果你准备好了，其实什么时候找工作都可以，如果刚好赶上金三银四、金九银十岗位的选择机会会更多一些。毕竟开发面试还是得看技术。</p>
+<h3 id="渠道"><a class="markdownIt-Anchor" href="#渠道"></a> 渠道</h3>
+<p>既然要找工作了，渠道很重要，如何从岗位海洋里找到和你契合度高的岗位，并且如何高效的送达简历，其实都是至关重要。</p>
+<ul>
+<li><strong>招聘App</strong>：我主要是在BOSS直聘和前程无忧两个APP上，其他的没有使用过也就不做评论</li>
+<li><strong>内推</strong>：确定了目标公司或者意向岗位，先发动下你的小伙伴们，看能不能内推，如果不行可以发动互联网资源，像牛客、知乎、Ve2x，甚至github也有一些内推渠道</li>
+<li><strong>猎头</strong>：寻找一名优秀的猎头，提出你的需求，交给他来帮你物色，但前提是你们俩要相互信任、并且信息对等且真实，不然工作谈好了最终因为你提供的相关信息与实际不符（比如学历、当前薪资情况等等）导致翻车。</li>
+</ul>
+<h3 id="准备"><a class="markdownIt-Anchor" href="#准备"></a> 准备</h3>
+<p>简历投出去了，就预示着你随时会收到面试邀请，可万万不能等收到面试再准备复习，到那个时候只能是临时抱佛脚，很可能被佛踢一脚！！</p>
+<ul>
+<li>夯实基础：基础不牢，地动山摇。面试过程中基础知识的考察还是占一定比重的，很多一面基本都是基础考察，所以基础是你能否二面的关键</li>
+<li>梳理项目：根据你的简历，梳理你的项目，主要从项目架构（为什么这样设计）、核心功能逻辑（流程熟悉）、遇到的困难这几块来准备</li>
+<li>技能自查：简历中一般都会列举自己掌握的技术能力，从熟悉到了解，既然你写上去了，那就要做到完全的准备，随时迎接面试官的连环炮</li>
+<li>时间管理：工作、复习、面试是一个漫长的过程，三者之间还是需要一个比较好的时间安排，本职工作还是需要同样重视，毕竟你还没离职。</li>
+</ul>
+<h3 id="面试"><a class="markdownIt-Anchor" href="#面试"></a> 面试</h3>
+<p>基本上现在的互联网面试方式就三种：电话面试、视频面试、现场面试</p>
+<p>论效率的话现场面试效率最高，电话、视频面一般都只是一面、二面简单了解下。我因为是异地面试的原因，通常都会和对方商量，一共几面，可否当天全部安排。一站式的面试很考验人的精神状态。</p>
+<ul>
+<li>面试礼仪：毕竟是面试，打工人骨子里的修养和礼貌还是要有的，电话、视频的沟通方式，需要的注意事项都要提前准备</li>
+<li>了解面试：一定要了解下面试的整体流程，会有几面、大概多久会出结果。一方面做到心中有数，同时也能合理的安排其他时间</li>
+<li>自信谦虚：去面试一定要自信，既然他已经通知你面试了，说明你还是很优秀的，但切记不能自信过头转而极度自负，还是要保持谦虚，切记不能夸夸其谈</li>
+</ul>
+<p>其实面试就像是平时的技术分享一样，把你掌握的一些骚操作、知识点分享给面试官，在我个人的体会下，一场成功的面试就是两个技术人的经验交流，面试者发挥出了自己的所学也看到了自己的短板，面试官测出了对方的深度也发现了对方的闪光点。</p>
+<h3 id="复盘"><a class="markdownIt-Anchor" href="#复盘"></a> 复盘</h3>
+<p>第一场面试结束后，大概率你的心态已经发生了一丝变化，要么信心满满要么就是可能被虐了一顿，但是不论如何，面试后的复盘是尤为重要，技术面试中被问到的问题，哪些是你非常熟悉的，哪些是你印象模糊含含糊糊的，哪些又是你从来没接触过的。这些都需要进行复盘总结。</p>
+<p>通过面试后的复盘，来查漏补缺，花时间补一补自己的薄弱点，用每一场面试来磨砺自己，直到你可以在面试中游刃有余，那说明你已经来感觉了。这也代表着你面试大概率要通过了。</p>
+<h3 id="抉择"><a class="markdownIt-Anchor" href="#抉择"></a> 抉择</h3>
+<p>无论你的预期是什么，当你在有可以选择的情况下一定要多方面多角度考虑和抉择</p>
+<ul>
+<li>薪资待遇：出来打工为的就是赚钱，所以薪资待遇也是最关注的问题，是否达到预期，是否可以接受，五险一金缴纳细则、</li>
+<li>技术氛围：对方的技术氛围如何，是不是让你去开荒（比如全公司就你一个写Java的），技术栈是否与当前的你匹配，如果就职对你的技术实力是否有所提升</li>
+<li>个人发展：就职后对个人的发展如何，是否是高危暴雷行业，晋升规则方式如何</li>
+</ul>
+<p>最后关于薪资多说两嘴：</p>
+<blockquote>
+<p>时薪时薪时薪！！！！重要的事情说三遍！</p>
+</blockquote>
+<p>有的朋友觉得加班无所谓只要钱管够、有的朋友觉得绝对不加班，加班的我就不去</p>
+<p>但是无论加班还是不加班，我都建议你先计算一下时薪，福报型企业加班多自然到手的也多一些，正常型企业不加班但是薪资可能稍微低一点</p>
+<p>但是并不是薪资低就不考虑，这个时候建议你算一下时薪，如果不加班的工作可以拿到和加班工作相近的时薪，那还真的需要你好好斟酌，毕竟双休、朝九晚五的生活也是很美的。</p>
+<h3 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h3>
+<p>唠唠叨叨扯了这么多，也是经历这次换工作后，把自己遇到的一些坑点和经验分享给大家。还是那句话，换工作可以，但是不要盲目的换。</p>
+<p>你为什么换工作？你的新工作是否解决了你的困惑，达到了你的预期？</p>
+<p>最后，还是祝自己也祝大家工作顺利～</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/find-job/" target="_blank" title="聊一下换工作">https://www.larscheng.com/find-job/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/生活/"><i class="fa-fw fa fa-tags"></i> 生活</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020-summary/">匆匆忙忙的2021</a>
+            
+            
+            <a class="next" rel="next" href="/device_wifi_config/">IoT系列（2）：WIFI设备常见配网方案介绍</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Nacos（六）：多环境下如何“管理”及“隔离”配置和服务 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Nacos（六）：多环境下如何“管理”及“隔离”配置和服务</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-08-06&nbsp;&nbsp;15:03:05</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SpringCloud/">SpringCloud</a>
+                            
+                                <a href="/categories/SpringCloud/Nacos/">Nacos</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">3,216</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">12min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>前景回顾：</p>
+<ul>
+<li><a href="https://www.larscheng.com/config-profile/">Nacos（五）：多环境下如何“读取”Nacos中相应环境的配置</a></li>
+<li><a href="https://www.larscheng.com/config-service/">Nacos（四）：SpringCloud项目中接入Nacos作为配置中心</a></li>
+</ul>
+<p>现如今，在微服务体系中，一个系统往往被拆分为多个服务，每个服务都有自己的配置文件，然后每个系统往往还会准备开发环境、测试环境、正式环境</p>
+<p>我们来说算一算，假设某系统有10个微服务，那么至少有10个配置文件吧，三个环境（dev\test\prod），那就有30个配置文件需要进行管理。</p>
+<p>这么多的配置文件，要修改一个或者多个的时候，稍有不慎可能就会出现改错了、不生效…等等问题。</p>
+<p><strong>那么如果引入Nacos作为配置中心后，如何有效的进行配置文件的管理和不同环境间的隔离区分呢？</strong></p>
+<blockquote>
+<p>别担心，Namespace可以帮助我们进行多环境下的管理和隔离</p>
+</blockquote>
+<a id="more"></a>
+<p>有了上一篇文章的介绍，本文主要从以下几个方面介绍：</p>
+<ul>
+<li>Namespace是什么</li>
+<li>Namespace如何进行配置和服务的管理、隔离</li>
+<li>创建和获取NamespaceID</li>
+<li>Namespace实施方案1</li>
+<li>Namespace实施方案2</li>
+</ul>
+<h1 id="namespace"><a class="markdownIt-Anchor" href="#namespace"></a> Namespace</h1>
+<p>Nacos引入了命名空间(Namespace)的概念来进行<code>多环境配置和服务</code>的管理及隔离</p>
+<p>Namespace也是官方推荐的多环境支持方案。</p>
+<h1 id="如何进行配置和服务的管理-隔离"><a class="markdownIt-Anchor" href="#如何进行配置和服务的管理-隔离"></a> 如何进行配置和服务的管理、隔离</h1>
+<p>当我们的服务达到一定的数量，集中式的管理许多服务会十分不便，</p>
+<p>那我们可以将这些具有相同特征或属性的服务进行分组管理，服务对应的配置也进行分组隔离</p>
+<p>这里的<code>分组</code>就是<code>Namespace</code>的概念，将服务和配置纳入相同的Namespace进行管理</p>
+<p>不同Namespace下的服务和配置之间就隔离开来</p>
+<h1 id="创建和获取namespaceid"><a class="markdownIt-Anchor" href="#创建和获取namespaceid"></a> 创建和获取NamespaceID</h1>
+<p>NamespaceId值是在配置文件配置时必须要填入的配置项，所以需要我们先创建Namespace和Id，步骤如下：</p>
+<p>nacos 的控制台左边功能栏看到有一个<code>命名空间</code>的功能，点击就可以看到<code>新建命名空间</code> 的按钮</p>
+<p>新建成功后，可以在命名空间列表中查看到你所创建的Namespace和他生成的ID值</p>
+<p>这里只是讲解创建步骤，本文继续延用Nacos（五）中创建的<code>DEV、TEST</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190723175908.png" alt=""></p>
+<h1 id="namespace实施方案1"><a class="markdownIt-Anchor" href="#namespace实施方案1"></a> Namespace实施方案1</h1>
+<p>Nacos给出了两种Namespace的实践方案</p>
+<ul>
+<li>面向一个租户</li>
+<li>面向多个租户</li>
+</ul>
+<p>方案1主要说明一下面向一个租户</p>
+<p>从一个租户(用户)的角度来看，如果有多套不同的环境，那么这个时候可以根据指定的环境来创建不同的 namespce，以此来实现多环境的隔离。</p>
+<p>例如，你可能有dev，test和prod三个不同的环境，那么使用一套 nacos 集群可以分别建以下三个不同的 namespace。如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805163212.png" alt="方案1"></p>
+<p>这里的单租户同样也适于小型项目，或者是项目不太多时的实施方案</p>
+<p>通过定义不同的环境，不同环境的项目在不同的Namespace下进行管理，不同环境之间通过Namespace进行隔离</p>
+<p>当多个项目同时使用该Nacos集群时，还可以通过Group进行Namespace内的细化分组</p>
+<p>这里以<code>Namespace：dev</code>为例，在Namespace中通过不同Group进行同一环境中不同项目的<code>再分类</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805163727.png" alt="方案1内部Group分组"></p>
+<p>有了以上思路，我们通过代码来实践一下</p>
+<h2 id="namespace下新建配置文件"><a class="markdownIt-Anchor" href="#namespace下新建配置文件"></a> Namespace下新建配置文件</h2>
+<p>启动Nacos-Server，进入Nacos控制台，切换到Namespace：dev界面，新建配置文件</p>
+<ul>
+<li>DataId:<code>nacos-namespace-one-dev.yml</code></li>
+<li>Group:<code>namespace-one</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nacos: </span><br><span class="line">    config: 项目：nacos-namespace-one，Namespace：dev</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>继续新建配置文件</p>
+<ul>
+<li>DataId:<code>nacos-namespace-two-dev.yml</code></li>
+<li>Group:<code>namespace-two</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nacos: </span><br><span class="line">    config: 项目：nacos-namespace-two，Namespace：dev</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>切换到Namespace：test环境，按照dev中的创建方式，分别创建<code>nacos-namespace-one-test.yml</code>和<code>nacos-namespace-two-test.yml</code></strong></p>
+<blockquote>
+<p>注意检查DataId是否正确、group、配置内容与环境是否匹配</p>
+</blockquote>
+<h2 id="创建项目"><a class="markdownIt-Anchor" href="#创建项目"></a> 创建项目</h2>
+<p>在聚合工程Nacos下创建名为<code>nacos-namespace-one</code>的子项目，该工程的依赖文件和启动类的代码与<a href="https://www.larscheng.com/config-service/">Nacos（四）</a>完全一致。</p>
+<blockquote>
+<p>以下NamespaceId均来自创建Namespace时生成的Id，在控制台命名空间页面中可以查看</p>
+</blockquote>
+<p>创建dev环境配置文件<code>bootstrap-dev.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9911</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-namespace-one</span></span><br><span class="line"><span class="attr">  profiles:</span></span><br><span class="line"><span class="attr">    active:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="string">edbd013b-b178-44f7-8caa-e73071e49c4d</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="string">edbd013b-b178-44f7-8caa-e73071e49c4d</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one</span></span><br></pre></td></tr></table></figure>
+<p>创建test环境配置文件<code>bootstrap-dev.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9912</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-namespace-one</span></span><br><span class="line"><span class="attr">  profiles:</span></span><br><span class="line"><span class="attr">    active:</span> <span class="string">test</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="number">0133</span><span class="string">bd1e-25c3-4985-96ed-a4e34efdea2e</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="number">0133</span><span class="string">bd1e-25c3-4985-96ed-a4e34efdea2e</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one</span></span><br></pre></td></tr></table></figure>
+<p><strong>重复以上操作，再创建一个名为<code>nacos-namespace-two</code>的子项目</strong></p>
+<blockquote>
+<p>nacos-namespace-two项目的dev和test启动端口分别设置为9921和9922，group为：namespace-two</p>
+</blockquote>
+<blockquote>
+<p>记得修改<code>spring.application.name</code>、<code>namespace</code>和<code>group</code></p>
+</blockquote>
+<h2 id="启动工程"><a class="markdownIt-Anchor" href="#启动工程"></a> 启动工程</h2>
+<p>分别启动两个项目的两个环境（四个启动类）,如下图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805185416.png" alt="两个环境都启动dev和test"></p>
+<p>现在我们有2个项目：<code>nacos-namespace-one</code>和<code>nacos-namespace-two</code></p>
+<p>2个项目分别有两个不同的环境<code>dev</code>和<code>test</code></p>
+<p>此时观察Nacos-Server控制台如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/namespace1.gif" alt="Nacos控制台"></p>
+<p>尝试访问接口来获取配置信息，验证是否可以读取相应环境配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">访问127.0.0.1:9911/getValue,返回：项目：nacos-namespace-one，Namespace：dev</span><br><span class="line">访问127.0.0.1:9912/getValue,返回：项目：nacos-namespace-one，Namespace：test</span><br><span class="line">访问127.0.0.1:9921/getValue,返回：项目：nacos-namespace-two，Namespace：dev</span><br><span class="line">访问127.0.0.1:9922/getValue,返回：项目：nacos-namespace-two，Namespace：test</span><br></pre></td></tr></table></figure>
+<p>通过以上实验，方案1可以达到多环境多项目下的服务、配置管理的目标</p>
+<blockquote>
+<p>方案1通过Namespace来隔离不同的环境（dev\test）,在具体的环境Namespace中通过Group来管理不同的项目</p>
+</blockquote>
+<h1 id="namespace实施方案2"><a class="markdownIt-Anchor" href="#namespace实施方案2"></a> Namespace实施方案2</h1>
+<p>了解了单租户的方案1，再来看看Nacos推荐的面向多租户的方案2</p>
+<p>从多个租户(用户)的角度来看，每个租户(用户)可能会有自己的 namespace,每个租户(用户)的配置数据以及注册的服务数据都会归属到自己的 namespace 下，以此来实现多租户间的数据隔离。</p>
+<p>例如超级管理员分配了三个租户，分别为张三、李四和王五。张三负责A项目，李四负责B项目，王五负责C项目</p>
+<p>分配好了之后，各租户用自己的账户名和密码登录后，创建自己的命名空间。如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805194232.png" alt="多租户namespace"></p>
+<blockquote>
+<p>方案2通过Namespace来隔离多租户之间的服务和配置，但不仅于此，他有很好的扩展性</p>
+</blockquote>
+<p>在该方案中，Group同样也有用武之地。</p>
+<p><strong>需求改变下</strong>，公司发展迅速业务调整，张三负责A项目、B项目、C项目，李四负责D项目、E项目、F项目，王五负责G项目、H项目、I项目,</p>
+<p>而每个项目又分了dev、test、prod三个环境，继续沿用之前的Namespace隔离租户方案，显得有些管理不便，这时候可以在NameSpace中加入Group进行项目环境分组，如图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805193836.png" alt="Group环境分组"></p>
+<p>但是当业务规模更大的时候（不考虑Nacos集群能否支持的因素），张三、李四、王五每人都负责10多个项目时，即<code>项目数&gt;环境数</code>时，可以通过Group进行项目分组，如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805194131.png" alt="Group项目分组"></p>
+<p>通过上面的理论分析，可以看出方案二有很好的扩展性</p>
+<p>依旧如上，我们通过代码来实践一下方案2（Namespace隔离租户 + group环境分组）</p>
+<h2 id="场景描述"><a class="markdownIt-Anchor" href="#场景描述"></a> 场景描述</h2>
+<p>依旧使用上面的两个项目，假设现在有两个租户，张三、李四</p>
+<p>张三负责项目：<code>nacos-namespace-one</code>, 李四负责项目：<code>nacos-namespace-two</code>，项目分别有dev和test环境</p>
+<h2 id="新建namespace和配置文件"><a class="markdownIt-Anchor" href="#新建namespace和配置文件"></a> 新建Namespace和配置文件</h2>
+<p>新建两个Namespace来隔离租户，分别为<code>zhangsan</code>、<code>lisi</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805195206.png" alt="zhangsan\lisi"></p>
+<p>在Namespace：zhangsan 下创建配置文件</p>
+<ul>
+<li>DataId:<code>nacos-namespace-one-dev.yml</code></li>
+<li>Group:<code>namespace-one-dev</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nacos: </span><br><span class="line">    config: 项目：nacos-namespace-one，Namespace：张三，环境：dev</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>继续创建test环境配置文件</p>
+<ul>
+<li>DataId:<code>nacos-namespace-one-test.yml</code></li>
+<li>Group:<code>namespace-one-test</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nacos: </span><br><span class="line">    config: 项目：nacos-namespace-one，Namespace：张三，环境：test</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>参照以上操作，在Namespace：lisi命名空间中创建配置文件<code>nacos-namespace-two-dev.yml</code>和<code>nacos-namespace-two-test.yml</code></p>
+<blockquote>
+<p>注意核对DataId、Group、和配置内容</p>
+</blockquote>
+<h2 id="修改项目的配置文件bootstrapyml"><a class="markdownIt-Anchor" href="#修改项目的配置文件bootstrapyml"></a> 修改项目的配置文件bootstrap.yml</h2>
+<p>修改项目nacos-namespace-one的dev配置文件<code>bootstrap-dev.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9911</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-namespace-one</span></span><br><span class="line"><span class="attr">  profiles:</span></span><br><span class="line"><span class="attr">    active:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="comment">#        方案2:NamespaceID\Group</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="string">e0d75068-a12c-4314-9296-3f396139d5b3</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one-dev</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br><span class="line"><span class="comment">#        方案2:NamespaceID\Group</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="string">e0d75068-a12c-4314-9296-3f396139d5b3</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one-dev</span></span><br></pre></td></tr></table></figure>
+<p>修改test配置文件<code>bootstrap-test.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9912</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-namespace-one</span></span><br><span class="line"><span class="attr">  profiles:</span></span><br><span class="line"><span class="attr">    active:</span> <span class="string">test</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="comment">#        方案2:NamespaceID\Group</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="string">e0d75068-a12c-4314-9296-3f396139d5b3</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one-test</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br><span class="line"><span class="comment">#        方案2:NamespaceID\Group</span></span><br><span class="line"><span class="attr">        namespace:</span> <span class="string">e0d75068-a12c-4314-9296-3f396139d5b3</span></span><br><span class="line"><span class="attr">        group:</span> <span class="string">namespace-one-test</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>重复以上操作相应的修改项目nacos-namespace-two的dev和test配置文件</p>
+</blockquote>
+<blockquote>
+<p>主要修改namespace和group属性，与命名空间lisi的ID和其下配置文件的Group对应</p>
+</blockquote>
+<h2 id="启动项目"><a class="markdownIt-Anchor" href="#启动项目"></a> 启动项目</h2>
+<p>分别启动两个项目的两个环境（四个启动类），启动成功如下图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190805185416.png" alt="两个环境都启动dev和test"></p>
+<p>此时两个项目分别启动两个环境后，注册到Nacos上不同的Namespace下，并读取相应环境的配置，具体如下：</p>
+<p>nacos-namespace-one</p>
+<ul>
+<li>dev: 注册到Namespace：zhangsan，读取Namespace：zhangsan下Group：namespace-one-dev的配置</li>
+<li>test: 注册到Namespace：zhangsan，读取Namespace：zhangsan下Group：namespace-one-test的配置</li>
+</ul>
+<p>nacos-namespace-two</p>
+<ul>
+<li>dev: 注册到Namespace：lisi，读取Namespace：lisi下Group：namespace-two-dev的配置</li>
+<li>test: 注册到Namespace：lisi，读取Namespace：lisi下Group：namespace-two-test的配置</li>
+</ul>
+<p>此时Nacos控制台如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/namespace2.gif" alt="namespace2console"></p>
+<p>ok我们来测试下各个环境的服务能否访问到对应的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">访问127.0.0.1:9911/getValue,返回：项目：nacos-namespace-one，Namespace：张三，环境：dev</span><br><span class="line">访问127.0.0.1:9912/getValue,返回：项目：nacos-namespace-one，Namespace：张三，环境：test</span><br><span class="line">访问127.0.0.1:9921/getValue,返回：项目：nacos-namespace-two，Namespace：李四，环境：dev</span><br><span class="line">访问127.0.0.1:9922/getValue,返回：项目：nacos-namespace-two，Namespace：李四，环境：test</span><br></pre></td></tr></table></figure>
+<p>通过访问服务的接口，各个服务都可以准确的读取到各自环境下的配置文件</p>
+<blockquote>
+<p>方案二可以看到同样支持服务和配置的隔离分组，同时支持业务的扩展，有较好的扩展性</p>
+</blockquote>
+<h1 id="问题描述"><a class="markdownIt-Anchor" href="#问题描述"></a> 问题描述</h1>
+<p>但是相信大家已经发现了一个问题，当使用的Group来进行分组后，配置文件相互之间可以实现不同环境与不同项目之间的分组隔离</p>
+<p>但是服务注册后，虽然可以通过Namespace隔离，但指定的Group分组却并没有生效，依然是<code>DEFAULT_GROUP</code></p>
+<p>比如方案1 所有项目启动后Nacos服务列表页如下图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190806145037.png" alt="question"></p>
+<p>这里本应该是我们自定义的分组<code>namespace-one</code>和<code>namespace-two</code>却没有生效</p>
+<p>由此发现，配置之间是达到了相互分组隔离名但<code>服务列表暂时并不支持</code>。</p>
+<blockquote>
+<p>但是不要担心，Nacos的社区极度活跃，社区的大佬们也发现了这一情况，并且在Nacos-client的源码中可以看到NameingService在加载配置文件时是有预留<code>Group</code>这一属性字段的。</p>
+</blockquote>
+<p>所以既然Nacos提供了这一实践方案，正常使用只不过是时间问题。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>以上分析了Nacos对于Namespace提供的两种实践方案，同时进行了代码实验，均达到了预期的要求。</p>
+<p>现对两种方案进行一个总结</p>
+<ul>
+<li>单租户方案（方案1）：适合小型项目，服务数量不多时，方案一完全够用</li>
+<li>多租户方案（方案2）：适合项目量多，有一定的团队规模，且服务数量较多时，可以相对条理清晰的管理和隔离配置及服务。</li>
+</ul>
+<p><strong><em>本文源码</em>：<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/Nacos" target="_blank" rel="noopener">https://github.com/larscheng/larscheng-learning-demo/tree/master/Nacos</a></strong></p>
+<h1 id="参考与感谢"><a class="markdownIt-Anchor" href="#参考与感谢"></a> 参考与感谢</h1>
+<p><a href="https://nacos.io/zh-cn/docs/namespace-endpoint-best-practices.html" target="_blank" rel="noopener">Namespace最佳实践</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/nacos-namespace/" target="_blank" title="Nacos（六）：多环境下如何“管理”及“隔离”配置和服务">https://www.larscheng.com/nacos-namespace/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Nacos/"><i class="fa-fw fa fa-tags"></i> Nacos</a>
+                    
+                        <a href="/tags/配置中心/"><i class="fa-fw fa fa-tags"></i> 配置中心</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/nacos-shareconfig/">Nacos（七）：Nacos共享配置</a>
+            
+            
+            <a class="next" rel="next" href="/config-profile/">Nacos（五）：多环境下如何“读取”Nacos中相应的配置</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

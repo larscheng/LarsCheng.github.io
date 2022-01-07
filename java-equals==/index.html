@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java中==和equals方法的分析 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java中==和equals方法的分析</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-06-17&nbsp;&nbsp;17:42:19</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,445</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">5min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>== 和 equals是经久不衰的面试题，记得刚毕业的时候我也被问到过很多次，从最开始的一脸懵逼到最后的从容回答，本文我们就来分析下这两者之间的区别和联系。</p>
+<p>为避免阅读疲劳，我这里先放上结论：</p>
+<a id="more"></a> 
+<p><strong>联系：</strong></p>
+<ul>
+<li>两者都被用来进行比较操作</li>
+<li>当equals()未被重写时，两者的用途和比较的内容相同，即都是比较对象的引用地址是否相同</li>
+</ul>
+<p><strong>区别：</strong></p>
+<ul>
+<li>==既可以比较基本数据类型，亦可用在对象之间。equals()只能比较对象间的关系</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"> </th>
+<th style="text-align:center">基本数据类型</th>
+<th style="text-align:center">对象类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>==</strong></td>
+<td style="text-align:center">比较值是否相同</td>
+<td style="text-align:center">比较引用地址是否相同</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>equals</strong></td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">equals()未被重写时比较对象的引用地址是否相同<br> equals()被重写后根据equals()实现逻辑而定</td>
+</tr>
+</tbody>
+</table>
+<p>下面我们对以上的结论进行验证.</p>
+<h3 id="两者的联系"><a class="markdownIt-Anchor" href="#两者的联系"></a> 两者的联系</h3>
+<p><strong>==</strong>：关系操作符，计算两个操作数之间的关系，返回一个boolean类型的结果</p>
+<p><strong>equals</strong>：Object类的一个方法，用来比较两个对象之间的关系，返回一个boolean类型的结果</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/equalsAnd%3D%3D/20190531164914.png" alt="Object类中的equals()实现"></p>
+<p>从Object类中的equals()实现来看他们两个都是用来进行==的逻辑比较，并且都返回一个boolean值</p>
+<p>但是仔细分析，</p>
+<ul>
+<li>==的操作数是有<code>类型区分</code>的(基本数据类型，对象类型)，所以不同的操作数会有不同的计算逻辑。</li>
+<li>而equals()是Object一个方法，既然是基类方法那么就可以被<code>子类重写</code>，所以实际的比较逻辑还是要根据重写内容来判断</li>
+</ul>
+<p>栗子：Date类的equals()被重写,实际判断的是时间戳的值是否相等</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/equalsAnd%3D%3D/20190531165645.png" alt="Date类中被重写的equals()"></p>
+<h3 id="的使用"><a class="markdownIt-Anchor" href="#的使用"></a> ==的使用</h3>
+<p>== 是一个关系操作符，他有两个操作数，操作数则分为两个大类：基本数据类型、引用数据类型。</p>
+<p>直接上代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">10</span>;</span><br><span class="line">        System.out.println(<span class="string">"a==b:"</span>+(a==b));</span><br><span class="line"></span><br><span class="line">        String s1 = <span class="string">"A"</span>;<span class="comment">//栈内存中对象引用变量s1指向常量池中的A</span></span><br><span class="line">        String s2 = <span class="string">"A"</span>;<span class="comment">//栈内存中对象引用s2指向常量池中的A</span></span><br><span class="line">        String s3 = <span class="keyword">new</span> String(<span class="string">"A"</span>);<span class="comment">//栈内存中对象引用s3指向堆内存中的A对象</span></span><br><span class="line">        String s4 = <span class="keyword">new</span> String(<span class="string">"A"</span>);<span class="comment">//栈内存中对象引用s4指向堆内存中的另一个A对象</span></span><br><span class="line">        System.out.println(<span class="string">"s1==s2:"</span>+(s1==s2));</span><br><span class="line">        System.out.println(<span class="string">"s1==s3:"</span>+(s1==s3));</span><br><span class="line">        System.out.println(<span class="string">"s3==s4:"</span>+(s3==s4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a==b:true</span><br><span class="line">s1==s2:true</span><br><span class="line">s1==s3:false</span><br><span class="line">s3==s4:false</span><br></pre></td></tr></table></figure>
+<p>具体分析下输出的结果</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/equalsAnd%3D%3D/20190603163326.png" alt="堆栈示意图"></p>
+<p><strong>a==b</strong>：操作数a、b是基本数据类型，使用==直接比较ab在栈内存中的值是否相等，故结果为true</p>
+<p><strong>s1==s2</strong>：操作数s1、s2为对象类型，<code>String s1 = &quot;A&quot;</code>执行时，堆内存的常量池中会开辟空间存放A对象，栈内存中的引用变量s1会指向该对象的内存地址，s2创建时同样会指向常量池中的A，s1和s2指向的是同一个对象所以结果为true</p>
+<p><strong>s1==s3</strong>：s2是通过new()来创建对象，堆内存中会开辟空间存放对象，显然s1和s3的内存地址是不同的，s1指向常量池中的&quot;A&quot;，s2指向堆内存中的new String(“A”)，所以结果为false</p>
+<p><strong>s3==s4</strong>：s3、s4是通过new()的方式创建的两个不同的对象，他们的内存地址不同，结果必然为false</p>
+<p><strong>总结：</strong></p>
+<blockquote>
+<p>==作为关系操作符，当操作数为基本数据类型时，直接判断值是否相同，<br>
+当操作数为对象类型时，判断两对象的内存地址是否相同</p>
+</blockquote>
+<h3 id="equals"><a class="markdownIt-Anchor" href="#equals"></a> equals()</h3>
+<p>equals()方法时Object类的方法之一，这意味着所有Java类都继承了这一方法，并可以对他进行重写，比如String、Date、Integer…</p>
+<p>在上文我们通过Object类中equals()方法的源码可知，在未被重写时，equals()内部其实是调用了==进行判断。</p>
+<p>下面我们看下String类对equals()的实现：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/equalsAnd%3D%3D/20190531175528.png" alt="String类对equals()的实现"></p>
+<p>可见，String类的equals方法中，先判断两个对象是否内存地址相同，如果内存地址不同，则判断值是否相同<br>
+修改之前的代码测试如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String s1 = <span class="string">"A"</span>;<span class="comment">//栈内存中对象引用变量s1指向常量池中的A</span></span><br><span class="line">        String s2 = <span class="string">"A"</span>;<span class="comment">//栈内存中对象引用s2指向常量池中的A</span></span><br><span class="line">        String s3 = <span class="keyword">new</span> String(<span class="string">"A"</span>);<span class="comment">//栈内存中对象引用s3指向堆内存中的A对象</span></span><br><span class="line">        String s4 = <span class="keyword">new</span> String(<span class="string">"A"</span>);<span class="comment">//栈内存中对象引用s4指向堆内存中的另一个A对象</span></span><br><span class="line">        System.out.println(<span class="string">"s1.equals(s2):"</span>+(s1.equals(s2)));</span><br><span class="line">        System.out.println(<span class="string">"s1.equals(s3):"</span>+(s1.equals(s3)));</span><br><span class="line">        System.out.println(<span class="string">"s3.equals(s4):"</span>+(s3.equals(s4)));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s1.equals(s2):true</span><br><span class="line">s1.equals(s3):true</span><br><span class="line">s3.equals(s4):true</span><br></pre></td></tr></table></figure>
+<p>具体分析下输出的结果</p>
+<p><strong>s1.equals(s2)</strong>：相同的内存地址直接返回true</p>
+<p><strong>s1.equals(s3)</strong>：内存地址不同，开始判断值是否相同，值都为&quot;A&quot;，返回true</p>
+<p><strong>s3.equals(s4)</strong>：内存地址不同，开始判断值是否相同，值都为&quot;A&quot;，返回true</p>
+<p>通过上面的栗子，发现了一种现象：<strong>内存地址相同的对象其值必定相同，而内存地址不同的对象，其值关系不确定</strong></p>
+<p><strong>总结：</strong></p>
+<blockquote>
+<p>equals()方法在Object类中作用于==相同，但是大部分的类都对equals()进行了重写，所以要找到equals真正的判断逻辑就得看他的方法实现。同样的我们自己创建的实体类或者其他对象都可以自定义equals()方法。</p>
+</blockquote>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java-equals==/" target="_blank" title="Java中==和equals方法的分析">https://www.larscheng.com/java-equals==/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"><i class="fa-fw fa fa-tags"></i> Java</a>
+                    
+                        <a href="/tags/equals-HashCode/"><i class="fa-fw fa fa-tags"></i> equals&HashCode</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/java-equals-hashcode/">Java中equals和HashCode方法的分析</a>
+            
+            
+            <a class="next" rel="next" href="/java-auto-box/">Java中的自动拆装箱、装箱缓存</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

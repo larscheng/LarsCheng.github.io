@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Vert.x Core（二）- Event Bus（事件总线） | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Vert.x Core（二）- Event Bus（事件总线）</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-02&nbsp;&nbsp;14:28:22</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Vert-x/">Vert.x</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,714</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <pre><code>本文是我在学习Vert.x过程中的一些笔记，作为记录。
+因为是初学，对Vert.x的理解还不够透彻，如有错误之处我们可以在评论中一起讨论呦。
+</code></pre>
+<h3 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> 概述</h3>
+<pre><code>The event bus is the nervous system of Vert.x
+</code></pre>
+<p>EnventBus是Vert.x的神经系统，EventBus为Verticle之间提供通讯和信息传递的基础。这种方式提供了一个简单但有效的解耦。</p>
+<a id="more"></a> 
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/vertx/20191029130558.png" alt=""></p>
+<p>如上图，EventBus为多个Verticle实例传递消息，而在Vertx中每一个Verticle都对应着一个或者多个处理器（handler），我们将部署两个Verticle(H1和H2)来处理HTTP请求，一个Verticle（D1）封装数据库持久化。由此产生的Verticle将没有相互的直接引用，它们将只商定事件总线中的目的地名称以及消息格式。假设H1接收到查询请求，H1会将查询的消息发送到EventBus上，此时注册在该地址上的D1接收到了消息，执行查询任务将返回结果以JSON形式原路返回，这整个过程都是异步进行。</p>
+<p>发送到事件总线的消息将解码为JSON。虽然Vert.x的事件总线支持灵活的串行化方案用于高要求或者高度定制的上下文，但是使用JSON数据通常是明智的选择。使用JSON的另一个优势是它是一种语言无关的格式。由于Vert.x是支持多语言的，对于使用不同语言编写的Verticle之间的通讯，JSON是非常理想的。</p>
+<h3 id="地址"><a class="markdownIt-Anchor" href="#地址"></a> 地址</h3>
+<p>Verticle之间的消息被EventBus发送到一个约定的<strong>地址（Address）</strong>，消息的提供者和消费者通过地址来实现消息的生产和消费。</p>
+<h3 id="处理器"><a class="markdownIt-Anchor" href="#处理器"></a> 处理器</h3>
+<p>这里的消费者自然就是不同的处理器Handler，处理器之间可以根据不通的消息通信方式实现不同的功能。</p>
+<p>EventBus事件总线中支持的消息通信方式有如下三种：、</p>
+<ul>
+<li>点对点 ： 消息指发送给一个监听这个地址上的 消费者(consumer) 。</li>
+<li>发布/订阅 ： 消息会被所有监听在这个地址上的所有 消费者(consumer) 收到。</li>
+<li>请求/应答 ： 消息回发送给一个 消费者(consumer) , 它 应答 这个消息并且把另外一个 消息 发送回初始的发送者。</li>
+</ul>
+<h3 id="消息类型"><a class="markdownIt-Anchor" href="#消息类型"></a> 消息类型</h3>
+<p>通常的消息格式无非字符串、整数、Json等，但因为Vert.x多语言的特点，JSON则是他最常用的消息类型，JSON在Vertx支持的所有语言都是非常容易创建、读取和解析的，因此它已经成为了Vert.x中的通用语。这就给程序员提供很大的发挥空间，你可以自定义一个专属的消息传递对象，通过JSON形式进行传递。</p>
+<h3 id="eventbus的使用"><a class="markdownIt-Anchor" href="#eventbus的使用"></a> EventBus的使用</h3>
+<p>1.获取EventBus对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus eventBus = vertx.eventBus();</span><br></pre></td></tr></table></figure>
+<p>2.EventBus对外提供的api</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">@Fluent</span><br><span class="line">    EventBus send(String var1, Object var2);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    &lt;T&gt; EventBus send(String var1, Object var2, Handler&lt;AsyncResult&lt;Message&lt;T&gt;&gt;&gt; var3);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    EventBus send(String var1, Object var2, DeliveryOptions var3);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    &lt;T&gt; EventBus send(String var1, Object var2, DeliveryOptions var3, Handler&lt;AsyncResult&lt;Message&lt;T&gt;&gt;&gt; var4);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    EventBus publish(String var1, Object var2);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    EventBus publish(String var1, Object var2, DeliveryOptions var3);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageConsumer&lt;T&gt; consumer(String var1);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageConsumer&lt;T&gt; consumer(String var1, Handler&lt;Message&lt;T&gt;&gt; var2);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageConsumer&lt;T&gt; localConsumer(String var1);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageConsumer&lt;T&gt; localConsumer(String var1, Handler&lt;Message&lt;T&gt;&gt; var2);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageProducer&lt;T&gt; sender(String var1);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageProducer&lt;T&gt; sender(String var1, DeliveryOptions var2);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageProducer&lt;T&gt; publisher(String var1);</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; MessageProducer&lt;T&gt; publisher(String var1, DeliveryOptions var2);</span><br><span class="line"></span><br><span class="line">    @GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">    EventBus registerCodec(MessageCodec var1);</span><br><span class="line"></span><br><span class="line">    @GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">    EventBus unregisterCodec(String var1);</span><br><span class="line"></span><br><span class="line">    @GenIgnore</span><br><span class="line">    &lt;T&gt; EventBus registerDefaultCodec(Class&lt;T&gt; var1, MessageCodec&lt;T, ?&gt; var2);</span><br><span class="line"></span><br><span class="line">    @GenIgnore</span><br><span class="line">    EventBus unregisterDefaultCodec(Class var1);</span><br><span class="line"></span><br><span class="line">    @GenIgnore</span><br><span class="line">    void start(Handler&lt;AsyncResult&lt;Void&gt;&gt; var1);</span><br><span class="line"></span><br><span class="line">    @GenIgnore</span><br><span class="line">    void close(Handler&lt;AsyncResult&lt;Void&gt;&gt; var1);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    &lt;T&gt; EventBus addOutboundInterceptor(Handler&lt;DeliveryContext&lt;T&gt;&gt; var1);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    &lt;T&gt; EventBus removeOutboundInterceptor(Handler&lt;DeliveryContext&lt;T&gt;&gt; var1);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    &lt;T&gt; EventBus addInboundInterceptor(Handler&lt;DeliveryContext&lt;T&gt;&gt; var1);</span><br><span class="line"></span><br><span class="line">    @Fluent</span><br><span class="line">    &lt;T&gt; EventBus removeInboundInterceptor(Handler&lt;DeliveryContext&lt;T&gt;&gt; var1);</span><br></pre></td></tr></table></figure>
+<p>可以看到提供了很多的接口，我们大致对他们的功能进行分类如下：</p>
+<p><strong>发布消息publish</strong></p>
+<p>发布消息到指定地址可以使用<code>publish</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Fluent</span><br><span class="line">EventBus publish(String var1, Object var2);</span><br><span class="line">@Fluent</span><br><span class="line">EventBus publish(String var1, Object var2, DeliveryOptions var3);</span><br></pre></td></tr></table></figure>
+<pre><code>eventBus.publish(&quot;hello.world&quot;, &quot;发布一条消息....&quot;);
+</code></pre>
+<p>通过publish发布的消息将会传递给所有在地址 hello.world 上注册过的处理器。这就涉及到EventBus的发布订阅</p>
+<p>在发布的时候我们还有一个参数<code>DeliveryOptions</code>,其实可以理解为获取Vertx对象时的<code>Vertxoptions</code>一样，可以额外添加一些配置,进行消息的发布。</p>
+<p><strong>发送消息send</strong></p>
+<p>发送消息到指定地址可以使用<code>send</code>方法，他与发布消息最大的区别就是，send方法只会发送消息到指定地址上的一个处理器，正好对应点对点的信息通信方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Fluent</span><br><span class="line">EventBus send(String var1, Object var2);</span><br><span class="line">@Fluent</span><br><span class="line">&lt;T&gt; EventBus send(String var1, Object var2, Handler&lt;AsyncResult&lt;Message&lt;T&gt;&gt;&gt; var3);</span><br><span class="line">@Fluent</span><br><span class="line">EventBus send(String var1, Object var2, DeliveryOptions var3);</span><br><span class="line">@Fluent</span><br><span class="line">&lt;T&gt; EventBus send(String var1, Object var2, DeliveryOptions var3, Handler&lt;AsyncResult&lt;Message&lt;T&gt;&gt;&gt; var4);</span><br></pre></td></tr></table></figure>
+<pre><code>eventBus.send(&quot;hello.world&quot;, &quot;发送一条消息....&quot;);
+</code></pre>
+<p>除了单纯的发送消息外，EventBus还提供了用户自定义属性配置（DeliveryOptions），进行消息发送的接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DeliveryOptions options = new DeliveryOptions();</span><br><span class="line">options.addHeader(&quot;token&quot;, &quot;aaaaaa&quot;);</span><br><span class="line">eventBus.send(&quot;hello.world&quot;, &quot;发送一条消息....&quot;, options);</span><br></pre></td></tr></table></figure>
+<p>当我们发送一条消息到某一地址后，消息被某一处理器接收并处理，这时我们需要知道消息是何时被消费的，我们可以通过send方法的另一种方式配合consumer方法来实现请求应答的消息通信方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">eventBus.send(&quot;hello.world&quot;, &quot;发送一条消息....&quot;, ar -&gt; &#123;</span><br><span class="line">  if (ar.succeeded()) &#123;</span><br><span class="line">    System.out.println(&quot;结果: &quot; + ar.result().body());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">MessageConsumer&lt;String&gt; consumer = eventBus.consumer(&quot;hello.world&quot;);</span><br><span class="line">consumer.handler(message -&gt; &#123;</span><br><span class="line">  System.out.println(&quot;处理器收到一条消息: &quot; + message.body());</span><br><span class="line">  message.reply(&quot;消费成功!&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>注册处理器consumer</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;T&gt; MessageConsumer&lt;T&gt; consumer(String var1);</span><br><span class="line">&lt;T&gt; MessageConsumer&lt;T&gt; consumer(String var1, Handler&lt;Message&lt;T&gt;&gt; var2);</span><br></pre></td></tr></table></figure>
+<p>consumer方法可以将处理器注册到指定的地址，第一个参数<code>String var1</code>就是address，EventBus提供了两个注册处理器的方法，一种是直接在参数中指定，另一种是通过comsumer方法返回的<code>MessageConsumer</code>对象进行注册设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">EventBus eb = vertx.eventBus();</span><br><span class="line"></span><br><span class="line">eb.consumer(&quot;hello.world&quot;, message -&gt; &#123;</span><br><span class="line">  System.out.println(&quot;处理器收到一条消息: &quot; + message.body());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">MessageConsumer&lt;String&gt; msgcomsumer = eb.consumer(&quot;hello.world&quot;);</span><br><span class="line">msgcomsumer.handler(message -&gt; &#123;</span><br><span class="line">  System.out.println(&quot;处理器收到一条消息: &quot; + message.body());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果你想知道他什么时候注册成功，那么可以为msgcomsumer绑定一个完成时的处理器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msgcomsumer.completionHandler(res -&gt; &#123;</span><br><span class="line">  if (res.succeeded()) &#123;</span><br><span class="line">    System.out.println(&quot;处理器注册成功&quot;);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    System.out.println(&quot;处理器注册失败&quot;);  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/vertx-eventbus/" target="_blank" title="Vert.x Core（二）- Event Bus（事件总线）">https://www.larscheng.com/vertx-eventbus/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Vert-x/"><i class="fa-fw fa fa-tags"></i> Vert.x</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/vertx-tcp/">Vert.x创建TCP服务端及客户端</a>
+            
+            
+            <a class="next" rel="next" href="/vertxbase/">Vert.x-Core（一）- 基础篇</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

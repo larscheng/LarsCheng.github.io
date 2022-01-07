@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>基于hexo和coding免费搭建个人博客网站 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">基于hexo和coding免费搭建个人博客网站</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2018-07-24&nbsp;&nbsp;9:25:48</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/博客/">博客</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,693</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">9min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>现如今有很多人每天在看博客，也有很多人在各大平台发表博客，今天我们通过hexo博客框架来自己动手搭建一个免费并且完全DIY的个人博客。Hexo的优势在于方便快捷并且提供的主题丰富，本文是笔者在搭建博客期间的一些经验分享。还是先来看一下搭建完成后的效果吧—<a href="http://LarsCheng.coding.me" target="_blank" rel="noopener">我的博客</a>。</p>
+<a id="more"></a> 
+<h2 id="hexo介绍"><a class="markdownIt-Anchor" href="#hexo介绍"></a> Hexo介绍</h2>
+<p><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a>是由台湾在校大学生tommy351(twitter名)设计的一款基于node的静态网站生成器，它使用MarkDown语法解析文章，能够几秒内生成静态网页。使用hexo搭建博客你会发现页面浏览十分流畅，这就是静态网页部署的优势所在。</p>
+<h2 id="正文"><a class="markdownIt-Anchor" href="#正文"></a> 正文</h2>
+<h3 id="搭建前提"><a class="markdownIt-Anchor" href="#搭建前提"></a> 搭建前提</h3>
+<p>在开始搭建博客网站之前需要以下准备：</p>
+<ul>
+<li>安装 <a href="https://nodejs.org/zh-cn/" target="_blank" rel="noopener">Node.js</a></li>
+<li>安装 <a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a></li>
+<li>注册 <a href="https://coding.net/" target="_blank" rel="noopener">Coding</a> 账号</li>
+</ul>
+<h3 id="下载并安装node"><a class="markdownIt-Anchor" href="#下载并安装node"></a> 下载并安装<a href="https://nodejs.org/zh-cn/" target="_blank" rel="noopener">Node</a></h3>
+<p>进入<a href="https://nodejs.org/zh-cn/" target="_blank" rel="noopener">Node下载</a>页面，此处笔者下载当前稳定版本8.11.3,安装过程比较简单此处不再赘述。安装完成后在命令提示符下使用以下命令检测是否安装成功,如果显示安装的版本号即表示安装成功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm -v</span><br><span class="line">v8.11.3</span><br></pre></td></tr></table></figure>
+<h3 id="下载并安装git"><a class="markdownIt-Anchor" href="#下载并安装git"></a> 下载并安装<a href="https://git-scm.com/download/win" target="_blank" rel="noopener">Git</a></h3>
+<p>进入<a href="https://git-scm.com/download/win" target="_blank" rel="noopener">Git下载</a>页面，选择对应的系统版本和git版本号进行下载，安装过程此处不再赘述。安装完成后在桌面右键可以看到git bash或者开始菜单中也可以找到。本文后续大部分操作也都在git bash中完成。<br>
+安装完成Git后，需要对Git进行用户名和密码的配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"Your Name"</span></span><br><span class="line">$ git config --global user.email <span class="string">"email@example.com"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。----<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="noopener">廖雪峰Git教程</a></p>
+</blockquote>
+<h3 id="hexo安装"><a class="markdownIt-Anchor" href="#hexo安装"></a> Hexo安装</h3>
+<p>首先我们先新建一个文件夹作为个人博客的文件目录，此处笔者创建blog文件夹。进入该文件夹后打开Git bash，开始安装hexo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli   <span class="comment">#安装Hexo脚手架  </span></span><br><span class="line">$ hexo init  	            <span class="comment">#Hexo自动在当前文件夹下下载搭建网站所需的所有文件</span></span><br><span class="line">$ npm install  	            <span class="comment">#安装依赖包</span></span><br></pre></td></tr></table></figure>
+<p>此时在blog文件夹中我们可以看到已经生成了搭建网站所需要的所有文件了，其目录如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">│  .gitignore</span><br><span class="line">│  package.json</span><br><span class="line">│  _config.yml                     <span class="comment">#博客网站的配置信息，核心配置文件</span></span><br><span class="line">│  </span><br><span class="line">├─node_modules                                  </span><br><span class="line">│    </span><br><span class="line">├─scaffolds                        <span class="comment">#模版文件夹。当您新建文章时，Hexo 会根据 scaffold 来建立文件。</span></span><br><span class="line">│      draft.md</span><br><span class="line">│      page.md</span><br><span class="line">│      post.md</span><br><span class="line">│      </span><br><span class="line">├─<span class="built_in">source</span>                           <span class="comment">#资源文件夹是存放用户资源的地方，我们新建的md格式的博客就在此处</span></span><br><span class="line">│  └─_posts</span><br><span class="line">│          hello-world.md          <span class="comment">#hexo为我们创建的hello-world样例文件</span></span><br><span class="line">│          </span><br><span class="line">└─themes                           <span class="comment">#主题文件夹。Hexo会根据主题来生成静态页面。</span></span><br><span class="line">    └─landscape                    <span class="comment">#默认使用的主题</span></span><br></pre></td></tr></table></figure>
+<p>现在一个简单的个人博客已经创建完成，我们可以使用<code>hexo generate</code>命令来生成静态网页。然后通过<code>hexo server</code>命令启动本地服务器来预览一下hexo为我们提供的最原始博客页面。当然这两个命令也可以简写如下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g    </span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>浏览器访问http://localhost:4000/   ，此时就可以看见一个简单的博客页面。该页面正是source目录下hello-world.md文件生成的静态网页。<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/hexo/20191014133409.png" alt="hello-world"></p>
+<h3 id="部署博客到coding"><a class="markdownIt-Anchor" href="#部署博客到coding"></a> 部署博客到coding</h3>
+<p>Coding与Github相似，都是基于Git的代码托管平台，GitHub大家应该都很熟悉，相对与Coding来说，GitHub面向英语系国家程序员，Coding面向中国程序猿，而且Coding的私有库可免费使用这是最大的区别。两者的用法和操作其实大同小异。笔者也是第一次使用Coding，所以大家共同学习。本文就使用了Coding来作为博客项目的托管平台。</p>
+<h4 id="新建仓库"><a class="markdownIt-Anchor" href="#新建仓库"></a> 新建仓库</h4>
+<p>1.打开coding主页，创建新项目</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/hexo/20191014133511.png" alt="这里写图片描述"><br>
+新建一个名为yourname.coding.me的项目，其中这里的yourname最好是coding注册时的username，等项目部署成功后它就是你博客的访问地址。如下所示coding可以创建私有仓库，GitHub中是要收费的。<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/hexo/20191014133533.png" alt="这里写图片描述"><br>
+2.开启Pages服务，开启后我们就可以通过 <code>用户名</code>+网站后缀来访问博客，而且还可以绑定域名通过固定域名来访问。进入项目-&gt;代码-&gt;Pages服务，具体操作如下：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/hexo/20191014133559.png" alt="这里写图片描述"></p>
+<h4 id="连接到coding"><a class="markdownIt-Anchor" href="#连接到coding"></a> 连接到Coding</h4>
+<p>在管理Git项目时，无论是GitHub还是Coding我们可以通过<code>SSH、HTTPS</code>两种方式来<code>clone</code>或者<code>push</code>代码，当使用<code>HTTPS</code>的方式来管理代码，每次操作时都需要验证用户名和密码；而使用SSH方式<code>Push</code>代码之前需要配置个人的SSH key,这样就可以省掉繁琐的验证步骤。<br>
+当然，我们也可以选择通过HTTPS方式来进行项目的管理，那么请<strong>跳过SSH key的配置步骤</strong>，直接阅读项目部署步骤的内容。</p>
+<h4 id="配置ssh-key"><a class="markdownIt-Anchor" href="#配置ssh-key"></a> 配置SSH key</h4>
+<p>以下命令皆在Git bash下执行<br>
+<strong>1.检查你的电脑上是否已经生成了SSH Key</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh</span><br><span class="line">$ ls</span><br></pre></td></tr></table></figure>
+<p>如果该目录下存在<code>id_rsa.pub</code>或<code>id_dsa.pub</code>文件,那么直接进行<strong>第三步</strong></p>
+<p><strong>2.创建一个SSH Key</strong><br>
+执行创建命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">"username"</span>         <span class="comment">#username为git config --global user.name,即git中所配置的用户名</span></span><br></pre></td></tr></table></figure>
+<p>代码参数含义：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:center">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>-t</code></td>
+<td style="text-align:left">指定密钥类型，默认是rsa，可以省略。</td>
+<td style="text-align:center"><code>rsa</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>-C</code></td>
+<td style="text-align:left">设置注释文字，比如用户名。</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>-f</code></td>
+<td style="text-align:left">-f指定密钥文件存储文件名。</td>
+<td style="text-align:center"><code>id_rsa</code></td>
+</tr>
+</tbody>
+</table>
+<p>以上命令省略了<code>-f</code>参数，因此，运行上面那条命令后会让你输入一个文件名，用于保存刚才生成的SSH key代码，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Generating public/private rsa key pair. </span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/c/Users/you/.ssh/id_rsa): [Press enter]</span><br></pre></td></tr></table></figure>
+<p>此处我们直接按下回车使用默认文件名创建，那么就会生成id_rsa和id_rsa.pub两个秘钥文件。<br>
+接着又会提示你输入两次密码（该密码是你push文件的时候要输入的密码，而不是Coding管理者的密码），当然，你也可以不输入密码，直接按回车。那么push的时候就不需要输入密码，直接提交到Git服务器上了，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again:</span><br></pre></td></tr></table></figure>
+<p>接下来，就会显示如下一些提示，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Your identification has been saved in /c/Users/you/.ssh/id_rsa. </span><br><span class="line">Your public key has been saved in /c/Users/you/.ssh/id_rsa.pub.</span><br></pre></td></tr></table></figure>
+<p><strong>3.在Coding中配置SSH Key</strong><br>
+在刚才生成的文件夹中找到<code>id_rsa.pub</code>,用记事本打开后全选复制。<br>
+打开浏览器，进入我们Coding的工作台，账户-&gt;SSH公钥，按如下操作，将生成的SSH key添加。<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/hexo/20191014133624.png" alt="图"></p>
+<h4 id="部署发布项目"><a class="markdownIt-Anchor" href="#部署发布项目"></a> 部署发布项目</h4>
+<p>在我们创建的博客项目工作空间中找到_config.yml文件，打开后在文件的最后方，可以看到如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deploy：   </span><br><span class="line">    type:</span><br></pre></td></tr></table></figure>
+<p>对该配置进行修改如下(<strong>注意缩进</strong>)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy：   </span><br><span class="line">    type: git</span><br><span class="line">    repository: git@git.coding.net:yourname/yourname.coding.me.git       #发布到Coding（SSH方式）</span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure>
+<p>该配置指定了Coding仓库的地址，并通过SSH方式进行连接。同样我们也可以通过HTTPS方式。repository写法如下：</p>
+<blockquote>
+<p>repository: <a href="https://git.coding.net/yourname/yourname.coding.me.git" target="_blank" rel="noopener">https://git.coding.net/yourname/yourname.coding.me.git</a></p>
+</blockquote>
+<p>保存后关闭，在项目当前目录打开Git Bash ，因为项目的部署会用到<code>hexo-deployer-git</code>，所以先安装该插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>安装完成后，开始项目的部署操作，每次的部署操作可以分三步来，分别如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean                #清除缓存文件和已生成的静态文件。更换主题后一定要用</span><br><span class="line">$ hexo g                    #完整命令为hexo generate ，生成静态文件。</span><br><span class="line">$ hexo d                    #完整命令为hexo deploy ，部署网站。</span><br></pre></td></tr></table></figure>
+<p>如果你使用的是SSH方式的话，应该可以看到commit和push成功的记录，说明已经部署成功。如果使用的是HTTPS方式，会弹出输入用户名密码的输入框，键入你的coding用户名密码即可。</p>
+<blockquote>
+<p>此时打开浏览器访问 <a href="https://yourname.coding.me" target="_blank" rel="noopener">https://yourname.coding.me</a></p>
+</blockquote>
+<h3 id="主题更换"><a class="markdownIt-Anchor" href="#主题更换"></a> 主题更换</h3>
+<p>我们刚才搭建的博客使用的是默认的<code>landscape</code>主题。我们也可以在hexo提供的<a href="https://hexo.io/themes/" target="_blank" rel="noopener">主题页面</a>中选择自己喜欢的进行配置。在博客文件夹下的themes文件夹，该目录下存放的就是所有的主题资源。此处笔者以Next主题的配置为例。</p>
+<ol>
+<li>首先第一步下载主题,下载命令格式为<code>git clone {主题链接} themes/{主题名称}</code>。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+<p>下载完成后，在themes文件夹下就可以看到Next主题的相关文件。<br>
+2. 下载完成，接着就是启用主题。<br>
+在博客文件根目录中找到<code>_config.yml</code>文件，并用记事本打开，对<code>theme</code>属性进行修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next      #原本为lanscape主题，此处直接修改为我们下载的主题名</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>完成以上配置后，我们既定要记得清楚缓存并重新部署项目，操作如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$   hexo clean          #清除缓存</span><br><span class="line">$   hexo g              #生成静态文件</span><br><span class="line">$   hexo d              #部署博客网站</span><br></pre></td></tr></table></figure>
+<p>此时，我们的博客主题已经修改成功。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>搭建个人博客网站，并且坚持在网站上更发表自己的一些知识积累是很有意义的，这个过程不但让你融会贯通而且完全转化为自己的理解。笔者在搭建过程中也遇到许多坑，多亏有网上的众多大牛前辈。先回过头来看其实还是很有成就感的，当然当前进度的博客网站只能算是刚刚搭建好，hexo本来就是完全DIY的，主题和页面都需要更多的优化，最重要的是内容不能停，既然搭建好了，就坚持写下去吧。</p>
+<blockquote>
+<p>大家如果有问题或者笔者博客内容有误可以留言交流，共同学习。</p>
+</blockquote>
+<h2 id="参考的文章"><a class="markdownIt-Anchor" href="#参考的文章"></a> 参考的文章</h2>
+<blockquote>
+<p>hexo开发手册可以初步了解hexo：  <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a><br>
+博客搭建的基础教程写得非常详细： <a href="https://www.jianshu.com/p/eb002d35436c" target="_blank" rel="noopener">https://www.jianshu.com/p/eb002d35436c</a></p>
+</blockquote>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/create-blog/" target="_blank" title="基于hexo和coding免费搭建个人博客网站">https://www.larscheng.com/create-blog/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Hexo/"><i class="fa-fw fa fa-tags"></i> Hexo</a>
+                    
+                        <a href="/tags/Coding/"><i class="fa-fw fa fa-tags"></i> Coding</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/microservice-note/">[SpringCloud学习] - 浅谈微服务架构</a>
+            
+            
+            <a class="next" rel="next" href="/test/">Hello World</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>SpringBoot项目中实现国际化 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SpringBoot项目中实现国际化</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-01&nbsp;&nbsp;14:07:01</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SpringBoot/">SpringBoot</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,385</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">9min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>什么是国际化呢？国际惯例，来时来一段官方介绍：</p>
+<pre><code>国际化（internationalization）是设计和制造容易适应不同区域要求的产品的一种方式。它要求从产品中抽离所有地域语言，国家/地区和文化相关的元素。换言之，应用程序的功能和代码设计考虑在不同地区运行的需要，其代码简化了不同本地版本的生产。开发这样的程序的过程，就称为国际化。
+</code></pre>
+<p>在我们实际开发中，一个web应用可能要在多个地区使用，面对不同地区的不同语言，为了适应不同的用户，我们可以尝试在前端页面实现多语言的支持，那么同样对于后端返回的一些提示信息，异常信息等，我们后端也可以根据不同的语言环境来进行国际化处理，返回相应的信息。</p>
+<a id="more"></a> 
+<h3 id="开发工具"><a class="markdownIt-Anchor" href="#开发工具"></a> 开发工具</h3>
+<p>IDEA、Maven、SpringBoot2.0.5、Jdk1.8、google浏览器</p>
+<h3 id="springboot中的国际化"><a class="markdownIt-Anchor" href="#springboot中的国际化"></a> SpringBoot中的国际化</h3>
+<p><strong>原理</strong>：<br>
+想要使应用支持国际化，首先需要知道用户的语言环境，即用户想要看到的语言，我们设想在用户每次请求时告诉服务器自己的语言环境，服务器收到请求后，根据不同的语言环境返回不同的信息来实现国际化。在spring应用中，用户的语言环境是通过<code>区域解析器</code>来识别的，而区域解析器有分为好几种（<code>后面详细说</code>）,在我们不做配置修改时，spring使用<code>AcceptHeaderLocaleResolver</code>作为默认的区域解析器，它是根据HTTP请求 Header中的<code>Accept-language</code>的值来解析，当然区域解析器我们也可以自定义配置。</p>
+<p><strong>springboot默认就支持国际化。我们只需要只需要作相应的配置即可。</strong></p>
+<p>1.首先你需要一个springboot项目。IDEA中分分钟创建好一个项目。</p>
+<p>2.在<code>resources</code>下定义国际化配置文件，注意名称必须以<code>messages</code>开始。（<code>在springboot中，当我们不修改配置时默认去解析名称以message开始的properties文件</code>）</p>
+<ul>
+<li>
+<p>messages.properties （<code>默认环境，无法确定语言环境时，解析该文件中的相应信息</code>）</p>
+</li>
+<li>
+<p>messages_zh_CN.properties（<code>中文语言环境时，解析该文件中的相应信息</code>）</p>
+</li>
+<li>
+<p>messages_en_US.properties（<code>英文语言环境时，解析该文件中的相应信息</code>）</p>
+</li>
+</ul>
+<p>在三个配置文件中分别以<code>Key = Value</code>形式存储如下三条信息，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">welcome = 这是一个支持国际化的项目。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">welcome = 这是一个支持国际化的项目。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">welcome = This is a project supporting internationalization.</span><br></pre></td></tr></table></figure>
+<p>3.创建thymeleaf页面<br>
+加入thymeleaf依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在<code>resources/templates</code>目录下创建<code>hello.html</code>页面:<br>
+尝试在不同的语言环境下，通过<code>#{welcome}</code>获取信息</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">label</span> <span class="attr">th:text</span>=<span class="string">"#&#123;welcome&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>4.创建访问页面的controller<br>
+注意这里controller的注解时<code>@Controller</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/9/25 19:28</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hi"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"/hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试国际化效果"><a class="markdownIt-Anchor" href="#测试国际化效果"></a> 测试国际化效果</h3>
+<p>这里使用google浏览器进行测试，测试之前需要安装插件<code>Language Switcher</code><br>
+Language Switcher : 可以改变当前请求的语言环境（根据自己的选择）</p>
+<p>启动我们的springboot项目，google浏览器访问 <a href="http://127.0.0.1:8080/hi" target="_blank" rel="noopener">http://127.0.0.1:8080/hi</a> ,可以看到如下页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132507.png" alt=""></p>
+<p>通过Language Switcher切换语言环境为<code>English - United States</code>,重新访问 <a href="http://127.0.0.1:8080/hi" target="_blank" rel="noopener">http://127.0.0.1:8080/hi</a> ，可以看到如下页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132524.png" alt=""></p>
+<p>ok，大功告成，到此一个简单的国际化项目就完成了。</p>
+<h3 id="扩展国际化"><a class="markdownIt-Anchor" href="#扩展国际化"></a> 扩展国际化</h3>
+<p>通过上面的小栗子，我们可以看到一个简单的国际化使用，但是在开发中中还需要我们进行一定的配置，来满足我们不同情况下的使用。</p>
+<h4 id="在返回结果中获取国际化信息"><a class="markdownIt-Anchor" href="#在返回结果中获取国际化信息"></a> 在返回结果中获取国际化信息</h4>
+<p>很多时候，后端接收到一个请求后，需要返回一个提示信息，而此时我们可以使这个返回信息支持国际化</p>
+<p>这里就用到了<code>org.springframework.context.MessageSource</code>接口,MessageSource提供了三个方法</p>
+<pre><code>@Nullable//参数字段可为空
+String getMessage(String var1, @Nullable Object[] var2, @Nullable String var3, Locale var4);
+
+String getMessage(String var1, @Nullable Object[] var2, Locale var3) throws NoSuchMessageException;
+
+String getMessage(MessageSourceResolvable var1, Locale var2) throws NoSuchMessageException;
+</code></pre>
+<ul>
+<li>
+<p>String getMessage(String var1, @Nullable Object[] var2, @Nullable String var3, Locale var4)：用来从MessageSource获取消息的基本方法。如果在指定的locale中没有找到消息，则使用默认的消息。var2中的参数将使用标准类库中的MessageFormat来作消息中替换值。</p>
+</li>
+<li>
+<p>String getMessage(String code, Object[] args, Locale loc)：本质上和上一个方法相同，其区别在：没有指定默认值，如果没找到消息，会抛出一个NoSuchMessageException异常。</p>
+</li>
+<li>
+<p>String getMessage(MessageSourceResolvable resolvable, Locale locale)：上面方法中所使用的属性都封装到一个MessageSourceResolvable实现中，而本方法可以指定MessageSourceResolvable实现。</p>
+</li>
+</ul>
+<p>下面我们实践一下：</p>
+<p>1.创建一个以json返回格式的controller，注入MessageSource，注意controller的注解为<code>@RestController</code></p>
+<p>在这里首先我们需要获取到当前请求的Locale，有两种方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Locale locale = LocaleContextHolder.getLocale();</span><br><span class="line">Locale locale = RequestContextUtils.getLocale(request);</span><br></pre></td></tr></table></figure>
+<p>两种方式根据情况选择使用，下面是controller代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.i18n.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.MessageSource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.i18n.LocaleContextHolder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/9/21 10:54</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageSource messageSource;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/ha"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">ha</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> messageSource.getMessage(<span class="string">"welcome"</span>, <span class="keyword">null</span>, LocaleContextHolder.getLocale());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.启动项目访问 <a href="http://127.0.0.1:8080/ha" target="_blank" rel="noopener">http://127.0.0.1:8080/ha</a> ，可以看到相应语言环境的返回信息<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132600.png" alt=""></p>
+<p>通过Language Switcher切换语言环境为<code>English - United States</code>,重新访问http://127.0.0.1:8080/ha，可以看到如下页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132615.png" alt=""></p>
+<h3 id="支持占位符国际化信息返回"><a class="markdownIt-Anchor" href="#支持占位符国际化信息返回"></a> 支持占位符国际化信息返回</h3>
+<p>我们经常会遇到这样一个场景，登录账号需要验证码，填写完手机号获取验证码后会收到一条类似于<code>尊敬的用户13099999999您好，您的验证码是6666</code>，这种信息，其实就是一个模板，通过改变参数，重复使用。我们通过国际化资源文件中的占位符，配合MessageSource提供的api也可以实现。<br>
+资源文件中加入如下属性:</p>
+<p>messages.properties,messages_zh_CN.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello=你好：&#123;0&#125; ， 你的验证码为 ：&#123;1&#125;</span><br></pre></td></tr></table></figure>
+<p>messages_en_US.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello=Hello: &#123;0&#125;, your verification code is: &#123;1&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在<code>JsonController</code>中，创建一个测试接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;/haha&quot;)</span><br><span class="line">public String haha() &#123;</span><br><span class="line">    return messageSource.getMessage(&quot;hello&quot;, new Object[]&#123;&quot;zhangsan&quot;,&quot;123456&quot;&#125;, LocaleContextHolder.getLocale());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动项目直接，访问 <a href="http://127.0.0.1:8080/haha" target="_blank" rel="noopener">http://127.0.0.1:8080/haha</a> 可以看到相应语言环境的返回信息</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132628.png" alt=""></p>
+<p>通过Language Switcher切换语言环境为<code>English - United States</code>,重新访问 <a href="http://127.0.0.1:8080/haha" target="_blank" rel="noopener">http://127.0.0.1:8080/haha</a> ，可以看到如下页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132642.png" alt=""></p>
+<h3 id="支持国际化的枚举类"><a class="markdownIt-Anchor" href="#支持国际化的枚举类"></a> 支持国际化的枚举类</h3>
+<p>既然返回信息可以实现国际化，那我们的枚举类同样也可以实现国际化咯</p>
+<p>创建一个枚举类EnumSuccessOrError.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:枚举类举例</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/9/26 20:52</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span>  EnumSuccessOrError &#123;</span><br><span class="line">    SUCCESS(<span class="number">0</span>, <span class="string">"操作成功"</span>),</span><br><span class="line">    ERROR(<span class="number">1</span>, <span class="string">"操作失败"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回状态码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> statusCode;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回状态信息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String statusMsg;</span><br><span class="line"></span><br><span class="line">    EnumSuccessOrError(<span class="keyword">int</span> statusCode, String statusMsg) &#123;</span><br><span class="line">        <span class="keyword">this</span>.statusCode = statusCode;</span><br><span class="line">        <span class="keyword">this</span>.statusMsg = statusMsg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the statusCode</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getStatusCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> statusCode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the statusMsg</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getStatusMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> statusMsg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上，刚刚创建的枚举类是不支持国际化的，我们呢需要改造他，当调用<code>getStatusMsg</code>方法时根据语言环境返回相应的国际化字符串。可以从如下两个点着手：</p>
+<ul>
+<li>getStatusMsg方法改造</li>
+<li>资源文件中添加不同语言环境对应的返回值</li>
+</ul>
+<p>先在三个资源文件中加入不同环境的返回值：</p>
+<p>messages.properties,messages_zh_CN.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SUCCESS = 操作成功</span><br><span class="line">ERROR = 操作失败</span><br></pre></td></tr></table></figure>
+<p>messages_en_US.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SUCCESS=success</span><br><span class="line">ERROR=error</span><br></pre></td></tr></table></figure>
+<p>改造后的枚举如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span>  EnumSuccessOrError &#123;</span><br><span class="line">SUCCESS(<span class="number">0</span>, <span class="string">"SUCCESS"</span>),</span><br><span class="line">ERROR(<span class="number">1</span>, <span class="string">"ERROR"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回状态码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> statusCode;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回状态信息</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> String statusMsg;</span><br><span class="line"></span><br><span class="line">EnumSuccessOrError(<span class="keyword">int</span> statusCode, String statusMsg) &#123;</span><br><span class="line">    <span class="keyword">this</span>.statusCode = statusCode;</span><br><span class="line">    <span class="keyword">this</span>.statusMsg = statusMsg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> MessageSource messageSource;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> EnumSuccessOrError <span class="title">setMessageSource</span><span class="params">(MessageSource messageSource)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.messageSource = messageSource;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//通过静态内部类的方式注入bean，并赋值到枚举中</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ReportTypeServiceInjector</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageSource messageSource;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postConstruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (EnumSuccessOrError rt : EnumSet.allOf(EnumSuccessOrError.class))</span><br><span class="line">            rt.setMessageSource(messageSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the statusCode</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getStatusCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> statusCode;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the statusMsg，根据语言环境返回国际化字符串</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getStatusMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> messageSource.getMessage(statusMsg,<span class="keyword">null</span>,statusMsg, LocaleContextHolder.getLocale());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时我们在<code>JsonController</code>中，再创建一个测试接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/enumDemo"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">enumDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> EnumSuccessOrError.SUCCESS.getStatusMsg();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动项目直接，访问 <a href="http://127.0.0.1:8080/enumDemo" target="_blank" rel="noopener">http://127.0.0.1:8080/enumDemo</a> 可以看到相应语言环境的返回信息</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132701.png" alt=""></p>
+<p>通过Language Switcher切换语言环境为<code>English - United States</code>,重新访问 <a href="http://127.0.0.1:8080/enumDemo" target="_blank" rel="noopener">http://127.0.0.1:8080/enumDemo</a> ，可以看到如下页面：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132715.png" alt=""></p>
+<h4 id="参考和感谢"><a class="markdownIt-Anchor" href="#参考和感谢"></a> 参考和感谢</h4>
+<p><a href="https://blog.csdn.net/linxingliang/article/details/52350238" target="_blank" rel="noopener">https://blog.csdn.net/linxingliang/article/details/52350238</a><br>
+<a href="https://blog.csdn.net/flowingflying/article/details/76358970" target="_blank" rel="noopener">https://blog.csdn.net/flowingflying/article/details/76358970</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/sb2i18n/" target="_blank" title="SpringBoot项目中实现国际化">https://www.larscheng.com/sb2i18n/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/SpringBoot/"><i class="fa-fw fa fa-tags"></i> SpringBoot</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/vertxbase/">Vert.x-Core（一）- 基础篇</a>
+            
+            
+            <a class="next" rel="next" href="/vertxinfo/">Vert.x介绍</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

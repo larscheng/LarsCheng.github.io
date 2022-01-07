@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java时间处理5---Java8中时区相关类库介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java时间处理5---Java8中时区相关类库介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2020-07-10&nbsp;&nbsp;17:10:17</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,491</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">6min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>在Java8以前，我们对于时区的处理通常是为时间转换类设置指定TimeZone，然后进行时区时间转换。</p>
+<p>而在Java8中不仅对时间日期进行了细粒度处理，有无时区，时区处理也进行了更加细粒度的优化。</p>
+<p>在之前我们介绍的新类库中基本都是无时区概念的。本文将引入时区概念。</p>
+<a id="more"></a>
+<h1 id="概念"><a class="markdownIt-Anchor" href="#概念"></a> 概念</h1>
+<p>介绍时区相关类库前，先来认识下Java中常见的几种时间格式</p>
+<p>1.世界标准时间（UTC时间），其中T表示时分秒的开始，结尾的Z表示这是一个世界标准时间</p>
+<blockquote>
+<p>2020-07-06T11:24:37.081Z</p>
+</blockquote>
+<p>2.本地时间（不含时区信息的时间），结尾无时区信息</p>
+<blockquote>
+<p>2020-07-06T19:24:37.156</p>
+</blockquote>
+<p>3.含有时区信息的时间，<code>+08:00</code>表示该时间是由UTC时间加上8小时得到的，<code>[Asia/Shanghai]</code>表示该时间的时区信息</p>
+<blockquote>
+<p>2020-07-06T19:24:37.156+08:00[Asia/Shanghai]</p>
+</blockquote>
+<h1 id="zoneid和zoneoffset"><a class="markdownIt-Anchor" href="#zoneid和zoneoffset"></a> ZoneId和ZoneOffSet</h1>
+<ul>
+<li>ZoneId表示一个时区实例，他的内部定义了一个地区的时区规则集，例如<code>Europe/Paris</code></li>
+<li>ZoneOffSet表示与UTC时间的偏移时间，格式为<code>+08:00</code>、<code>-04:00</code></li>
+</ul>
+<h2 id="创建zoneid"><a class="markdownIt-Anchor" href="#创建zoneid"></a> 创建ZoneId</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//获取系统默认时区</span><br><span class="line">System.out.println(ZoneId.systemDefault());</span><br><span class="line">//4种常用方式创建ZoneId</span><br><span class="line">System.out.println(ZoneId.of(&quot;+01:00&quot;));</span><br><span class="line">System.out.println(ZoneId.of(&quot;UTC+01:00&quot;));</span><br><span class="line">System.out.println(ZoneId.of(&quot;America/Chicago&quot;));</span><br><span class="line">System.out.println(ZoneId.ofOffset(&quot;UTC&quot;, ZoneOffset.of(&quot;+01:00&quot;)));</span><br></pre></td></tr></table></figure>
+<p>输入结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Asia/Shanghai</span><br><span class="line">+01:00</span><br><span class="line">UTC+01:00</span><br><span class="line">America/Chicago</span><br><span class="line">UTC+01:00</span><br></pre></td></tr></table></figure>
+<h2 id="创建zoneoffset"><a class="markdownIt-Anchor" href="#创建zoneoffset"></a> 创建ZoneOffSet</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(ZoneOffset.ofHours(3));</span><br><span class="line">System.out.println(ZoneOffset.ofHoursMinutesSeconds(1, 2, 3));</span><br><span class="line">System.out.println(ZoneOffset.of(&quot;+01:00&quot;));</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+03:00</span><br><span class="line">+01:02:03</span><br><span class="line">+01:00</span><br></pre></td></tr></table></figure>
+<p>单独看ZoneId和ZoneOffSet可能还不能完全看出使用效果，下面看看带时区的日期时间</p>
+<h2 id="zonedatetime"><a class="markdownIt-Anchor" href="#zonedatetime"></a> ZoneDateTime</h2>
+<p>表示ISO-8601日历系统中具有时区的日期时间，此类存储所有日期和时间字段，精度为纳秒，时区为区域偏移量，用于处理模糊的本地日期时间。</p>
+<p>例如:<code>2020-07-06T19:24:37.156+08:00[Asia/Shanghai]</code></p>
+<p>ZonedDateTime相当于拥有三个独立对象，一个本地日期时间<code>LocalDateTime</code> ，一个时区ID<code>ZoneId</code>和时间偏移量<code>ZoneOffset</code>。</p>
+<p>偏移量和本地日期时间用于在必要时定义一个瞬时时间。 时区ID用于获取偏移量的具体规则。（因为在部分区域夏时令时的偏移量与平常不同）</p>
+<p>来看看ZoneDateTime的常用方法</p>
+<h2 id="初始化"><a class="markdownIt-Anchor" href="#初始化"></a> 初始化</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//默认系统时区</span><br><span class="line">System.out.println(ZonedDateTime.now());</span><br><span class="line">//指定一个时区的时间</span><br><span class="line">System.out.println(ZonedDateTime.now(Clock.system(ZoneId.of(&quot;Europe/Paris&quot;))));</span><br><span class="line">//指定一个偏移量的时间</span><br><span class="line">System.out.println(ZonedDateTime.now(Clock.system(ZoneOffset.of(&quot;+04:00&quot;))));</span><br><span class="line">//根据本地日期时间和系统时区组合日期时间</span><br><span class="line">System.out.println(ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault()));</span><br><span class="line">//根据年月日时分秒毫秒纳秒时区id构建</span><br><span class="line">System.out.println(ZonedDateTime.of(2020, 1, 1, 1, 1, 1, 111, ZoneId.of(&quot;Europe/Paris&quot;)));</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2020-07-10T11:44:15.651+08:00[Asia/Shanghai]</span><br><span class="line">2020-07-10T05:44:15.653+02:00[Europe/Paris]</span><br><span class="line">2020-07-10T07:44:15.668+04:00</span><br><span class="line">2020-07-10T11:44:15.668+08:00[Asia/Shanghai]</span><br><span class="line">2020-01-01T01:01:01.000000111+01:00[Europe/Paris]</span><br></pre></td></tr></table></figure>
+<h2 id="其他方法"><a class="markdownIt-Anchor" href="#其他方法"></a> 其他方法</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ZonedDateTime z = ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault());</span><br><span class="line"></span><br><span class="line">System.out.println(z.getZone());//获取时区信息</span><br><span class="line">System.out.println(z.getOffset());//获取时间偏移量</span><br><span class="line">System.out.println(z.getDayOfMonth());//获取当月第几天</span><br><span class="line">System.out.println(z.getDayOfWeek());//获取本周星期几</span><br><span class="line">System.out.println(z.getDayOfYear());//获取本年第几天</span><br><span class="line">//获取时间信息</span><br><span class="line">System.out.println(z.getYear()+&quot;/&quot;+z.getMonthValue()+&quot;/&quot;+z.getDayOfMonth()+&quot; &quot;+</span><br><span class="line">        z.getHour()+&quot;:&quot;+z.getMinute()+&quot;:&quot;+z.getSecond()+&quot;.&quot;+z.getNano());</span><br><span class="line">//加减时间</span><br><span class="line">System.out.println(z.plusHours(3));</span><br><span class="line">System.out.println(z.minusHours(3));</span><br><span class="line">//修改时间</span><br><span class="line">System.out.println(z.withHour(20));</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Asia/Shanghai</span><br><span class="line">+08:00</span><br><span class="line">10</span><br><span class="line">FRIDAY</span><br><span class="line">192</span><br><span class="line">2020/7/10 13:37:19.37000000</span><br><span class="line">2020-07-10T16:37:19.037+08:00[Asia/Shanghai]</span><br><span class="line">2020-07-10T10:37:19.037+08:00[Asia/Shanghai]</span><br><span class="line">2020-07-10T20:37:19.037+08:00[Asia/Shanghai]</span><br></pre></td></tr></table></figure>
+<h1 id="时区与偏移量"><a class="markdownIt-Anchor" href="#时区与偏移量"></a> 时区与偏移量</h1>
+<p>本文开始的时候介绍了ZoneId和ZoneOffSet,在Java8中这两个类都可以对日期时间进行时区的转换，<strong>但是我更推荐使用时区信息（ZoneId），而不是时间偏移量(ZoneOffset)</strong></p>
+<p>首先需要重温一下概念</p>
+<ul>
+<li>ZoneId表示一个时区实例，他的内部定义了一个地区的时区规则集，例如<code>Europe/Paris</code></li>
+<li>ZoneOffSet表示与UTC时间的偏移时间，格式为<code>+08:00</code>、<code>-04:00</code></li>
+</ul>
+<p>这里我们以<code>亚洲上海</code>时间(北京时间)—&gt;<code>法国巴黎</code>时间为例,对三月份的时间和六月份两个时间进行转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ZoneId zoneId = ZoneId.of(&quot;Europe/Paris&quot;);</span><br><span class="line">ZonedDateTime now = ZonedDateTime.now().withMonth(6);</span><br><span class="line">System.out.println(&quot;6月的此时北京时间:&quot;+now);</span><br><span class="line">System.out.println(&quot;6月的此时巴黎时间:&quot;+now.withZoneSameInstant(zoneId));</span><br><span class="line">ZonedDateTime newTime = now.withMonth(3);</span><br><span class="line">System.out.println(&quot;3月的此时北京时间:&quot;+newTime);</span><br><span class="line">System.out.println(&quot;3月的此时巴黎时间:&quot;+newTime.withZoneSameInstant(zoneId));</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">6月的此时北京时间:2020-06-10T14:23:48.756+08:00[Asia/Shanghai]</span><br><span class="line">6月的此时巴黎时间:2020-06-10T08:23:48.756+02:00[Europe/Paris]</span><br><span class="line">3月的此时北京时间:2020-03-10T14:23:48.756+08:00[Asia/Shanghai]</span><br><span class="line">3月的此时巴黎时间:2020-03-10T07:23:48.756+01:00[Europe/Paris]</span><br></pre></td></tr></table></figure>
+<p>有没有发现什么异样？</p>
+<blockquote>
+<p>两个同一时刻不同月份的时间转换了时区后第一次偏移量为2小时，第二次为1小时</p>
+</blockquote>
+<p>这是因为部分国家存在<code>夏时令</code>这种骚操作，一年中不同的月份有着不同的时间偏移量。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/java8date/20200710143656.png" alt=""></p>
+<p>如果我们使用ZoneOffset，假设你知道目标时区的多种偏移时间，那么可以进行代码判断处理，<strong>但是如果要转换的时区很多，或者完全没有考虑夏时令问题时，那么转换出来的时间将会超乎你的想象</strong>！！</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java8time_3/" target="_blank" title="Java时间处理5---Java8中时区相关类库介绍">https://www.larscheng.com/java8time_3/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/时间处理/"><i class="fa-fw fa fa-tags"></i> 时间处理</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/singleton/">设计模式(1)-带你了解3类8种单例模式</a>
+            
+            
+            <a class="next" rel="next" href="/java8time_2/">Java时间处理4---Java8中LocalDate、LocalTime、LocalDateTime介绍</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

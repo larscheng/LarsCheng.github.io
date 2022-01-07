@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>设计模式(3)-原型模式与浅拷贝和深拷贝 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">设计模式(3)-原型模式与浅拷贝和深拷贝</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2020-09-05&nbsp;&nbsp;9:53:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/设计模式/">设计模式</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,969</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="概念"><a class="markdownIt-Anchor" href="#概念"></a> 概念</h1>
+<p>在有些系统中，存在大量相同或相似对象的创建问题，如果用传统的构造函数来创建对象，会比较复杂且耗时耗资源，<br>
+用原型模式生成对象就很高效，就像孙悟空拔下猴毛轻轻一吹就变出很多孙悟空一样简单。</p>
+<p>原型模式定义：<code>用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或相似的新对象</code></p>
+<h1 id="模拟需求"><a class="markdownIt-Anchor" href="#模拟需求"></a> 模拟需求</h1>
+<p>现在有一辆车，他的名字叫做哈啰单车，它的价格是2元/1小时，请编写程序创建多辆哈啰单车</p>
+<p>简单分析后涉及到以下几个类：</p>
+<ul>
+<li>车辆类 Vehicle.java</li>
+<li>测试类 Client.java</li>
+</ul>
+<h1 id="传统方式"><a class="markdownIt-Anchor" href="#传统方式"></a> 传统方式</h1>
+<p>先来看下最容易理解的方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> price;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**getter&amp;setter&amp;toString.......*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Vehicle vehicle = <span class="keyword">new</span> Vehicle(<span class="string">"哈啰单车"</span>, <span class="number">2.0</span>);</span><br><span class="line">        Vehicle vehicle1 = <span class="keyword">new</span> Vehicle(vehicle.getName(),vehicle.getPrice());</span><br><span class="line">        Vehicle vehicle2 = <span class="keyword">new</span> Vehicle(vehicle.getName(),vehicle.getPrice());</span><br><span class="line">        System.out.println(vehicle.hashCode());</span><br><span class="line">        System.out.println(vehicle1.hashCode());</span><br><span class="line">        System.out.println(vehicle2.hashCode());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行测试类代码可以看到创建了另外3个属性相同但引用完全不同的哈啰单车</p>
+<p>执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1836019240</span><br><span class="line">325040804</span><br><span class="line">1173230247</span><br></pre></td></tr></table></figure>
+<h1 id="原型模式"><a class="markdownIt-Anchor" href="#原型模式"></a> 原型模式</h1>
+<p>上面的对象复制方式是比较容易理解的，但是如果要复制很多对象时，每次都要get/set ，工作量必然很大</p>
+<p>那有没有其他的复制方式吗？当然有了，设计模式中有一种<code>原型模式</code>的设计理念</p>
+<p>原型模式的概念我们上文也有提到：<code>用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或相似的新对象</code></p>
+<p>原型模式是一种创建型设计模式，创建方无需了解创建的细节，原型模式所涉及到的角色和类图如下</p>
+<ul>
+<li>抽象原型类Prototype：抽象原型类，声明一个克隆自己的方法</li>
+<li>具体的原型实现类ConcretePrototype：具体的原型类，实现克隆自己的方法</li>
+<li>客户类Client：客户调用方，克隆对象</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/designpatteren/20201019165815.png" alt="原型模式"></p>
+<h1 id="原型模式示例"><a class="markdownIt-Anchor" href="#原型模式示例"></a> 原型模式示例</h1>
+<p>对于模式场景中，要求复制多个不同的对象的需求，使用原型模式则有了新的解决方案如下</p>
+<p>Java中Object类提供一个clone方法。该方法可以将一个Java对象复制一份。<br>
+如果某一个要使用clone方法，必须先实现Cloneable接口，Cloneable接口表示该类能够复制并且具有复制能力</p>
+<p>涉及到的类和角色如下：</p>
+<ul>
+<li>抽象原型类：Cloneable接口，声明了clone方法</li>
+<li>具体原型类：Vehicle类，有自己的对象属性，并且实现了clone方法</li>
+<li>Client：调用测试</li>
+</ul>
+<p>只需要将上面的代码加以修改即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> price;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**getter&amp;setter&amp;toString.......*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        Vehicle vehicle = <span class="keyword">new</span> Vehicle(<span class="string">"哈啰单车"</span>, <span class="number">2.0</span>);</span><br><span class="line">        <span class="comment">//使用clone方法进行对象复制</span></span><br><span class="line">        Vehicle vehicle1 = (Vehicle) vehicle.clone();</span><br><span class="line">        Vehicle vehicle2 = (Vehicle) vehicle.clone();</span><br><span class="line">        System.out.println(vehicle.hashCode());</span><br><span class="line">        System.out.println(vehicle1.hashCode());</span><br><span class="line">        System.out.println(vehicle2.hashCode());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>依旧执行测试方法，来看看通过clone方法是否复制出了不同的对象</p>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1836019240</span><br><span class="line">325040804</span><br><span class="line">1173230247</span><br></pre></td></tr></table></figure>
+<p>通过上面的一个小场景，对原型模式进行了简单的演示。但是上面的原型模式在一些特殊情况下可能就会出现问题</p>
+<h1 id="模拟需求2"><a class="markdownIt-Anchor" href="#模拟需求2"></a> 模拟需求2</h1>
+<p>现在有一车辆类，他有名称、单价、所属公司三个属性；所属公司对象包含了公司名称属性，请编写程序创建多辆美团单车，单价为2元/小时，所属公司为美团点评</p>
+<p>简单分析后涉及到以下几个类：</p>
+<ul>
+<li>车辆类 Vehicle.java</li>
+<li>公司类 Company.java</li>
+<li>测试类 Client.java</li>
+</ul>
+<p>在上文原型模式的代码中加上Company类的代码和Vehicle类的公司属性后如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Company</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**getter&amp;setter&amp;toString.......*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> price;</span><br><span class="line">    <span class="keyword">private</span> Company company;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**getter&amp;setter&amp;toString.......*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Client代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        Vehicle vehicle = <span class="keyword">new</span> Vehicle(<span class="string">"美团单车"</span>, <span class="number">2.0</span>, <span class="keyword">new</span> Company(<span class="string">"美团点评"</span>));</span><br><span class="line"></span><br><span class="line">        Vehicle vehicle1 = (Vehicle) vehicle.clone();</span><br><span class="line">        Vehicle vehicle2 = (Vehicle) vehicle.clone();</span><br><span class="line">        System.out.println(<span class="string">"vehicle.hashCode(): "</span>+vehicle.hashCode()+<span class="string">" company.hashCode(): "</span>+ vehicle.getCompany().hashCode());</span><br><span class="line">        System.out.println(<span class="string">"vehicle1.hashCode(): "</span>+vehicle1.hashCode()+<span class="string">" company.hashCode(): "</span>+ vehicle1.getCompany().hashCode());</span><br><span class="line">        System.out.println(<span class="string">"vehicle2.hashCode(): "</span>+vehicle2.hashCode()+<span class="string">" company.hashCode(): "</span>+ vehicle2.getCompany().hashCode());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>观察克隆对象后的输出结果，你就会发现问题所在</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vehicle.hashCode(): 1836019240 company.hashCode(): 325040804</span><br><span class="line">vehicle1.hashCode(): 1173230247 company.hashCode(): 325040804</span><br><span class="line">vehicle2.hashCode(): 856419764 company.hashCode(): 325040804</span><br></pre></td></tr></table></figure>
+<p>三个车辆对象的hashCode都不相同，说明有被成功克隆，但是其中的公司属性（对象类型）的hashCode并没有被同步克隆，内容中只有一份Company对象</p>
+<p>相当于这次的克隆，内存中创建了三个不同车辆（Vehicle）对象，但是公司（Company）对象只有一个，被三个车辆对象所引用。</p>
+<blockquote>
+<p>理论上，在创建了第一个车辆对象后，连续克隆两次后，内存中应该有3个车辆对象和3个公司对象。</p>
+</blockquote>
+<p>这里就出现了原型模式中会存在的<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 浅拷贝&amp;深拷贝</span><br><span class="line"></span><br><span class="line">关于浅拷贝的描述：</span><br><span class="line"></span><br><span class="line">- 数据类型为基本类型的成员变量，在调用默认clone方法后，会进行浅拷贝，即将该属性的值复制一份给新的对象</span><br><span class="line">- 数据类型为引用类型的成员变量，比如一个数组、一个对象，在调用默认的clone方法后，只会将成员变量的引用地址指向新的对象，而不会克隆新的成员变量对象</span><br><span class="line"></span><br><span class="line">这种现象即为`浅拷贝`，上面的几个例子严格来说都属于浅拷贝，因为都没有去考虑成员变量为引用类型时的对象克隆</span><br><span class="line"></span><br><span class="line">`深拷贝`自然是解决了浅拷贝的缺陷，对整个对象进行完全深度的对象复制，包括对象的引用类型和基本类型成员变量</span><br><span class="line"></span><br><span class="line"># 深拷贝应用</span><br><span class="line"></span><br><span class="line">针对模拟需求2，使用深拷贝的方式进行代码实现</span><br><span class="line"></span><br><span class="line">实现思路：Company和Vehicle都实现Cloneable接口，重写Vehicle的clone方法</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Company  implements Cloneable &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    </span><br><span class="line">    @Override</span><br><span class="line">    protected Object clone() throws CloneNotSupportedException &#123;</span><br><span class="line">        return super.clone();</span><br><span class="line">    &#125;</span><br><span class="line">    /**getter&amp;setter&amp;toString.......*/</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> price;</span><br><span class="line">    <span class="keyword">private</span> Company company;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        Vehicle vehicle = (Vehicle) <span class="keyword">super</span>.clone();</span><br><span class="line">        vehicle.setCompany((Company) <span class="keyword">this</span>.company.clone());</span><br><span class="line">        <span class="keyword">return</span> vehicle;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**getter&amp;setter&amp;toString.......*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Client代码无需变动，执行Client进行测试，结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vehicle.hashCode(): 1836019240 company.hashCode(): 325040804</span><br><span class="line">vehicle1.hashCode(): 1173230247 company.hashCode(): 856419764</span><br><span class="line">vehicle2.hashCode(): 621009875 company.hashCode(): 1265094477</span><br></pre></td></tr></table></figure>
+<p>可以看到三个对象的对象成员属性明显都是不同的，说明做到了深拷贝</p>
+<h1 id="常见的原型模式的运用"><a class="markdownIt-Anchor" href="#常见的原型模式的运用"></a> 常见的原型模式的运用</h1>
+<p>Spring中配置bean的时候，scope属性可以配置一个prototype值，该值指定该bean的创建是使用原型模式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//示例：</span><br><span class="line">    &lt;bean id=&quot;userDaoImpl&quot;  scope=&quot;prototype&quot; class=&quot;com.larscheng.www.dao.impl.UserDaoImpl&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>当通过getBean方法获取bean时，可以看到源码中对于scope属性进行了处理<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/designpatteren/20201020133700.png" alt=""></p>
+<h1 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h1>
+<ul>
+<li>当我们要创建新的对象过于复杂时，可以考虑使用原型模式来进行创建</li>
+<li>使用原型模式时，需要考虑到浅拷贝和深拷贝</li>
+</ul>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/prototype/" target="_blank" title="设计模式(3)-原型模式与浅拷贝和深拷贝">https://www.larscheng.com/prototype/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/设计模式/"><i class="fa-fw fa fa-tags"></i> 设计模式</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/builder/">设计模式(4)-建造者模式</a>
+            
+            
+            <a class="next" rel="next" href="/factory/">设计模式(2)-工厂模式图文介绍</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

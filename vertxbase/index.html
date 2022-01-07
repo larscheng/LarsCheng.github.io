@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Vert.x-Core（一）- 基础篇 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Vert.x-Core（一）- 基础篇</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-01&nbsp;&nbsp;14:17:40</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Vert-x/">Vert.x</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">3,318</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">13min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <pre><code>本文是我在学习Vert.x过程中的一些笔记，作为记录。
+因为是初学，对Vert.x的理解还不够透彻，如有错误之处我们可以在评论中一起讨论呦。
+</code></pre>
+<h3 id="vertx-core模块是vertx的根基"><a class="markdownIt-Anchor" href="#vertx-core模块是vertx的根基"></a> Vert.x core模块是vertx的根基</h3>
+<p>是基于netty的一个工具包，提供tcp、http、websocket、dns、eventbus等基础功能封装</p>
+<a id="more"></a>
+<h3 id="vertx对象"><a class="markdownIt-Anchor" href="#vertx对象"></a> Vertx对象</h3>
+<p>Vertx对象是Vert.x的控制中心，是做一切事情的基础</p>
+<p>直接创建该对象：<code>Vertx vertx = Vertx.vertx();</code></p>
+<p>或者在创建时使用相关配置属性：<code>Vertx vertx = Vertx.vertx(new VertxOptions().setWorkerPoolSize(40));</code></p>
+<p><a href="http://vertx.io/docs/apidocs/io/vertx/core/VertxOptions.html" target="_blank" rel="noopener">VertxOptions的具体属性参数参考</a></p>
+<p>在Vertx中我们需要时刻保持eventLoop的畅通，当创建集群模式下的Vertx对象时，就不能用单机模式的方式了，因为让不同的 Vert.x 实例组成一个集群需要一些时间（也许是几秒钟）。在这段时间内，我们不想去阻塞调用线程，所以我们通过异步的方式来获取Vertx对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Vertx.clusteredVertx(new VertxOptions(), res -&gt; &#123;</span><br><span class="line">  if (res.succeeded()) &#123;</span><br><span class="line">    Vertx vertx = res.result(); // 获取到了集群模式下的 Vertx 对象</span><br><span class="line">    // .....</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // 获取失败，可能是集群管理器出现了问题</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="vertx是事件驱动"><a class="markdownIt-Anchor" href="#vertx是事件驱动"></a> Vertx是事件驱动</h3>
+<p>当Vertx有一个事件要传递给某一个Hander去处理时，他会异步的去调用这个Hander。</p>
+<p>Vertx中的大部分api都是不会阻塞线程的</p>
+<p>传统的阻塞式的api，例如spring开发中，往往会有以下场景</p>
+<p><code>线程a调用线程b，线程b执行逻辑，执行完毕后返回结果到线程a，线程a处理返回结果，线程a执行完毕</code></p>
+<p>在这种场景下，线程a调用了线程b后就一直处于阻塞状态，如果此时有大量请求涌入，很可能造成灾难性的后果。</p>
+<p>而如果使用Vertx来处理这种场景，则变成了如下的逻辑</p>
+<p><code>线程a调用线程b，并告知线程b执行完毕后的通知线程c，线程a执行完毕。线程b开始执行执行完毕后通知线程c，线程c处理返回结果。</code></p>
+<p>因为Vert.x API不会阻塞线程，所以通过Vert.x您可以只使用少量的线程来处理大量的并发。</p>
+<h3 id="eventloop"><a class="markdownIt-Anchor" href="#eventloop"></a> EventLoop</h3>
+<p>Vert.x的api保证无阻塞的情况下，Vert.x使用 Event Loop 来调用您的处理器。Event Loop 可以在事件到达时快速地分发到不同的处理器中。由于没有阻塞，Event Loop 可在短时间内分发大量的事件。例如，一个单独的 Event Loop 可以非常迅速地处理数千个 HTTP 请求。这种方式被称为<strong>反应器（Reactor）模式</strong>，所以呢，在Vertx中有一条黄金法则：<strong><mark>不要阻塞EventLoop</mark></strong></p>
+<h3 id="处理阻塞式代码"><a class="markdownIt-Anchor" href="#处理阻塞式代码"></a> 处理阻塞式代码</h3>
+<p>虽然Vertx的大部分api是无阻塞的，但仍然存在一些阻塞式的代码。比如数据库操作，如果这种方法或者线程运行在EventLoop上，势必会造成阻塞，这种情况下内，Vertx提供了专门为阻塞式代码执行和处理回调的方法。</p>
+<ul>
+<li>executeBlocking</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vertx.executeBlocking(future -&gt; &#123;</span><br><span class="line">  // 调用一些需要耗费很长时间返回结果的阻塞式API</span><br><span class="line">  String result = someAPI.blockingMethod(&quot;hello&quot;);</span><br><span class="line">  future.complete(result);</span><br><span class="line">&#125;, res -&gt; &#123;</span><br><span class="line">    //处理结果</span><br><span class="line">  System.out.println(&quot;The result is: &quot; + res.result());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code>默认情况下，如果 executeBlocking 在同一个上下文环境中（如：同一个 Verticle 实例）被调用了多次，
+那么这些不同的 executeBlocking 代码块会 顺序执行（一个接一个）。
+
+若您不需要关心您调用 executeBlocking 的顺序，
+可以将 ordered 参数的值设为 false。这样任何 executeBlocking 都会在 Worker Pool 中并行执行。
+</code></pre>
+<ul>
+<li>Worker Verticle</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">WorkerExecutor executor = vertx.createSharedWorkerExecutor(&quot;my-worker-pool&quot;);</span><br><span class="line">executor.executeBlocking(future -&gt; &#123;</span><br><span class="line">  // 调用一些需要耗费显著执行时间返回结果的阻塞式API</span><br><span class="line">  String result = someAPI.blockingMethod(&quot;hello&quot;);</span><br><span class="line">  future.complete(result);</span><br><span class="line">&#125;, res -&gt; &#123;</span><br><span class="line">  System.out.println(&quot;The result is: &quot; + res.result());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Worker Executor 在不需要的时候必须被关闭：</p>
+<pre><code>executor.close();
+</code></pre>
+<h3 id="异步协调"><a class="markdownIt-Anchor" href="#异步协调"></a> 异步协调</h3>
+<p>在Vertx中，Future可以用来协调多个异步线程的操作结果，Future支持两种组合方式：并发组合、顺序组合</p>
+<p><strong>并发组合</strong></p>
+<p><code>static &lt;T1,T2&gt; CompositeFuture all(Future&lt;T1&gt; f1,Future&lt;T2&gt; f2)</code><br>
+<code>static CompositeFuture all(List&lt;Future&gt; futures)</code></p>
+<p>该方法接受多个 Future 对象作为参数（最多6个，或者传入 List）。当所有的 Future 都成功完成，该方法将返回一个 成功的 Future；当任一个 Future 执行失败，则返回一个 失败的 Future，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;HttpServer&gt; httpServerFuture = Future.future();</span><br><span class="line">Future&lt;NetServer&gt; netServerFuture = Future.future();</span><br><span class="line"></span><br><span class="line">httpServer.listen(httpServerFuture.completer());</span><br><span class="line">netServer.listen(netServerFuture.completer());</span><br><span class="line"></span><br><span class="line">CompositeFuture.all(httpServerFuture, netServerFuture).setHandler(ar -&gt; &#123;</span><br><span class="line">  if (ar.succeeded()) &#123;</span><br><span class="line">    // 所有服务器启动完成</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // 有一个服务器启动失败</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当组合的处理操作完成时，该方法返回的 Future 上绑定的处理器（Handler）会被调用。当一个操作失败（其中的某一个 Future 的状态被标记成失败），则返回的 Future 会被标记为失败。当所有的操作都成功时，返回的 Future 将会成功完成。</p>
+<p><code>static &lt;T1,T2&gt; CompositeFuture any(Future&lt;T1&gt; f1,Future&lt;T2&gt; f2)</code><br>
+<code>static CompositeFuture any(List&lt;Future&gt; futures)</code></p>
+<p>该方法的合并会<code>等待第一个成功</code>执行的Future。CompositeFuture.any 方法接受多个 Future 作为参数（最多6个，或传入 List）。当任意一个 Future 成功得到结果，则该 Future 成功；当<code>所有</code>的 Future 都执行失败，则该 Future 失败。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CompositeFuture.any(future1, future2).setHandler(ar -&gt; &#123;</span><br><span class="line">  if (ar.succeeded()) &#123;</span><br><span class="line">    // 至少一个成功</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // 所有的都失败</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>static &lt;T1,T2&gt; CompositeFuture join(Future&lt;T1&gt; f1,Future&lt;T2&gt; f2)</code><br>
+<code>static CompositeFuture join(List&lt;Future&gt; futures)</code></p>
+<p>join方法的合并会<code>等待所有的 Future 完成</code>，无论成败。CompositeFuture.join 方法接受多个 Future 作为参数（最多6个），并将结果归并成一个 Future 。当全部 Future 成功执行完成，得到的 Future 是成功状态的；当至少一个 Future 执行失败时，得到的 Future 是失败状态的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CompositeFuture.join(future1, future2, future3).setHandler(ar -&gt; &#123;</span><br><span class="line">  if (ar.succeeded()) &#123;</span><br><span class="line">    // 所有都成功</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // 至少一个失败</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>顺序合并</strong><br>
+和 all 、join以及 any 实现的并发组合不同，<a href="http://vertx.io/docs/apidocs/io/vertx/core/Future.html#compose-io.vertx.core.Handler-io.vertx.core.Future-" target="_blank" rel="noopener">compose </a>方法作用于顺序组合 Future。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Future&lt;Void&gt; startFuture = Future.future();</span><br><span class="line">Future&lt;Void&gt; fut1 = Future.future();</span><br><span class="line">FileSystem fs = vertx.fileSystem();</span><br><span class="line"></span><br><span class="line">fs.createFile(&quot;/foo&quot;, fut1.completer());</span><br><span class="line"></span><br><span class="line">fut1.compose(v -&gt; &#123;</span><br><span class="line">    // fut1中文件创建完成后执行</span><br><span class="line">    Future&lt;Void&gt; fut2 = Future.future();</span><br><span class="line">    fs.writeFile(&quot;/foo&quot;, Buffer.buffer(), fut2.completer());</span><br><span class="line">    return fut2;</span><br><span class="line">&#125;).compose(v -&gt; &#123;</span><br><span class="line">            // fut2文件写入完成后执行</span><br><span class="line">            System.out.println(&quot;--------------------&quot;);</span><br><span class="line">            fs.copy(&quot;/foo&quot;, &quot;/foo&quot;, startFuture.completer());</span><br><span class="line">        &#125;,</span><br><span class="line">        // 如果任何一步失败，将startFuture标记成failed</span><br><span class="line">        startFuture)</span><br><span class="line">        .setHandler(a -&gt; &#123;</span><br><span class="line">            if (startFuture.succeeded()) &#123;</span><br><span class="line">                System.out.println(&quot;success...&quot;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                System.out.println(&quot;error...&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p>这里例子中，有三个操作被串起来了：</p>
+<ul>
+<li>一个文件被创建（fut1）</li>
+<li>一些东西被写入到文件（fut2）</li>
+<li>文件被移走（startFuture）</li>
+</ul>
+<p>如果这三个步骤全部成功，则最终的 Future（startFuture）会是成功的；其中任何一步失败，则最终 Future 就是失败的。</p>
+<h3 id="verticle"><a class="markdownIt-Anchor" href="#verticle"></a> Verticle</h3>
+<p>Verticle 是由 Vert.x 部署和运行的代码块。一个应用程序通常是由在同一个 Vert.x 实例中同时运行的许多 Verticle 实例组合而成。不同的 Verticle 实例通过向 Event Bus 上发送消息来相互通信。</p>
+<p>Verticle 的实现类必须实现 Verticle 接口。</p>
+<p>如果您喜欢的话，可以直接实现该接口，但是通常直接从抽象类 AbstractVerticle 继承更简单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class MyVerticle extends AbstractVerticle &#123;</span><br><span class="line"></span><br><span class="line">  // Called when verticle is deployed</span><br><span class="line">  // Verticle部署时调用</span><br><span class="line">  public void start() &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Optional - called when verticle is undeployed</span><br><span class="line">  // 可选 - Verticle撤销时调用</span><br><span class="line">  public void stop() &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="verticle-种类"><a class="markdownIt-Anchor" href="#verticle-种类"></a> Verticle 种类</h3>
+<ul>
+<li>
+<p>Stardand Verticle：这是最常用的一类 Verticle —— 它们永远运行在 Event Loop 线程上。</p>
+<ul>
+<li>当 Standard Verticle 被创建时，它会被分派给一个 Event Loop 线程，并在这个 Event Loop 中执行它的 start 方法。当您在一个 Event Loop 上调用了 Core API 中的方法并传入了处理器时，Vert.x 将保证用与调用该方法时相同的 Event Loop 来执行这些处理器。</li>
+<li>这意味着我们可以保证您的 Verticle 实例中 所有的代码都是在相同Event Loop中执行（只要您不创建自己的线程并调用它！）</li>
+<li>同样意味着您可以将您的应用中的所有代码用单线程方式编写，让 Vert.x 去考虑线程和扩展问题。您不用再考虑 synchronized 和 volatile 的问题，也可以避免传统的多线程应用经常会遇到的竞态条件和死锁的问题。</li>
+</ul>
+</li>
+<li>
+<p>Worker Verticle：这类 Verticle 会运行在 Worker Pool 中的线程上。一个实例绝对不会被多个线程同时执行。</p>
+<ul>
+<li>不是由一个 Event Loop 来执行，而是由Vert.x中的 Worker Pool 中的线程执行。</li>
+<li>Worker Verticle 被设计来调用阻塞式代码，它不会阻塞任何 Event Loop。</li>
+<li>将 Verticle 部署成一个 Worker Verticle，通过 如下方法来设置：</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DeploymentOptions options = new DeploymentOptions().setWorker(true);</span><br><span class="line">vertx.deployVerticle(&quot;com.mycompany.MyOrderProcessorVerticle&quot;, options);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Multi-Threaded Worker Verticle：这类 Verticle 也会运行在 Worker Pool 中的线程上。一个实例可以由多个线程同时执行（因此需要开发者自己确保线程安全）。</p>
+</li>
+</ul>
+<h3 id="verticle部署"><a class="markdownIt-Anchor" href="#verticle部署"></a> Verticle部署</h3>
+<p><a href="http://vertx.io/docs/apidocs/io/vertx/core/Vertx.html#deployVerticle-java.lang.Class-io.vertx.core.DeploymentOptions-" target="_blank" rel="noopener"><code>deployVerticle</code></a>方法可用来部署Verticle，具体怎么部署可以看看源码中提供的方法：<br>
+<code>package io.vertx.core.Vertx;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">@GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">void deployVerticle(Verticle var1);</span><br><span class="line"></span><br><span class="line">@GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">void deployVerticle(Verticle var1, Handler&lt;AsyncResult&lt;String&gt;&gt; var2);</span><br><span class="line"></span><br><span class="line">@GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">void deployVerticle(Verticle var1, DeploymentOptions var2);</span><br><span class="line"></span><br><span class="line">@GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">void deployVerticle(Verticle var1, DeploymentOptions var2, Handler&lt;AsyncResult&lt;String&gt;&gt; var3);</span><br><span class="line"></span><br><span class="line">@GenIgnore</span><br><span class="line">void deployVerticle(Class&lt;? extends Verticle&gt; var1, DeploymentOptions var2);</span><br><span class="line"></span><br><span class="line">@GenIgnore</span><br><span class="line">void deployVerticle(Class&lt;? extends Verticle&gt; var1, DeploymentOptions var2, Handler&lt;AsyncResult&lt;String&gt;&gt; var3);</span><br><span class="line"></span><br><span class="line">@GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">void deployVerticle(Supplier&lt;Verticle&gt; var1, DeploymentOptions var2);</span><br><span class="line"></span><br><span class="line">@GenIgnore(&#123;&quot;permitted-type&quot;&#125;)</span><br><span class="line">void deployVerticle(Supplier&lt;Verticle&gt; var1, DeploymentOptions var2, Handler&lt;AsyncResult&lt;String&gt;&gt; var3);</span><br><span class="line"></span><br><span class="line">void deployVerticle(String var1);</span><br><span class="line"></span><br><span class="line">void deployVerticle(String var1, Handler&lt;AsyncResult&lt;String&gt;&gt; var2);</span><br><span class="line"></span><br><span class="line">void deployVerticle(String var1, DeploymentOptions var2);</span><br><span class="line"></span><br><span class="line">void deployVerticle(String var1, DeploymentOptions var2, Handler&lt;AsyncResult&lt;String&gt;&gt; var3);</span><br></pre></td></tr></table></figure>
+<p>阅读源码可以看出，部署方式大概有两类</p>
+<ul>
+<li>实例部署
+<ul>
+<li>vertx.deployVerticle(new MyFirstVerticle());</li>
+<li>vertx.deployVerticle(MyFirstVerticle.class,new DeploymentOptions());</li>
+<li>vertx.deployVerticle(MyFirstVerticle::new,new DeploymentOptions());</li>
+</ul>
+</li>
+<li>类名部署
+<ul>
+<li>vertx.deployVerticle(“com.zhengql.vertx.MyFirstVerticle”);</li>
+</ul>
+</li>
+</ul>
+<p>Verticle的部署是异步的，当我们调用<code>deployVerticle</code>方法后，部署结果不是立即返回的，我们可以同步绑定处理异步返回结果的处理器：<br>
+<code>void deployVerticle(String var1, Handler&lt;AsyncResult&lt;String&gt;&gt; var2);</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vertx.deployVerticle(&quot;com.zhengql.vertx.MyFirstVerticle&quot;, res -&gt; &#123;</span><br><span class="line">  if (res.succeeded()) &#123;</span><br><span class="line">  //如果部署成功，这个完成处理器的结果中将会包含部署ID的字符串。这个部署 ID可以在之后您想要撤销它时使用。</span><br><span class="line">    System.out.println(&quot;Deployment id is: &quot; + res.result());</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    System.out.println(&quot;Deployment failed!&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>撤销Verticle</strong></p>
+<p>我们可以通过 <a href="http://vertx.io/docs/apidocs/io/vertx/core/Vertx.html#undeploy-java.lang.String-" target="_blank" rel="noopener"><code>undeploy</code></a> 方法来撤销部署好的 Verticle。</p>
+<p>撤销操作也是异步的，因此若您想要在撤销完成过后收到通知则可以指定另一个完成处理器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vertx.undeploy(deploymentID, res -&gt; &#123;</span><br><span class="line">  if (res.succeeded()) &#123;</span><br><span class="line">    System.out.println(&quot;Undeployed ok&quot;);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    System.out.println(&quot;Undeploy failed!&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>DeploymentOptions</strong></p>
+<p>在上边的部署方法api中有一个参数是DeploymentOptions ，可以通过配置自定义的配置来部署Verticle。</p>
+<p>指定Verticle的实例数量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DeploymentOptions options = new DeploymentOptions().setInstances(2);</span><br><span class="line">vertx.deployVerticle(&quot;com.zhengql.vertx.MyFirstVerticle&quot;, options);</span><br></pre></td></tr></table></figure>
+<p>部署时传给 Verticle 一个 JSON 格式的配置,该配置中的值可以在Verticle的start()中通过config().getString()方法来获取。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">JsonObject config = new JsonObject().put(&quot;name&quot;, &quot;zhengql&quot;).put(&quot;age&quot;, 18);</span><br><span class="line">DeploymentOptions options = new DeploymentOptions().setConfig(config);</span><br><span class="line">vertx.deployVerticle(&quot;com.zhengql.vertx.MyFirstVerticle&quot;, options);</span><br></pre></td></tr></table></figure>
+<h3 id="定时任务"><a class="markdownIt-Anchor" href="#定时任务"></a> 定时任务</h3>
+<p>在Vertx中我们要求了Verticle不可以阻塞EventLoop，所以我们不能在Verticle中使用线程调度方法sleep、wait等，好在Vert.x为我们提供了专用的定时器</p>
+<p><strong>一次性定时器 setTimer</strong><br>
+一次性计时器会在一定延迟后调用 Event Handler如下<br>
+延迟5s，打印字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//5000代表延迟时间，单位毫秒</span><br><span class="line">long timerID = vertx.setTimer(5000, id -&gt; &#123;</span><br><span class="line">  System.out.println(&quot;hello xiaogege&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>周期性定时器 setPeriodic</strong><br>
+周期性触发的定时器setPeriodic，在任务第一次触发前也是需要延时的，demo如下<br>
+每5s打印一次字符串，注：第一次不是立即触发，时间单位毫秒</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">long timerID = vertx.setPeriodic(5000, id -&gt; &#123;</span><br><span class="line">  System.out.println(&quot;hello xiaojiejie&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>取消定时任务 cancelTimer</strong></p>
+<p>首先先来看看定时任务的api</p>
+<pre><code>long setTimer(long var1, Handler&lt;Long&gt; var3);
+
+long setPeriodic(long var1, Handler&lt;Long&gt; var3);
+
+boolean cancelTimer(long var1);
+</code></pre>
+<p>从api中可以看出，设置定时任务都有一个long型的返回值，取消定时任务需要一个long型的参数，可能你已经猜到了两者之间的关系，那么这个long型的返回值是什么呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setTimer</span><br><span class="line">long setTimer(long delay,</span><br><span class="line">              Handler&lt;Long&gt; handler)</span><br><span class="line">Set a one-shot timer to fire after delay milliseconds, at which point handler will be called with the id of the timer.</span><br><span class="line">Parameters:</span><br><span class="line">delay - the delay in milliseconds, after which the timer will fire</span><br><span class="line">handler - the handler that will be called with the timer ID when the timer fires</span><br><span class="line">Returns:</span><br><span class="line">the unique ID of the timer</span><br></pre></td></tr></table></figure>
+<p>这个返回值是定时器的唯一id，当定时器触发调用处理器也是通过这个唯一id。</p>
+<p>撤销定时器直接调用<code>cancelTimer</code>即可</p>
+<h3 id="资料参考"><a class="markdownIt-Anchor" href="#资料参考"></a> 资料参考</h3>
+<p><a href="https://vertx.io/docs/" target="_blank" rel="noopener">https://vertx.io/docs/</a></p>
+<p><a href="https://vertx.io/docs/vertx-core/java/" target="_blank" rel="noopener">https://vertx.io/docs/vertx-core/java/</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/vertxbase/" target="_blank" title="Vert.x-Core（一）- 基础篇">https://www.larscheng.com/vertxbase/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Vert-x/"><i class="fa-fw fa fa-tags"></i> Vert.x</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/vertx-eventbus/">Vert.x Core（二）- Event Bus（事件总线）</a>
+            
+            
+            <a class="next" rel="next" href="/sb2i18n/">SpringBoot项目中实现国际化</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

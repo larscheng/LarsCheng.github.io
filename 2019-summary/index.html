@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>菜鸡程序员的2019年度总结 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">菜鸡程序员的2019年度总结</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2020-01-01&nbsp;&nbsp;15:47:12</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/生活/">生活</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">3,927</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">12min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="碎碎念"><a class="markdownIt-Anchor" href="#碎碎念"></a> 碎碎念</h1>
+<p>写这篇总结时已经是2020年的第一天了。不得不感慨时间过得太快，记忆中的2019仿佛一片空白，但是细细回味之后，这一年许多人许多事都还历历在目。</p>
+<p>2019年过去，2020的到来。第一批90后已经迈三奔四，同样作为90后的我不由得意识到自己的年龄，自己确实已经不小了。但一想到自己的现状，只能说：<code>革命尚未成功，我辈仍需继续努力！！！</code></p>
+<blockquote>
+<p>灵魂拷问: 时间回到2019年年初，你当时立下的flag，现在又完成了多少呢？(反正我是惨不忍睹…)</p>
+</blockquote>
+<a id="more"></a> 
+<p>2019年是我毕业后的第一年，可能18年还能厚脸皮说自己还是个学生，但是19年已经正式从学生到求职者的角色中转变过来，但实际上论参加工作时间的话，到目前为止已经过去<code>2年1个月</code>了(2017.11)，如果要是算年头的话，2020年已经是我成为程序员的<code>第4个</code>年头了，看着这些数据真的是<code>细思极恐</code>，再看看自己这个技术水平，哇<code>不忍直视</code>！</p>
+<p>标题虽然写的是2019年度总结，但这也是我第一次写年度总结，我更想借此对自己从参加工作到现在的生活和工作进行梳理。整理过去的人和事，确定今后的方向（<code>立flag</code>），轻装上阵。</p>
+<p>那闲话不多说，既然是总结，那就先对这过去的<code>3个年头</code>做一个简单的回溯吧</p>
+<h1 id="2017"><a class="markdownIt-Anchor" href="#2017"></a> 2017</h1>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/life/20191011213042.png" alt="凌晨的城站" style="zoom: 25%;">
+<p>网易云热评上看到过这样一句话：</p>
+<blockquote>
+<p>跨越数千公里，只身来到一个陌生的城市，火车站凌晨昏黄的灯光照在脸上时大概是一个人最孤独的时候吧。</p>
+</blockquote>
+<p>然鹅生活中谁又何尝不是负重前行，忍受孤独呢？我们都是平凡的普通人，所以你只管努力，其他的交给时间就好。</p>
+<h2 id="年度关键字"><a class="markdownIt-Anchor" href="#年度关键字"></a> 年度关键字</h2>
+<ul>
+<li>离家</li>
+<li>萌新</li>
+<li>新起点</li>
+<li>努力</li>
+</ul>
+<h2 id="入职"><a class="markdownIt-Anchor" href="#入职"></a> 入职</h2>
+<p>2017.11那时候也算是初生牛犊不怕虎，10月底拿到offer，签三方、学校请假、买车票一套操作带走后，直接闪现杭州。凌晨4点下火车时才有种如梦初醒的感觉（<code>我是谁？我在哪？我怎么跑这来了？？？</code>），在工作人员的引导下坐上了第一班公交车，晃悠晃悠到了现在的公司（<code>给工作人员点赞昂</code>）</p>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/life/20191011213007.png" alt="工位" style="zoom: 25%;">
+<p>入职后来到一个新的环境，新的事物新的朋友。公司安排了员工宿舍，分配了导师。一周的接触后，现在想想真的很温馨，大家对我都很关照。记得那时上手的技术大部分都没用过。自己当时除了有点Java基础，框架懂点SSM，其他的就是一片空白，当时导师给我介绍公司的技术栈时真的有种听天书的感觉，有些又仿佛听过，当时的真实问答现场是这样的：</p>
+<blockquote>
+<p>导师：springboot用过么？ 我：…没…没用过，用过spring,springMvc(内心：面试咋没问到这个，这几个是不是有啥关系，名字这么像)<br>
+导师：那mybatisplus接触过吗？ 我：…也没…,就用过mybatis 导师：没事两个很像，好上手<br>
+…</p>
+</blockquote>
+<h2 id="成长"><a class="markdownIt-Anchor" href="#成长"></a> 成长</h2>
+<p>11月就是一个接收新事物的一个月，学习到新的技术，认识到新的朋友。那段时间也许是出于自身的焦虑，也或许是作为实习生应该要有一个努力上进的态度，每晚都在办公室学习，造轮子很久，<code>庆幸自己遇到了一个很好的导师</code>，导师每天下班前都会习惯性的问我今天遇到了哪些问题，我也是厚脸皮将问题一一提出，导师则细心解答。</p>
+<p>时间过得很快，每天过着充实的学习生活，当时就像一片海绵，疯狂的吸取自己缺少的那些水分。记得当时已经开始帮同事解决禅道上的一些小bug（<code>当时还用的禅道haha</code>），直到年底，12月底，项目组接到了一个新的项目，我也有幸成为了项目的一员。当时我也不会想到这个项目一作就做到了现在，而且做到现在最初的那些开发人员也就只剩下了我和导师，那些熟悉的面孔逐渐变成陌生又慢慢变为熟悉。</p>
+<h1 id="2018"><a class="markdownIt-Anchor" href="#2018"></a> 2018</h1>
+<blockquote>
+<p>一辈子有很多夏天，但没有任何一个夏天像今夏</p>
+</blockquote>
+<p>2018年见了太多的别离，2018年也是毕业那年，记得那年夏天，记得那些人，四年美好的回忆</p>
+<h2 id="年度关键字-2"><a class="markdownIt-Anchor" href="#年度关键字-2"></a> 年度关键字</h2>
+<ul>
+<li>毕设</li>
+<li>旅行</li>
+<li>毕业</li>
+<li>博客</li>
+<li>项目</li>
+<li>读书学习分享</li>
+<li>springboot、springcloud</li>
+<li>linux、docker</li>
+<li>mongodb、redis、rabbitmq</li>
+<li>ci/cd</li>
+</ul>
+<p>2018算是自己人生中历史性的一年吧，这一年正式毕业摇身一变成为一名社会银，这一年完成了自己的毕业作品，这一年和她一起去走过了毕业旅行，这一年正真开始了自己的程序生涯。</p>
+<h2 id="300块"><a class="markdownIt-Anchor" href="#300块"></a> 300块</h2>
+<p>毕业前夕伴随着是劳神的毕业设计，从2017年底，确定毕设题目后（<code>《毕业设计选题系统》</code>），以自己最熟悉的springboot+mybatisplus+mysql+redis等技术，利用周末和返校的时间独自开发完成，并将该系统接入院系内开始内部测试使用，将毕业生从选题到结题的所有流程实现自动化。</p>
+<p>就这样折腾下来，自己有幸还被评选为优秀毕业生，最后还发了300块钱（<code>虽然有点少,是真的少...哈哈哈嗝~</code>）</p>
+<p>后来据指导老师的反馈说，系统已经正式在全院开始使用。</p>
+<h2 id="成都"><a class="markdownIt-Anchor" href="#成都"></a> 成都</h2>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/life/20191011203502.png" alt="小酒馆" style="zoom:33%;">
+<p>毕业旅行应该是许多同学都必须要实现的愿望之一，有幸、碰巧我也实现了这一愿望，闪现到了成都耍了一圈。</p>
+<p>记得那年有首《成都》火遍了大街小巷，当时决定去成都前还特意自己规划了一晚上的游玩路线，实际后来没能用得上哈哈。</p>
+<p>其实无论是学习还是工作，如果条件允许的话一定要多出去走走，看看这大好河山，尝尝各地美食。让自己有更好的精神面貌来迎接工作和生活</p>
+<h2 id="博客-分享"><a class="markdownIt-Anchor" href="#博客-分享"></a> 博客、分享</h2>
+<p>回到公司，我开始迷上了一个东西：<code>博客</code></p>
+<p>最初对于博客一直有敬畏之心，觉着能发表博客的都是大佬，都是业界大牛，这种想法直到我参加了一次小组的技术分享后发生了转变。</p>
+<p>以前在学校虽然也组织一些活动，参加一些活动，但是那些都是在自己熟悉的同学老师面前，做一些自己擅长的事情。而作为一个职场新人技术小白组内的技术分享对我来说就像是关公面前耍大刀（<code>这个比拟比较夸大哈哈哈~</code>），记得当时分享的是<code>quartz</code>，当时做了很多准备，结合自己的使用经验，以及实践社区大佬的使用经验总结成书面的技术分享文章，后来分享效果还挺不错，起码把自己懂得，理解到的，用过的都分享了出来并做了总结。</p>
+<p>通过那次的分享，逐渐明白完全掌握一个新知识新技术，并不是你会用就可以了，而是你能够将这个知识讲出来，教会别人，并能为其答疑解惑。</p>
+<p>自此，博客成了我记录学习，总结知识的方法和途径。</p>
+<h2 id="程序生涯开启"><a class="markdownIt-Anchor" href="#程序生涯开启"></a> 程序生涯开启</h2>
+<p>自7月份后，程序生涯正式开启，进入打怪升级的模式，<code>我是一个莫得感情的编码机器</code>。</p>
+<p>后半年陆续开始参与两个项目的开发工作，在有了之前的适应期，慢慢开始接触和掌握项目中的相关技术栈。</p>
+<p>同时作为一个不安分的开发，在工作之余开始折腾持续集成持续部署，开始学习linux、docker、jenkins，好像走向了半道子运维的路线。</p>
+<p>Java后端的世界广袤无垠，我也仅仅探索了冰山一角，每一个程序员都有相同的特点，比如都喜欢打篮球，比如都要实现架构师之梦，我也一样，心怀梦想在技术之路上不断向前。</p>
+<h1 id="2019"><a class="markdownIt-Anchor" href="#2019"></a> 2019</h1>
+<blockquote>
+<p>拒绝拖延症，拒绝拖延症，拒绝拖延症</p>
+</blockquote>
+<p>2019年是生活重心都在工作的一年，这一年也是<code>五味杂陈</code>的一年，这一年暴露出了自身的很多潜藏问题和缺点。</p>
+<h2 id="年度关键字-3"><a class="markdownIt-Anchor" href="#年度关键字-3"></a> 年度关键字</h2>
+<ul>
+<li>整合</li>
+<li>规范</li>
+<li>基础</li>
+<li>参与开源</li>
+<li>Nacos</li>
+<li>博客</li>
+<li>以考代学</li>
+<li>Mycat、DRDS</li>
+<li>influxDB</li>
+<li>优秀员工</li>
+</ul>
+<p>这一年的项目情况就不多作介绍，主要对自己项目工作以外的一些事件进行总结</p>
+<h2 id="五味杂陈"><a class="markdownIt-Anchor" href="#五味杂陈"></a> 五味杂陈</h2>
+<p>说到五味杂陈，离不开情之一字，哈哈哈，这种事其实不应该出现在程序员的年度总结中，但是键盘敲到这里，思绪划过2019一整年，真的是五味杂陈，异地恋的痛点也算是这一年不可缺的的一部分，经历了很多的争吵，产生过很多的矛盾。异地恋考验着双方的同时又需要两个人的坚持，好在争吵平息，矛盾化解。愿这些烦恼都随2019一起远去。</p>
+<h2 id="提高效率"><a class="markdownIt-Anchor" href="#提高效率"></a> 提高效率</h2>
+<p>经过1年的打怪升级，项目组内的开发套路和基本架构都已经熟悉，在对目前项目中在使用的延时任务进行了整合，并以微服务形式提供接口支持。防止出现重复造轮子的现象，提高开发效率。</p>
+<p>随着业务的细分，项目中的微服务越来越多，原本的手动配置管理已经愈加繁杂，在调研了市面上的微服务配置管理解决方案后，选用了<code>Nacos</code>作为配置中心和注册中心。并接入正在开发中的项目。目前Nacos已经落地公司多个项目中。在多个微服务的配置管理上大大提高了效率</p>
+<p>调研了部门中各个项目组的代码提交习惯后，发现一个问题：提交记录没有任何规范可言，于是乎，不安分的我开始率先在小组内推广<code>规范式提交</code>，规范小组内的提交格式，并且向整个部门安利。</p>
+<h2 id="返璞归真"><a class="markdownIt-Anchor" href="#返璞归真"></a> 返璞归真</h2>
+<p>刚入行的时候就有朋友给提点过：<code>做这一行，到了最后拼的都是内功</code>，话俗理不俗！</p>
+<p>一门语言，语言的基础就像武侠小说中的内功心法，而那些框架，中间件等等就好比武功招式绝学。那些武林大侠个个都是内功深厚，就好比张无忌武功初上光明顶时武功平平，但他却因习得九阳神功这一绝世无双的内功心法而能力战群雄。</p>
+<p>Java开发同样如此，其实最核心的还是Java基础，这一年基本上停止了新框架的学习，重心放在了基础知识的复习和深入。</p>
+<h2 id="考证"><a class="markdownIt-Anchor" href="#考证"></a> 考证</h2>
+<p>在9月份时报考了软件设计师考试，抱着以考代学的心态（<code>因为自己基础太差</code>），稳扎稳打，踏实复习，最终结果还算令人满意成功通过了考试。</p>
+<p>这门考试最佳的报考时间应该是大三大四，我到现在才考完全是因为自己的拖延症，不过现在回头去复习，很多基础的知识点都有一种恍然大悟的感觉。也算是恶补了一波基础知识。</p>
+<p>虽然目前大众对这个证书不是太感冒，但是存在即合理，通过复习确实可以梳理计算机相关基础知识，同时可以系统的了解计算机相关知识点。如果你有兴趣不妨一试哟。</p>
+<h2 id="博客"><a class="markdownIt-Anchor" href="#博客"></a> 博客</h2>
+<p>博客输出已经成为一种习惯，虽然我的更新频率十分不规律，而且技术深度也一般，但是相信自己只要坚持输出，终会有所收获。</p>
+<p>写博客已经不单单是记录和总结了，就像能用嘴巴说出来的东西，不一定能用文字清楚的表达。而写博客更多的是分享和文档撰写、信息归纳汇总的锻炼，就像锻炼一个人的文字表达能力一样。</p>
+<p>今年最满意的是将自己在公司使用Nacos的历程记录成系列博客，虽然只是如何使用如何接入的基础性文章，但是也收到很多热心读者的信息反馈。</p>
+<p>目前博客的访问人数也刚刚突破6000+，双十一的时候趁着有活动一次性给自己的域名续费了5年，这一年我也在不断的调整自己的写作风格，力求能够用简单朴实的文字将技术点清晰明了的传递给每一位读者。</p>
+<h2 id="架构升级"><a class="markdownIt-Anchor" href="#架构升级"></a> 架构升级</h2>
+<p>随着业务需求的升级，目前在用的部分架构和数据库解决方案已经不足以支撑后续业务，有幸参与到目前项目组的数据库解决方案升级计划中，开始负责TSDB和DRDS的调研和落地使用。</p>
+<p>目前已经基本完成了TSDB的接入工作，后续会重点关注DRDS的相关调研和接入工作。</p>
+<h1 id="暴露出的问题"><a class="markdownIt-Anchor" href="#暴露出的问题"></a> 暴露出的问题</h1>
+<p>前面都是在总结一些自己的阶段性成果和大事件，但对于过程中暴露出额自身问题却只字未提，这里想把他们单拎出来，警示自己：</p>
+<ul>
+<li>未能时常关心到家人 -----&gt; 做到一周最少一次联系（<code>特别好奇是不是男生都和家里联系少？还是就我是这样？总之这样是不对的</code>）</li>
+<li>重度拖延症 -----&gt; 为自己制定计划表，和奖惩措施</li>
+<li>负能量多于正能量 -----&gt; 调整心态，微笑面对生活</li>
+<li>读书太少 -----&gt; 提升内涵，多读书，读好书</li>
+<li>运动太少 -----&gt; 加强锻炼，控制体重（<code>毕业到现在已经从120斤胖到140斤......惨不忍睹</code>）</li>
+<li>熬夜太多 -----&gt; 早睡早起，狗命重要！！！</li>
+<li>典型肥宅 -----&gt; 重拾兴趣爱好，充实业务生活</li>
+</ul>
+<p>多的flag着实不想立了，不想来年打脸，但以上这些已经列出来的问题点，是必须优先解决的。</p>
+<h1 id="2020"><a class="markdownIt-Anchor" href="#2020"></a> 2020</h1>
+<blockquote>
+<p>逆水行舟不进则退，长期处于舒适区只会习惯于停留在原地</p>
+</blockquote>
+<p>最后的这一节，就像小时候写新学期打算一样，要求新的一年做出展望和规划，也是必不可少的。</p>
+<p>新的一年当但是希望自己测试通过，全年无bug啦，哈哈哈</p>
+<p>新的一年也算是一个新的起点，希望自己初心不改，保持现在的节奏稳扎稳打，努力提升自己，变得更优秀。</p>
+<p>新的一年像上面提到的，要警惕<code>舒适区</code>，时时刻刻，必须要提醒自己，不能懈怠，懈怠你就破功了老弟！</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/2019-summary/" target="_blank" title="菜鸡程序员的2019年度总结">https://www.larscheng.com/2019-summary/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/生活/"><i class="fa-fw fa fa-tags"></i> 生活</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/nacos-infos/">Nacos系列博客说明</a>
+            
+            
+            <a class="next" rel="next" href="/nearby-search/">Java中“附近的人”实现方案讨论及代码实现</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

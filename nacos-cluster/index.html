@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Nacos（九）：Nacos集群部署和遇到的问题 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Nacos（九）：Nacos集群部署和遇到的问题</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-08-16&nbsp;&nbsp;11:40:31</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SpringCloud/">SpringCloud</a>
+                            
+                                <a href="/categories/SpringCloud/Nacos/">Nacos</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,836</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>前面的系列文章已经介绍了Nacos的如何接入SpringCloud，以及Nacos的基本使用方式</p>
+<p>之前的文章中都是基于<code>单机模式</code>部署进行讲解的，本文对Nacos的<code>集群</code>部署方式进行说明</p>
+<a id="more"></a>
+<h1 id="环境准备"><a class="markdownIt-Anchor" href="#环境准备"></a> 环境准备</h1>
+<ul>
+<li>JDK8</li>
+<li>Centos7.5(ip:<code>10.1.8.27</code>)</li>
+<li>MySQL 5.6.5+</li>
+<li>Nacos-server：1.0.1</li>
+</ul>
+<blockquote>
+<p>请提前下载Nacos-server：1.0.1压缩包并解压至相应目录</p>
+<blockquote>
+<p>本次的Nacos-server在linux服务器上进行启动。</p>
+</blockquote>
+</blockquote>
+<h1 id="集群模式部署"><a class="markdownIt-Anchor" href="#集群模式部署"></a> 集群模式部署</h1>
+<p>Nacos文档中提供了三种集群部署方案</p>
+<ol>
+<li><code>http://ip1:port/openAPI</code> 直连ip模式：
+<ul>
+<li>ip+端口进行部署，客户端直接连接Nacos的ip</li>
+</ul>
+</li>
+<li><code>http://Vip:port/openAPI</code> 挂载虚拟IP模式：
+<ul>
+<li>配合KeepAlive，Nacos真实ip都挂载虚拟Ip下</li>
+<li>客户端访问Vip发起请求</li>
+<li>当主Nacos宕机后，备用Nacos接管，实现高可用，</li>
+</ul>
+</li>
+<li><code>http://www.nacostest.com:port/openAPI</code>  挂载虚拟IP+域名模式：
+<ul>
+<li>为虚拟ip绑定一个域名，当Nacos集群迁移时，客户端配置无需修改。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190815145919.png" alt=""></p>
+<p>这三种方案都是为了尽可能实现高可用，后两种方案除了基本的部署流程外更多侧重于实现高可用的工作上</p>
+<blockquote>
+<p>本文以第一种ip+端口的方式为大家介绍集群部署方式</p>
+</blockquote>
+<p>当然<code>ip+端口</code>也有多种部署方式</p>
+<ul>
+<li>1ip+n端口+Nginx：普通玩家部署方式，没有过多服务器，单台服务器启动多个nacos实例，仅适合测试使用</li>
+<li>nip+n端口+Nginx：RMB玩家部署方式，服务器资源充足，组建完美集群，实现更好的容灾与隔离</li>
+</ul>
+<p>无论怎么部署，部署方式都是一样的，这里我以<code>1ip+3端口+Nginx</code>的方式进行集群搭建</p>
+<h2 id="修改配置"><a class="markdownIt-Anchor" href="#修改配置"></a> 修改配置</h2>
+<p>1、修改Nacos-server目录<code>conf/</code>下的<code>application.properties</code>文件，添加mysql数据源</p>
+<p>2、修改集群配置</p>
+<p>ip和端口的规划如下:</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>端口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.8.27</td>
+<td>8849</td>
+</tr>
+<tr>
+<td>10.1.8.27</td>
+<td>8850</td>
+</tr>
+<tr>
+<td>10.1.8.27</td>
+<td>8851</td>
+</tr>
+</tbody>
+</table>
+<p>修改<code>conf/</code>下的<code>cluster.conf.example</code>文件，将其命名为<code>cluster.conf</code>，内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># ip:port</span><br><span class="line">10.1.8.27:8849</span><br><span class="line">10.1.8.27:8850</span><br><span class="line">10.1.8.27:8851</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：一定要记得将配置文件重命名为<code>cluster.conf</code>, 最好用实际ip，而非<code>127.0.0.1</code>，否则会出现问题</p>
+</blockquote>
+<p>3、修改启动脚本</p>
+<p>我们要在单台服务器上启动多个Nacos实例，要保证三个实例为不同的端口，这里我们可以修改启动脚本<br>
+定位到<code>export FUNCTION_MODE=&quot;all&quot;</code>这一行，修改脚本内容，使其支持以<code>-p</code>传入端口参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MODE=<span class="string">"cluster"</span></span><br><span class="line"><span class="built_in">export</span> FUNCTION_MODE=<span class="string">"all"</span></span><br><span class="line"><span class="comment"># 新加</span></span><br><span class="line"><span class="built_in">export</span> SERVER_PORT=<span class="string">"8848"</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">getopts</span> <span class="string">":m:f:p:"</span> opt</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">case</span> <span class="variable">$opt</span> <span class="keyword">in</span></span><br><span class="line">        m)</span><br><span class="line">            MODE=<span class="variable">$OPTARG</span>;;</span><br><span class="line">        f)</span><br><span class="line">            FUNCTION_MODE=<span class="variable">$OPTARG</span>;;</span><br><span class="line">        <span class="comment"># 新加</span></span><br><span class="line">        p)</span><br><span class="line">            SERVER_PORT=<span class="variable">$OPTARG</span>;;</span><br><span class="line">        ?)</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Unknown parameter"</span></span><br><span class="line">        <span class="built_in">exit</span> 1;;</span><br><span class="line">    <span class="keyword">esac</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="comment"># 新加</span></span><br><span class="line">JAVA_OPT=<span class="string">"<span class="variable">$&#123;JAVA_OPT&#125;</span> -Dserver.port=<span class="variable">$&#123;SERVER_PORT&#125;</span>"</span></span><br></pre></td></tr></table></figure>
+<p>相应的，修改shutdown脚本，使其可接收参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新加内容</span></span><br><span class="line">PORT=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">if</span> [ ! <span class="variable">$PORT</span> ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"please select stop port!"</span> &gt;&amp;2</span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加PORT过滤</span></span><br><span class="line">pid=`ps ax | grep -i <span class="string">'nacos.nacos'</span> |grep java |grep <span class="variable">$&#123;PORT&#125;</span> | grep -v grep | awk <span class="string">'&#123;print $1&#125;'</span>`</span><br><span class="line"></span><br><span class="line"><span class="comment"># 后边省略...</span></span><br></pre></td></tr></table></figure>
+<h2 id="启动nacos"><a class="markdownIt-Anchor" href="#启动nacos"></a> 启动Nacos</h2>
+<p>执行如下三条命令</p>
+<blockquote>
+<p>bash <a href="http://startup.sh" target="_blank" rel="noopener">startup.sh</a> -p 8849<br>
+bash <a href="http://startup.sh" target="_blank" rel="noopener">startup.sh</a> -p 8850<br>
+bash <a href="http://startup.sh" target="_blank" rel="noopener">startup.sh</a> -p 8851</p>
+</blockquote>
+<p>**如果你的机器不能同时启动3个实例，检查是否内存不够了，可以适当调整JVM参数  **</p>
+<p>调整启动脚本中<code>JAVA_OPT=&quot;${JAVA_OPT} -server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m</code>中的<code>-Xms</code> <code>-Xmx</code> <code>-Xmn</code></p>
+<p>启动成功后会打印如下一句话：</p>
+<blockquote>
+<p>nacos is starting，you can check the /usr/local/nacos/nacos/logs/start.out</p>
+</blockquote>
+<p>查看该目录下的start.out文件，可以看到如下日志</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190815171218.png" alt="startup"></p>
+<p>此时，多节点的集群雏形已经搭建好了，可以试着访问Nacos后台</p>
+<p><a href="http://ip:8849/nacos/index.html" target="_blank" rel="noopener">http://ip:8849/nacos/index.html</a><br>
+<a href="http://ip:8850/nacos/index.html" target="_blank" rel="noopener">http://ip:8850/nacos/index.html</a><br>
+<a href="http://ip:8851/nacos/index.html" target="_blank" rel="noopener">http://ip:8851/nacos/index.html</a></p>
+<p>不出意外,可以正常访问到Nacos控制台</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190816085452.png" alt=""></p>
+<p>从图上可以看到集群节点共有三个，其中端口8850为<code>leader</code></p>
+<h2 id="配置nginx"><a class="markdownIt-Anchor" href="#配置nginx"></a> 配置Nginx</h2>
+<p>完成上面的配置后，已经基本完成集群搭建的90%了</p>
+<p>这里我们可以通过Nginx配置，为Nacos提供统一的入口，来实现一个简单的负载均衡</p>
+<p>Nginx配置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">upstream nacos-server &#123;</span><br><span class="line">  server 127.0.0.1:8849;</span><br><span class="line">  server 127.0.0.1:8850;</span><br><span class="line">  server 127.0.0.1:8851;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  listen 8848;</span><br><span class="line">  server_name  localhost;</span><br><span class="line">  location /nacos/ &#123;</span><br><span class="line">    proxy_pass http://nacos-server/nacos/;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行命令 <code>sudo nginx</code>启动nginx</p>
+<p>通过8848端口访问Nacos后台，此时Nginx会将请求分发至<code>nacos-server</code>下的地址中，这里默认的分发策略是<code>线性轮询</code></p>
+<h2 id="客户端测试"><a class="markdownIt-Anchor" href="#客户端测试"></a> 客户端测试</h2>
+<blockquote>
+<p>这里继续使用之前的Demo项目（<a href="https://www.larscheng.com/config-service">Nacos（四）</a>）</p>
+</blockquote>
+<p>1、修改下项目配置文件<code>bootstarp.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-config</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">10.1</span><span class="number">.8</span><span class="number">.27</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">10.1</span><span class="number">.8</span><span class="number">.27</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：主要是修改注册中心和配置中新的地址，记得替换成你的服务器地址哦</p>
+</blockquote>
+<p>2、启动前确保已经向Nacos中添加配置文件，如果已经添加可以忽略</p>
+<p>在公共空间(public)中新建一个配置文件DataID: <code>nacos-config.yml</code>, 配置内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span> </span><br><span class="line"><span class="attr">    port:</span> <span class="number">9989</span></span><br><span class="line"><span class="attr">nacos:</span></span><br><span class="line"><span class="attr">    config:</span> <span class="string">配置文件已持久化到数据库中...</span></span><br></pre></td></tr></table></figure>
+<p>3、启动Nacos-config项目</p>
+<p>启动成功后检查日志和Nacos控制台</p>
+<p>注册成功的日志如下：</p>
+<blockquote>
+<p>09:37:19.366 [main] [nacos] [64] INFO  o.s.c.a.n.r.NacosServiceRegistry - nacos registry, nacos-config 10.1.8.71:9989 register finished</p>
+</blockquote>
+<p>控制台中可以看到服务已经注册</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190816104055.png" alt=""></p>
+<p>浏览器请求nacos-config中的接口，查看是否可以读取配置</p>
+<p>访问：<a href="http://127.0.0.1:9989/getValue" target="_blank" rel="noopener">http://127.0.0.1:9989/getValue</a> 返回：配置文件和服务信息已持久化到数据库中…</p>
+<blockquote>
+<p>集群的部署方式就介绍完了，文中的集群部署方式不是最优的方式</p>
+<blockquote>
+<p>实际生产环境下，至少应该保证各个Nacos节点位于不同服务器,以实现更好的隔离和容灾</p>
+</blockquote>
+</blockquote>
+<h1 id="出现的问题"><a class="markdownIt-Anchor" href="#出现的问题"></a> 出现的问题</h1>
+<p>这里将我在配置集群时出现的一些问题和解决方式进行说明</p>
+<p>1、在集群搭建完成后，启动nacos客户端进行服务注册时报错了，提示我<code>服务端没有启动，稍后再试</code>，如下：</p>
+<blockquote>
+<p>code:503 msg: server is STARTING now, please try again later!</p>
+</blockquote>
+<p>一脸懵B，Nacos后台都可以访问的鸭，为啥说我没启动。翻阅Nacos-server的源码后</p>
+<ul>
+<li>后台可访问只能说明<code>nacos-consloe</code>模块启动成功</li>
+<li>无法注册服务<code>nacos-naming</code>模块可能启动失败了</li>
+</ul>
+<p>参考了github中的<a href="https://github.com/alibaba/nacos/issues/770" target="_blank" rel="noopener">#770-issues</a></p>
+<pre><code>必须保证`InetAddress.getLocalHost().getHostAddress()`或者`hostname -i`打印的结果是  
+192.xxx.xxx.xxx而不是`127.0.0.1`才行
+</code></pre>
+<p>解决办法如下：</p>
+<ul>
+<li>修改hosts，在hosts文件中添加<code>yourip hostname</code>，例如：<code>10.1.8.27 lars</code></li>
+<li>修改cluster.conf,修改集群配置文件，全部用实际ip+端口的方式，而非<code>127.0.0.1</code></li>
+</ul>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>Nacos的集群部署基本就介绍完了，官方推荐的三种方式，他们的基本部署思路和方式都大同小异，只不过在高可用上有所不同，挑选你适合的方式动手搭建集群试试吧。</p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<p><a href="https://nacos.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">Nacos支持三种部署模式</a></p>
+<p><a href="https://github.com/alibaba/nacos/issues" target="_blank" rel="noopener">社区issues</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/nacos-cluster/" target="_blank" title="Nacos（九）：Nacos集群部署和遇到的问题">https://www.larscheng.com/nacos-cluster/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Nacos/"><i class="fa-fw fa fa-tags"></i> Nacos</a>
+                    
+                        <a href="/tags/注册中心/"><i class="fa-fw fa fa-tags"></i> 注册中心</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/study-plan/">近期学习计划</a>
+            
+            
+            <a class="next" rel="next" href="/nacos-persistence/">Nacos（八）：Nacos持久化</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

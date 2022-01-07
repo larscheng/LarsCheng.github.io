@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>教你如何看懂UML中的类图及类图中的关系 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">教你如何看懂UML中的类图及类图中的关系</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-10-29&nbsp;&nbsp;13:53:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/设计模式/">设计模式</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,657</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">5min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>本文作为设计模式系列的第零篇文章，其主要时教大家如何去看懂设计模式中常见的类图，以及类间的关系。因为无论你从哪里学习设计模式，都避免不了类图的阅读和理解。</p>
+<p>本文主要从以下几个方面介绍：</p>
+<ol>
+<li><strong>UML介绍</strong></li>
+<li><strong>类图介绍</strong></li>
+<li><strong>类与类之间的关系</strong></li>
+</ol>
+<a id="more"></a> 
+<h1 id="uml介绍"><a class="markdownIt-Anchor" href="#uml介绍"></a> UML介绍</h1>
+<p>统一建模语言（Unified Modeling Language，UML）是用来设计软件蓝图的可视化建模语言，1997 年被国际对象管理组织（OMG）采纳为面向对象的建模语言的国际标准。它的特点是简单、统一、图形化、能表达软件设计中的动态与静态信息。</p>
+<p>UML集成了Booch，OMT和面向对象程序设计的概念，将这些方法融合为单一的，通用的，并且可以广泛使用的建模语言。UML打算成为可以对并发和分布式系统的标准建模语言。</p>
+<p>UML发展至今在UML2.2种已经定义了14种图示，<strong>本文不对UML展开说明</strong>，感兴趣的同学可以翻一下<code>大学课本《软件工程》</code></p>
+<blockquote>
+<p>本文我们重点讲解在设计模式中用到最多的类图。</p>
+</blockquote>
+<h1 id="类图介绍"><a class="markdownIt-Anchor" href="#类图介绍"></a> 类图介绍</h1>
+<p>类图（Class Diagram）展现了一组对象、接口、协作和它们之间的关系</p>
+<h2 id="类图的组成"><a class="markdownIt-Anchor" href="#类图的组成"></a> 类图的组成</h2>
+<p>类图中通常由 <code>类、接口、协作、关系</code>组成</p>
+<h2 id="类"><a class="markdownIt-Anchor" href="#类"></a> 类</h2>
+<p>类：是对对象的抽象，具有相似结构、行为和关系的一组对象的描述符，用来描述系统的静态部分。类的图示如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028160550.png" alt="Student类"></p>
+<ul>
+<li>最上面是类名称</li>
+<li>中间部分包含类的属性（[可见性]属性名:类型[=默认值] —&gt; <code>+ age:Integer = 1</code>）</li>
+<li>底部部分包含类的方法（[可见性]名称(参数列表)[:返回类型] —&gt; <code>+ eat(String food):String</code>）</li>
+</ul>
+<blockquote>
+<p>其中的<code>可见性</code>表示该属性对类外的元素是否可见<br>
+包括公有（Public）、私有（Private）、受保护（Protected）和默认（Default）4 种<br>
+在类图中分别用符号<code>+</code>、<code>-</code>、<code>#</code>、<code>~</code>表示。</p>
+</blockquote>
+<h2 id="接口"><a class="markdownIt-Anchor" href="#接口"></a> 接口</h2>
+<p>接口（Interface）<code>是一种特殊的类</code>，它具有类的结构但不可被实例化，只可以被子类实现。它包含抽象操作，但不包含属性。它描述了类或组件对外可见的动作。在 UML 中，接口有两种表示方法，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028164413.png" alt="Person接口两种表示"></p>
+<h2 id="关系"><a class="markdownIt-Anchor" href="#关系"></a> 关系</h2>
+<p>这里以图形接口、长方形类、圆形类的类图为例，长方形和圆形都实现了图形接口，他们之间存在<code>实现关系</code>,类图如下：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028165559.png" alt="实现"></p>
+<p>从图中可以发现，长方形类和圆形类都通过<code>虚线空心箭头</code>指向图形接口，这在类图中表示他们存在实现关系。</p>
+<h1 id="类与类之间的关系"><a class="markdownIt-Anchor" href="#类与类之间的关系"></a> 类与类之间的关系</h1>
+<p>根据类与类之间的耦合度从弱到强排列，UML 中的类图有以下几种关系：<br>
+<code>依赖关系</code>、<code>关联关系</code>、<code>聚合关系</code>、<code>组合关系</code>、<code>泛化关系</code>和<code>实现关系</code>。</p>
+<h2 id="依赖关系"><a class="markdownIt-Anchor" href="#依赖关系"></a> 依赖关系</h2>
+<p>对象之间最弱的一种关联方式，是临时性的关联。代码中一般指由局部变量、函数参数、返回值建立的对于其他对象的调用关系以及对静态方法的调用。一个类调用被依赖类中的某些方法而得以完成这个类的一些职责。在类图使用<code>带箭头的虚线</code>表示依赖，箭头从使用类指向被依赖的类。</p>
+<p>如图所示，程序员与电脑的类图中，程序员想要写代码，需要用到电脑，程序员与电脑之间存在<code>依赖关系</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028182715.png" alt="依赖"></p>
+<h2 id="关联关系"><a class="markdownIt-Anchor" href="#关联关系"></a> 关联关系</h2>
+<p>对象之间一种引用关系，比如客户类与订单类之间的关系。这种关系通常使用类的属性表达。<br>
+关联又分为<code>一般关联</code>、<code>聚合关联</code>与<code>组合关联</code>。</p>
+<h3 id="一般关联"><a class="markdownIt-Anchor" href="#一般关联"></a> 一般关联</h3>
+<p>一般关联在类图使用<code>带箭头或者没有箭头的实线</code>表示，箭头从使用类指向被关联的类。可以是单向和双向，也可以没有箭头。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028185716.png" alt="一般关联"></p>
+<p>如图所示，单向关联中，可以看到Student类有home属性，且Student类引用了Home类</p>
+<p>在双向关联中，不难发现Student类引用了Teacher类，Teacher类也相应的引用了Student类</p>
+<h3 id="聚合关联"><a class="markdownIt-Anchor" href="#聚合关联"></a> 聚合关联</h3>
+<p>聚合关系是一种特殊的关联关系，表示has-a的关系，是一种不稳定的包含关系，聚合关系强调的是整体和部分的关系，其中<code>部分可以脱离整体而存在</code>。<br>
+例如学校有老师，而老师脱离学校后仍可以教授学生。</p>
+<p>在UML类图中聚合用<code>带空心菱形的直线</code>表示，其中菱形指向整体，学校与老师的类图如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028190745.png" alt="聚合关联"></p>
+<h3 id="组合关联"><a class="markdownIt-Anchor" href="#组合关联"></a> 组合关联</h3>
+<p>组合关系也是一种特殊的关联关系，表示contains-a的关系，它与聚合关系很像，也是强调整体与部分的关系，不同的是<code>部分无法脱离整体存在</code>。</p>
+<p>比如我们的身体有心脏、大脑、四肢等重要器官，对于一个健康的身体而言，任何一个器官都不能少</p>
+<p>在UML类图中聚合用<code>带实心菱形的直线</code>表示，其中菱形指向整体，身体与心脏的类图如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028191449.png" alt="组合关联"></p>
+<h2 id="泛化关系"><a class="markdownIt-Anchor" href="#泛化关系"></a> 泛化关系</h2>
+<p>泛化关系在Java中也叫作继承关系，表示is-a的关系，是对象之间耦合度最大的一种关系，子类继承父类的所有细节。</p>
+<p>在UML中我们用<code>带空心三角形的直线</code>来表示,其中空心三角指向父类，如图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/uml/20191028192818.png" alt="泛化关系"></p>
+<h2 id="实现关系"><a class="markdownIt-Anchor" href="#实现关系"></a> 实现关系</h2>
+<p>接口与实现类之间的关系。在这种关系中，类实现了接口，类中的操作实现了接口中所声明的所有的抽象操作。</p>
+<p>实现关系上文也有讲到，在 UML 类图中，实现关系使用<code>带空心三角箭头的虚线</code>来表示，箭头从实现类指向接口。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>UML作为一个严谨的软件建模语言，经过20多年的发展已经成为业界的标准建模语言，大家接触它最多的时候应该时大学中，反倒工作中很少用到。</p>
+<p>但是关于UML的基本常识和基本使用是作为一个开发人员的必修课，就像在学习设计模式时，你首先就得学会读懂类图，能够画出类图。</p>
+<p>相信读完本文，类图已经难不倒你了。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/uml-class/" target="_blank" title="教你如何看懂UML中的类图及类图中的关系">https://www.larscheng.com/uml-class/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/设计模式/"><i class="fa-fw fa fa-tags"></i> 设计模式</a>
+                    
+                        <a href="/tags/UML/"><i class="fa-fw fa fa-tags"></i> UML</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/commit-log/">你还没用过“约定式提交”吗？那你赶紧来补补知识吧</a>
+            
+            
+            <a class="next" rel="next" href="/dp-overview/">设计模式总览</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

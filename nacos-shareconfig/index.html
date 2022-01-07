@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Nacos（七）：Nacos共享配置 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Nacos（七）：Nacos共享配置</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-08-07&nbsp;&nbsp;18:13:27</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SpringCloud/">SpringCloud</a>
+                            
+                                <a href="/categories/SpringCloud/Nacos/">Nacos</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,966</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">8min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>前景回顾：</p>
+<ul>
+<li><a href="https://www.larscheng.com/nacos-namespace/">Nacos（六）：多环境下如何“管理”及“隔离”配置和服务</a></li>
+<li><a href="https://www.larscheng.com/config-profile/">Nacos（五）：多环境下如何“读取”Nacos中相应环境的配置</a></li>
+<li><a href="https://www.larscheng.com/config-service/">Nacos（四）：SpringCloud项目中接入Nacos作为配置中心</a></li>
+</ul>
+<p>前几章已经基本介绍了springcloud项目结合Nacos的大部分用法，本文介绍一下Nacos作为配置中心时，如何读取共享配置</p>
+<a id="more"></a>
+<h1 id="我的环境"><a class="markdownIt-Anchor" href="#我的环境"></a> 我的环境</h1>
+<ul>
+<li>Windows10</li>
+<li>JDK8</li>
+<li>SpringCloud：Finchley.RELEASE</li>
+<li>SpringBoot：2.0.4.RELEASE</li>
+<li>spring-cloud-alibaba-dependencies：0.2.2.RELEASE</li>
+<li>Nacos-server：1.0.1</li>
+</ul>
+<p><strong>本文的项目Demo继续沿用之前文章中的聚合工程<code>Nacos</code>,若小伙伴还没有之前的环境，可至<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/Nacos" target="_blank" rel="noopener">源码地址</a>中下载</strong></p>
+<h1 id="场景描述"><a class="markdownIt-Anchor" href="#场景描述"></a> 场景描述</h1>
+<blockquote>
+<p>一个项目中服务数量增加后，配置文件相应增加，多个配置文件中会存在相同的配置，那么我们可以将相同的配置独立出来，作为该项目中各个服务的共享配置文件，每个服务都可以通过Nacos进行共享配置的读取</p>
+</blockquote>
+<p>下面用一个demo演示下，是否可行</p>
+<ul>
+<li>demo工程：nacos-config-share</li>
+<li>配置文件：nacos-config-share.yml</li>
+<li>共享配置文件：shareconfig1.yml，shareconfig2.yml</li>
+</ul>
+<h1 id="创建项目"><a class="markdownIt-Anchor" href="#创建项目"></a> 创建项目</h1>
+<p>一如往常，还是在聚合工程Nacos下创建名为<code>nacos-config-share</code>的子工程，其pom.xml文件依赖与之前的项目都一致，如果您没有之前的项目可参考<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/Nacos" target="_blank" rel="noopener">源码地址</a></p>
+<p>1、修改springboot启动类<code>NacosConfigShareApplication.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RefreshScope</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NacosConfigShareApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(NacosConfigShareApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;nacos.share&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String share;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;share.config1&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String shareConfig1;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;share.config2&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String shareConfig2;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/getValue"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> share;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/getShare1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShare1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> shareConfig1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/getShare2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShare2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> shareConfig2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、修改该项目的配置文件<code>bootstrap.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-config-share</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br><span class="line"><span class="attr">        shared-dataids:</span> <span class="string">shareconfig1.yml,shareconfig2.yml</span></span><br><span class="line"><span class="attr">        refreshable-dataids:</span> <span class="string">shareconfig1.yml,shareconfig2.yml</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>从配置文件可以看出，通过<code>shared-dataids</code>属性来指定要读取共享配置文件的<code>DataID</code>,多个文件用<code>,</code>分隔<br>
+使用<code>refreshable-dataids</code>指定共享配置文件支持自动刷新</p>
+</blockquote>
+<h1 id="新建配置文件"><a class="markdownIt-Anchor" href="#新建配置文件"></a> 新建配置文件</h1>
+<p>这里我们作为演示，暂不加入Namespace，直接在公共空间中创建及测试</p>
+<p>创建配置文件<code>nacos-config-share.yml</code>,详细如下：</p>
+<ul>
+<li>DataId:<code>nacos-config-share.yml</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">    port: 9984</span><br><span class="line">nacos: </span><br><span class="line">    share: nacos-config-share</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>创建共享配置文件1<code>shareconfig1.yml</code>,详细如下：</p>
+<ul>
+<li>DataId:<code>shareconfig1.yml</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">share: </span><br><span class="line">    config1: 这里是共享配置文件1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>创建共享配置文件1<code>shareconfig2.yml</code>,详细如下：</p>
+<ul>
+<li>DataId:<code>shareconfig2.yml</code></li>
+<li>配置格式：<code>YAML</code></li>
+<li>配置内容：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">share: </span><br><span class="line">    config2: 这里是共享配置文件2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>创建成功后，配置列表如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190807165641.png" alt="shareconfig"></p>
+<h1 id="启动测试"><a class="markdownIt-Anchor" href="#启动测试"></a> 启动测试</h1>
+<p>直接启动项目，如果启动成功。可以看到日志中如下信息：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190807165911.png" alt="startup"></p>
+<p>访问启动类中提供的接口，测试下能否获取到共享配置文件中的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">访问127.0.0.1:9984/getValue,返回：nacos-config-share</span><br><span class="line">访问127.0.0.1:9984/getShare1,返回：这里是共享配置文件1</span><br><span class="line">访问127.0.0.1:9984/getShare2,返回：这里是共享配置文件2</span><br></pre></td></tr></table></figure>
+<p>再测试下<code>refreshable-dataids</code>配置的自动刷新是否生效</p>
+<p>在Nacos控制台中修改共享配置文件<code>shareconfig2.yml</code>的值为：<code>这里是共享配置文件2这里是共享配置文件2</code></p>
+<p>编辑保存后，重新请求 127.0.0.1:9984/getShare2 ，观察返回结果如下：</p>
+<blockquote>
+<p>这里是共享配置文件2这里是共享配置文件2</p>
+</blockquote>
+<p>以上返回结果说明通过在配置文件中指定<code>shared-dataids</code>和<code>refreshable-dataids</code>是可以实现共享配置文件的读取和自动刷新的。</p>
+<h1 id="需求变更"><a class="markdownIt-Anchor" href="#需求变更"></a> 需求变更</h1>
+<blockquote>
+<p>假设现在要读取<code>shareconfig3.yml</code>和<code>shareconfig4.yml</code>文件但是它的Group为<code>SHARE3_GROUP</code>和<code>SHARE4_GROUP</code>,   即共享配置文件与项目自身配置文件不在同一Group中（<code>上边的例子是全都在DEFAULT_GROUP分组</code>）   那如果继续用上边的方法，就无法读取共享配置文件</p>
+</blockquote>
+<p>这时可以使用另一个配置<code>ext-config</code>，它可以由用户自定义指定需要加载的配置<code>DataID、Group以及是否自动刷新</code></p>
+<p>并且<code>ext-config</code>是一个集合（<code>List</code>），支持多个配置文件的指定。</p>
+<h1 id="新建共享配置文件"><a class="markdownIt-Anchor" href="#新建共享配置文件"></a> 新建共享配置文件</h1>
+<p>先创建配置配置文件<code>shareconfig3.yml</code>和<code>shareconfig4.yml</code>，注意他们的Group属性</p>
+<ul>
+<li>
+<p>DataId:<code>shareconfig3.yml</code></p>
+</li>
+<li>
+<p>Group：<code>SHARE3_GROUP</code></p>
+</li>
+<li>
+<p>配置格式：<code>YAML</code></p>
+</li>
+<li>
+<p>配置内容：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">share: </span><br><span class="line">    config3: 这里是共享配置文件3，Group:SHARE3_GROUP</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>DataId:<code>shareconfig4.yml</code></p>
+</li>
+<li>
+<p>Group：<code>SHARE4_GROUP</code></p>
+</li>
+<li>
+<p>配置格式：<code>YAML</code></p>
+</li>
+<li>
+<p>配置内容：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">share: </span><br><span class="line">    config4: 这里是共享配置文件4，Group:SHARE4_GROUP</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>创建成功页面如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg//blogImg/Nacos/20190807173312.png" alt="shareconfig34"></p>
+<h1 id="修改项目代码"><a class="markdownIt-Anchor" href="#修改项目代码"></a> 修改项目代码</h1>
+<p>1、在启动类<code>NacosConfigShareApplication.java</code>中新增如下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Value</span>(<span class="string">"$&#123;share.config3&#125;"</span>)</span><br><span class="line"><span class="keyword">private</span> String shareConfig3;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Value</span>(<span class="string">"$&#123;share.config4&#125;"</span>)</span><br><span class="line"><span class="keyword">private</span> String shareConfig4;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/getShare3"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getShare3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> shareConfig3;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/getShare4"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getShare4</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> shareConfig4;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、修改项目配置文件<code>bootstrap.yml</code>,增加<code>ext-config</code>配置</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nacos-config-share</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    nacos:</span></span><br><span class="line"><span class="attr">      discovery:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">      config:</span></span><br><span class="line"><span class="attr">        server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line"><span class="attr">        prefix:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">        file-extension:</span> <span class="string">yml</span></span><br><span class="line"><span class="attr">        shared-dataids:</span> <span class="string">shareconfig1.yml,shareconfig2.yml</span></span><br><span class="line"><span class="attr">        refreshable-dataids:</span> <span class="string">shareconfig1.yml,shareconfig2.yml</span></span><br><span class="line"><span class="attr">        ext-config:</span></span><br><span class="line"><span class="attr">          - data-id:</span> <span class="string">shareconfig3.yml</span></span><br><span class="line"><span class="attr">            group:</span> <span class="string">SHARE3_GROUP</span></span><br><span class="line"><span class="attr">            refresh:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">          - data-id:</span> <span class="string">shareconfig4.yml</span></span><br><span class="line"><span class="attr">            group:</span> <span class="string">SHARE4_GROUP</span></span><br><span class="line"><span class="attr">            refresh:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h1 id="启动进行测试"><a class="markdownIt-Anchor" href="#启动进行测试"></a> 启动进行测试</h1>
+<p>项目经过修改后，可以看到</p>
+<ol>
+<li>项目自身的nacos配置文件属于DEFAULT_GROUP下,默认读取</li>
+<li>shareconfig1.yml,shareconfig2.yml 都属于DEFAULT_GROUP下，通过<code>shared-dataids</code>指定进行读取</li>
+<li>shareconfig3.yml,shareconfig4.yml 都属于<code>非DEFAULT_GROUP</code>下，通过<code>ext-config</code>配置属性进行自定义读取</li>
+</ol>
+<p>启动项目，测试所有的配置文件是否可以正常读取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">访问127.0.0.1:9984/getValue,返回：nacos-config-share</span><br><span class="line">访问127.0.0.1:9984/getShare1,返回：这里是共享配置文件1</span><br><span class="line">访问127.0.0.1:9984/getShare2,返回：这里是共享配置文件2这里是共享配置文件2</span><br><span class="line">访问127.0.0.1:9984/getShare3,返回：这里是共享配置文件3，Group:SHARE3_GROUP</span><br><span class="line">访问127.0.0.1:9984/getShare4,返回：这里是共享配置文件4，Group:SHARE4_GROUP</span><br></pre></td></tr></table></figure>
+<p>修改<code>shareconfig4.yml</code>的配置内容为：<code>这里是共享配置文件4，Group:SHARE4_GROUP,支持自动刷新</code>，保存后，再次调用127.0.0.1:9984/getShare4，返回如下：</p>
+<blockquote>
+<p>这里是共享配置文件4，Group:SHARE4_GROUP,支持自动刷新</p>
+</blockquote>
+<p>调用接口后发现，两种共享配置的加载方式都可以正常读取，并且可以一起使用。<code>ext-config</code>的方式实现了用户自定义配置共享配置文件。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>上面的demo已经演示Nacos共享配置的两种实现方式，两种方式针对不同的场景，总结如下：</p>
+<ul>
+<li><code>shared-dataids</code>方式：
+<ul>
+<li>适合于共享配置文件与项目默认配置文件处于相同Group时，直接两条命令就可以搞定</li>
+<li>优点：配置方便</li>
+<li>缺点：只能在同一Group中</li>
+</ul>
+</li>
+<li><code>ext-config</code>方式：
+<ul>
+<li>它可以由开发者自定义要读取的共享配置文件的DataId、Group、refresh属性，这样刚好解决了<code>shared-dataids</code>存在的局限性。</li>
+<li>优点：可以与<code>shared-dataids</code>方案结合使用，用户自定义配置。灵活性强</li>
+<li>缺点：配置容易出错，要熟悉YAML语法</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>可见两种方式各有长处，所以如果在开发中需要使用共享配置，大家可以是具体情况而定选择自己最合适的方案。</p>
+</blockquote>
+<p><strong><em>本文源码</em>：<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/Nacos" target="_blank" rel="noopener">https://github.com/larscheng/larscheng-learning-demo/tree/master/Nacos</a></strong></p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<p><a href="http://blog.yuqiyu.com/spring-cloud-alibaba-nacos-config-share-custom.html" target="_blank" rel="noopener">SpringCloud Alibaba - Nacos Config 自定义共享配置</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/nacos-shareconfig/" target="_blank" title="Nacos（七）：Nacos共享配置">https://www.larscheng.com/nacos-shareconfig/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Nacos/"><i class="fa-fw fa fa-tags"></i> Nacos</a>
+                    
+                        <a href="/tags/配置中心/"><i class="fa-fw fa fa-tags"></i> 配置中心</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/nacos-persistence/">Nacos（八）：Nacos持久化</a>
+            
+            
+            <a class="next" rel="next" href="/nacos-namespace/">Nacos（六）：多环境下如何“管理”及“隔离”配置和服务</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

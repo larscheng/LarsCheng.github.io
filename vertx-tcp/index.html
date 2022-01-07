@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Vert.x创建TCP服务端及客户端 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Vert.x创建TCP服务端及客户端</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-04-02&nbsp;&nbsp;19:34:39</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Vert-x/">Vert.x</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,612</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <pre><code>本文是我在学习Vert.x过程中的一些笔记，作为记录。
+因为是初学，对Vert.x的理解还不够透彻，如有错误之处我们可以在评论中一起讨论呦。
+</code></pre>
+<h3 id="环境准备"><a class="markdownIt-Anchor" href="#环境准备"></a> 环境准备</h3>
+<ul>
+<li>JDK8+</li>
+<li>Maven</li>
+<li>IDE</li>
+<li>Vert.x 3.6.3</li>
+</ul>
+<p>我们通常用到的最多的应该是Http服务，创建一个Http服务端似乎web开发中常有的事情。但是如果有一个需要Tcp服务的场景，这时候我们会想到Socket编程，基于Socket实现一个Tcp服务的过程是及其考验编程水平的，需要手动处理网络和线程问题。于是乎我们又想到了Netty，用Netty来实现Tcp服务似乎也不错啊，他简化了传统的Nio操作，但是如果没有接触过Netty则需要从头学习，学习成本较高。其实我们可以使用Vertx来创建Tcp服务，因为Vert.x本来就是基于Netty的，而且通过Vertx创建Tcp服务非常方便。</p>
+<a id="more"></a>
+<h3 id="vertx中创建tcp服务端"><a class="markdownIt-Anchor" href="#vertx中创建tcp服务端"></a> vertx中创建Tcp服务端</h3>
+<p>默认的创建方式如下：</p>
+<pre><code>NetServer netServer = vertx.createNetServer();
+</code></pre>
+<p>默认创建的Tcp服务端实际上是初始化了一个默认的NetServerOptions实例，Tcp服务端会随机选择一个本地未被占用的端口进行监听</p>
+<p>当然我们也可以通过配置自定义属性来创建：</p>
+<pre><code>NetServer netServer = vertx.createNetServer(new NetServerOptions().setPort(9981));
+//可以获取监听的端口
+netServer.actualPort();
+</code></pre>
+<p>当创建Tcp服务端监听某一端口时我们注册一个处理器，当创建成功并开始监听时触发：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//监听指定主机和端口,并且在监听开始时触发通知</span><br><span class="line">vertx.createNetServer().listen(9983, &quot;localhost&quot;, res -&gt; &#123;</span><br><span class="line">    if (res.succeeded()) &#123;</span><br><span class="line">        System.out.println(&quot;Tcp服务端启动成功&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        System.err.println(&quot;Tcp服务端启动失败&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当服务端创建成功后，有客户端请求进来，会触发相应的处理器，可以通过<code>connectHandler</code>方法绑定处理器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//绑定处理器，当有请求进入时触发</span><br><span class="line">NetServer netServer = vertx.createNetServer().connectHandler(netSocket -&gt; &#123;</span><br><span class="line">    //得到NetSocket实例</span><br><span class="line">    netSocket.handler(buffer -&gt; &#123;</span><br><span class="line">        //读取数据</span><br><span class="line">        System.out.println(&quot;读取到数据:&quot; + buffer.toString() + &quot; 长度为: &quot; + buffer.length());</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    netSocket.write(Buffer.buffer(&quot;数据已接收......&quot;), ar -&gt; &#123;</span><br><span class="line">        if (ar.succeeded()) &#123;</span><br><span class="line">            System.out.println(&quot;写入数据成功!&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.err.println(&quot;写入数据失败!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    netSocket.closeHandler(ar -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;客户端退出连接&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;).listen(9984, &quot;localhost&quot;);</span><br></pre></td></tr></table></figure>
+<h3 id="tcp客户端创建"><a class="markdownIt-Anchor" href="#tcp客户端创建"></a> Tcp客户端创建</h3>
+<p>客户端的创建方式与服务端类似，也有默认的创建方法和自定义的属性配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//默认客户端创建</span><br><span class="line">NetClient netClient1 = vertx.createNetClient();</span><br><span class="line"></span><br><span class="line">//自定义属性创建</span><br><span class="line">NetClient netClient2 = vertx.createNetClient(new NetClientOptions().setConnectTimeout(10000));</span><br></pre></td></tr></table></figure>
+<p>创建Tcp客户端需要使用<code>connect</code>方法连接到服务端后，才可以进行数据的收发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NetClient client = vertx.createNetClient(new NetClientOptions().setConnectTimeout(10000));</span><br><span class="line">client.connect(9984, &quot;localhost&quot;, res -&gt; &#123;</span><br><span class="line">  if (res.succeeded()) &#123;</span><br><span class="line">    System.out.println(&quot;连接成功!&quot;);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    System.out.println(&quot;连接失败: &quot; + res.cause().getMessage());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="关闭tcp连接"><a class="markdownIt-Anchor" href="#关闭tcp连接"></a> 关闭Tcp连接</h3>
+<p>当请求结束时，可以调用close关闭服务端或者客户端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//1.直接关闭</span><br><span class="line">netServer.close();</span><br><span class="line"></span><br><span class="line">//2.关闭结果打印通知</span><br><span class="line">netServer.close(res -&gt; &#123;</span><br><span class="line">    if (res.succeeded()) &#123;</span><br><span class="line">        System.out.println(&quot;关闭成功!&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        System.err.println(&quot;关闭失败!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="项目创建"><a class="markdownIt-Anchor" href="#项目创建"></a> 项目创建</h3>
+<p>在IDEA中创建一个Maven工程，pom文件引入Vertx-core的依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line"> &lt;groupId&gt;io.vertx&lt;/groupId&gt;</span><br><span class="line"> &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;</span><br><span class="line"> &lt;version&gt;3.6.3&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>创建NetServerDemo.java文件,创建并部署Tcp服务端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">package com.zhengql.www;</span><br><span class="line"></span><br><span class="line">import io.vertx.core.AbstractVerticle;</span><br><span class="line">import io.vertx.core.Vertx;</span><br><span class="line">import io.vertx.core.buffer.Buffer;</span><br><span class="line">import io.vertx.core.net.NetServer;</span><br><span class="line">import io.vertx.core.net.NetServerOptions;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 描述: tcp</span><br><span class="line"> *</span><br><span class="line"> * @author zhengql</span><br><span class="line"> * @date 2019/4/2 14:57</span><br><span class="line"> */</span><br><span class="line">public class NetServerDemo extends AbstractVerticle &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Vertx.vertx().deployVerticle(new NetServerDemo());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void start() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        //绑定处理器，当有请求进入时触发</span><br><span class="line">        NetServer netServer = vertx.createNetServer().connectHandler(netSocket -&gt; &#123;</span><br><span class="line">            //得到NetSocket实例</span><br><span class="line">            netSocket.handler(buffer -&gt; &#123;</span><br><span class="line">                //读取数据</span><br><span class="line">                System.out.println(&quot;读取到数据:&quot; + buffer.toString() + &quot; 长度为: &quot; + buffer.length());</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            netSocket.write(Buffer.buffer(&quot;数据已接收......&quot;), ar -&gt; &#123;</span><br><span class="line">                if (ar.succeeded()) &#123;</span><br><span class="line">                    System.out.println(&quot;写入数据成功!&quot;);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    System.err.println(&quot;写入数据失败!&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            netSocket.closeHandler(ar -&gt; &#123;</span><br><span class="line">                System.out.println(&quot;客户端退出连接&quot;);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;).listen(9984, &quot;localhost&quot;, res -&gt; &#123;</span><br><span class="line">            if (res.succeeded()) &#123;</span><br><span class="line">                System.out.println(&quot;Tcp服务端启动成功&quot;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                System.err.println(&quot;Tcp服务端启动失败&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建NetClientDemo.java文件，创建并部署Tcp客户端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">package com.zhengql.www;</span><br><span class="line"></span><br><span class="line">import io.vertx.core.AbstractVerticle;</span><br><span class="line">import io.vertx.core.Vertx;</span><br><span class="line">import io.vertx.core.buffer.Buffer;</span><br><span class="line">import io.vertx.core.net.NetClient;</span><br><span class="line">import io.vertx.core.net.NetClientOptions;</span><br><span class="line">import io.vertx.core.net.NetSocket;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 描述:</span><br><span class="line"> * Tcp客户端</span><br><span class="line"> *</span><br><span class="line"> * @author zhengql</span><br><span class="line"> * @date 2019/4/2 15:39</span><br><span class="line"> */</span><br><span class="line">public class NetClientDemo extends AbstractVerticle &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Vertx.vertx().deployVerticle(new NetClientDemo());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void start() throws Exception &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        //创建连接到指定主机和端口的客户端，并绑定创建结果的处理器</span><br><span class="line">        NetClient netClient3 = vertx.createNetClient(new NetClientOptions().setConnectTimeout(10000))</span><br><span class="line">                .connect(9984, &quot;localhost&quot;, res -&gt; &#123;</span><br><span class="line">                    if (res.succeeded()) &#123;</span><br><span class="line">                        System.out.println(&quot;连接成功!&quot;);</span><br><span class="line">                        NetSocket socket = res.result();</span><br><span class="line">                        //向服务器写入数据</span><br><span class="line">                        socket.write(Buffer.buffer(&quot;发送数据......&quot;), ar -&gt; &#123;</span><br><span class="line">                            if (ar.succeeded()) &#123;</span><br><span class="line">                                System.out.println(&quot;数据发送成功!&quot;);</span><br><span class="line">                            &#125; else &#123;</span><br><span class="line">                                System.err.println(&quot;数据发送失败!&quot;);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line"></span><br><span class="line">                        //读取服务端返回的数据</span><br><span class="line">                        socket.handler(buffer -&gt; &#123;</span><br><span class="line">                            System.out.println(&quot;读取到数据:&quot; + buffer.toString() + &quot; 长度为: &quot; + buffer.length());</span><br><span class="line">                        &#125;);</span><br><span class="line">                        socket.closeHandler(ar -&gt; &#123;</span><br><span class="line">                            System.out.println(&quot;客户端断开连接&quot;);</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        System.out.println(&quot;连接失败!: &quot; + res.cause().getMessage());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此，服务端和客户端的代码已经编写完成</p>
+<p>启动NetServerDemo，可以看到控制台中的日志打印如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132012.png" alt=""></p>
+<p>在启动NetClientDemo，控制台打印如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132023.png" alt=""></p>
+<p>客户端启动成功后，此时服务端的日志如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029132038.png" alt=""></p>
+<p>上面的代码创建了一个Tcp服务端和Tcp客户端，服务端监听本地的<code>9984</code>端口，客户端与本地的9984端口的Tcp服务端建立连接后发送数据，<br>
+当接收到客户端的请求时打印其传来的消息<code>“发送数据......”</code>，并回复<code>“数据已接收......”</code></p>
+<p>至此，一个基于Vert.x的Tcp服务端、客户端创建demo就完成了，是不是比Socket编程要简单很多呢？</p>
+<h3 id="资料参考"><a class="markdownIt-Anchor" href="#资料参考"></a> 资料参考</h3>
+<p><a href="https://vertx.io/docs/" target="_blank" rel="noopener">https://vertx.io/docs/</a></p>
+<p><a href="https://vertx.io/docs/vertx-core/java/" target="_blank" rel="noopener">https://vertx.io/docs/vertx-core/java/</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/vertx-tcp/" target="_blank" title="Vert.x创建TCP服务端及客户端">https://www.larscheng.com/vertx-tcp/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Vert-x/"><i class="fa-fw fa fa-tags"></i> Vert.x</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/vertx-http/">Vert.x创建一个Http服务</a>
+            
+            
+            <a class="next" rel="next" href="/vertx-eventbus/">Vert.x Core（二）- Event Bus（事件总线）</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

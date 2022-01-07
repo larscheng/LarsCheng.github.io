@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Hexo-theme-butterfly修改调整记录教程 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Hexo-theme-butterfly修改调整记录教程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-09-19&nbsp;&nbsp;16:38:13</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/博客/">博客</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,496</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">6min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>首先感谢<a href="https://github.com/jerryc127/hexo-theme-butterfly/tree/dev" target="_blank" rel="noopener">Butterfly</a>作者<a href="https://jerryc.me" target="_blank" rel="noopener">jerryc</a>,提供了一个非常优秀的博客主题</p>
+</blockquote>
+<blockquote>
+<p>2020.3.27 更新：<br>
+我目前已经更换了博客主题，butterfly也更新了许多新功能，本文的修改仅在我当时使用的版本中测试过，如果你使用的是最新版的butterfly，建议本文的diy修改仅作参考哦</p>
+<p>ＧＬ＆ＨF</p>
+</blockquote>
+<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>在阅读本文之前，确保您已经了解并使用过<a href="https://github.com/jerryc127/hexo-theme-butterfly/tree/dev" target="_blank" rel="noopener">hexo-theme-butterfly</a>主题。</p>
+<p>如果你还没有使用过，那推荐你一款美观大气的hexo主题：<a href="https://github.com/jerryc127/hexo-theme-butterfly/tree/dev" target="_blank" rel="noopener">hexo-theme-butterfly</a></p>
+<p>其实在主题的使用过程中也是新语言的学习过程。</p>
+<h1 id="首页背景图片屏占比"><a class="markdownIt-Anchor" href="#首页背景图片屏占比"></a> 首页背景图片屏占比</h1>
+<p>1.在主题配置文件<code>themes/Butterfly/_config.yml</code>最后边添加如下配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首页背景图片屏占比，1：100%，2：50%，1.5：75%</span></span><br><span class="line"><span class="string">homepage：</span></span><br><span class="line"><span class="attr">    ratio:</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>2.修改<code>themes/Butterfly/layout/includes/additional-js.pug</code>该文件内代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">....省略....</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">alignContent</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> n = $(<span class="built_in">window</span>).height()/!&#123;theme.homepage.ratio&#125;, e = <span class="built_in">document</span>.querySelectorAll(<span class="string">".full_page"</span>), i = <span class="number">0</span>; i &lt; e.length; i++)</span><br><span class="line">  ....省略....</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此处将<code>homepage.ratio</code>属性设置为2。首页效果如下：</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/butterfly/20190919155516.png" alt="首页背景图片屏占比"></p>
+<h1 id="首页设置多个子标题"><a class="markdownIt-Anchor" href="#首页设置多个子标题"></a> 首页设置多个子标题</h1>
+<p>1.修改主题配置文件<code>themes/Butterfly/_config.yml</code>的<code>subtitle</code>属性，例如修改前为：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">subtitle:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  sub1:</span> <span class="string">所有的不平凡都来自平凡!</span></span><br><span class="line"><span class="attr">  sub2:</span> <span class="string">All</span> <span class="string">the</span> <span class="string">extraordinary</span> <span class="string">from</span> <span class="string">ordinary!</span></span><br></pre></td></tr></table></figure>
+<p>修改后：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">subtitle:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  sub:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">所有的不平凡都来自平凡</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">分享Java技术记录点滴生活...</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">今天最好的表现是明天最低的要求</span></span><br></pre></td></tr></table></figure>
+<p>2.修改<code>themes/Butterfly/layout/includes/additional-js.pug</code>该文件内代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">script.</span><br><span class="line">  <span class="keyword">var</span> typed = <span class="keyword">new</span> Typed(<span class="string">".subtitle"</span>, &#123;</span><br><span class="line">  strings: <span class="string">'!&#123;theme.subtitle.sub&#125;'</span>.split(<span class="string">','</span>),<span class="comment">//修改这里</span></span><br><span class="line">  startDelay: <span class="number">300</span>,</span><br><span class="line">  typeSpeed: <span class="number">100</span>,</span><br><span class="line">  loop: <span class="literal">true</span>,</span><br><span class="line">  backSpeed: <span class="number">50</span></span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>将之前的单个读取，改为直接读取数组再拆分<br>
+这里有一个瑕疵，它使用逗号<code>split(&quot;,&quot;)</code>进行拆分，所以当sub中有逗号的话，用转义符代替</p>
+</blockquote>
+<h1 id="icp备案国徽图标显示"><a class="markdownIt-Anchor" href="#icp备案国徽图标显示"></a> ICP备案国徽图标显示</h1>
+<p>1.修改主题配置文件<code>themes/Butterfly/_config.yml</code>的<code>ICP</code>属性，为其添加国徽图标的路径<code>pic</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ICP:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="string">ture</span></span><br><span class="line"><span class="attr">  pic:</span> <span class="string">/img/beian.png</span>  <span class="comment">#备案国徽小图路径</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">http://www.beian.gov.cn</span></span><br><span class="line"><span class="attr">  text:</span> <span class="string">浙ICP备12345678号</span></span><br></pre></td></tr></table></figure>
+<p>2.修改<code>themes/Butterfly/layout/includes/footer.pug</code>该文件内代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if theme.ICP.enable</span><br><span class="line">  .icp</span><br><span class="line">    a(href=theme.ICP.url target=&quot;_blank&quot;)</span><br><span class="line">      img.lozad(data-src=`$&#123;theme.ICP.pic&#125;` onerror=`onerror=null;src=&apos;$&#123;theme.ICP.pic&#125;&apos;` style=&quot;padding:0px;vertical-align: text-bottom;&quot;)</span><br><span class="line">      span=theme.ICP.text</span><br></pre></td></tr></table></figure>
+<p>修改后效果如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/butterfly/20190919161332.png" alt=""></p>
+<h1 id="添加友情链接侧边栏"><a class="markdownIt-Anchor" href="#添加友情链接侧边栏"></a> 添加友情链接侧边栏</h1>
+<p>1.修改主题配置文件<code>themes/Butterfly/_config.yml</code>的<code>aside</code>属性，添加侧边栏友链属性</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">aside:</span></span><br><span class="line"><span class="attr">  card_author:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_announcement:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_recent_post:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_categories:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_tags:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_archives:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_webinfo:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  card_links:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">true</span>  <span class="comment"># 是否开启友链侧边栏显示</span></span><br><span class="line"><span class="attr">    num:</span> <span class="number">6</span>        <span class="comment"># 显示个数</span></span><br><span class="line"><span class="attr">    flink:</span> <span class="attr">http://www.larscheng.com/friends/</span> <span class="comment"># 友链页面地址</span></span><br></pre></td></tr></table></figure>
+<p>1.在目录<code>themes/Butterfly/layout/includes/widget</code>下新建文件<code>card_links.pug</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.card_widget.card-links</span><br><span class="line">  .card-content</span><br><span class="line">    .item_headline</span><br><span class="line">      i.fa.fa-handshake-o(aria-hidden=&quot;true&quot;)</span><br><span class="line">      span= _p(&apos;aside.card_links&apos;)</span><br><span class="line">    each i in site.data.link</span><br><span class="line">        if(i.class_name === &quot;友情链接&quot;)</span><br><span class="line">            ul.aside_category_item</span><br><span class="line">              each item,index in i.link_list</span><br><span class="line">                if(index &lt;= theme.aside.card_links.num)</span><br><span class="line">                    li.aside_category_list</span><br><span class="line">                      a(href=item.link  title=item.name+&quot; : &quot;+item.descr target=&quot;_blank&quot;)</span><br><span class="line">                         img.lozad(data-src=item.avatar alt=item.name onerror=`onerror=null;src=&apos;$&#123;theme.lodding_bg.flink&#125;&apos;` height=&quot;35px&quot;)</span><br><span class="line">                         item=item.name</span><br><span class="line">              li.aside_category_list.find_more</span><br><span class="line">                a(href=theme.aside.card_links.flink  target=&quot;_blank&quot;) 查看更多</span><br></pre></td></tr></table></figure>
+<p>其中<code>_p('aside.card_links')</code>是根据语言环境获取侧边栏标题：友情链接。可以到<code>themes/Butterfly/languages</code>下进行添加</p>
+<p>需要注意的一点是<code>if(i.class_name === &quot;友情链接&quot;)</code>这个判断这里是用来判断需要显示的数据</p>
+<blockquote>
+<p>Butterfly 的友情链接模板中存在多个class，通常我们只需要显示<code>友情链接</code>这一部分而已，所以会有这一判断<br>
+此处应该有更优雅的处理方式，但是限于水平有限，先暂且这样实现</p>
+</blockquote>
+<p>link.yml示例文件如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">class:</span></span><br><span class="line"><span class="attr">  class_name:</span> <span class="string">友情鏈接</span></span><br><span class="line"><span class="attr">  link_list:</span></span><br><span class="line">    <span class="number">1</span><span class="string">:</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">xxx</span></span><br><span class="line"><span class="attr">      link:</span> <span class="attr">https://blog.xxx.com</span></span><br><span class="line"><span class="attr">      avatar:</span> <span class="attr">https://cdn.xxxxx.top/avatar.png</span></span><br><span class="line"><span class="attr">      descr:</span> <span class="string">xxxxxxx</span></span><br><span class="line">    <span class="number">2</span><span class="string">:</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">xxxxxx</span></span><br><span class="line"><span class="attr">      link:</span> <span class="attr">https://www.xxxxxxcn/</span></span><br><span class="line"><span class="attr">      avatar:</span> <span class="attr">https://xxxxx/avatar.png</span></span><br><span class="line"><span class="attr">      descr:</span> <span class="string">xxxxxxx</span>  </span><br><span class="line"></span><br><span class="line"><span class="attr">class2:</span></span><br><span class="line"><span class="attr"> class_name:</span> <span class="string">鏈接無效</span></span><br><span class="line"><span class="attr"> link_list:</span></span><br><span class="line">   <span class="number">1</span><span class="string">:</span></span><br><span class="line"><span class="attr">     name:</span> <span class="string">夢xxx</span></span><br><span class="line"><span class="attr">     link:</span> <span class="attr">https://blog.xxx.com</span></span><br><span class="line"><span class="attr">     avatar:</span> <span class="attr">https://xxxx/avatar.png</span></span><br><span class="line"><span class="attr">     descr:</span> <span class="string">xxxx</span></span><br><span class="line">   <span class="number">2</span><span class="string">:</span></span><br><span class="line"><span class="attr">     name:</span> <span class="string">xx</span></span><br><span class="line"><span class="attr">     link:</span> <span class="attr">https://www.axxxx.cn/</span></span><br><span class="line"><span class="attr">     avatar:</span> <span class="attr">https://x</span></span><br><span class="line"><span class="attr">     descr:</span> <span class="string">xx</span></span><br></pre></td></tr></table></figure>
+<p>3.修改<code>themes/Butterfly/layout/includes/aside.pug</code>文件，添加如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if theme.aside.card_links.enable</span><br><span class="line">  include widget/card_links.pug</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意改代码片段添加的先后位置，决定了它在页面上被渲染的顺序</p>
+</blockquote>
+<p>修改完毕后，显示的基本效果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/butterfly/20190919155941.png" alt="友链侧边栏"></p>
+<h1 id="其他小改动"><a class="markdownIt-Anchor" href="#其他小改动"></a> 其他小改动</h1>
+<p>这部分的修改适合强迫症晚期患者…</p>
+<h2 id="文章列表图片文字比例调整"><a class="markdownIt-Anchor" href="#文章列表图片文字比例调整"></a> 文章列表图片文字比例调整</h2>
+<p>这个属于css样式的调整，你可以直接在浏览器调整为你想要的样式属性后</p>
+<p>到<code>themes/Butterfly/source/css/_layout/z-other.styl</code>内进行修改</p>
+<ul>
+<li>文章列表的图片样式：<code>#recent-posts .post_cover</code></li>
+<li>文章列表的内容预览样式：<code>.recent-post-info</code></li>
+</ul>
+<blockquote>
+<p>大小、比列都由你定。</p>
+</blockquote>
+<h2 id="归档侧边栏查看更多按钮"><a class="markdownIt-Anchor" href="#归档侧边栏查看更多按钮"></a> 归档侧边栏查看更多按钮</h2>
+<p>查看<code>themes/Butterfly/layout/includes/widget/card_archives.pug</code>发现它直接调用了<code>list_archives</code>方法</p>
+<p>emmmmmm，能力有限我又去暴力改代码了…找到<code>/node_modules/hexo/lib/plugins/helper/list_archives.js</code><br>
+修改<code>if (style === 'list') {·······}</code>内的内容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (style === <span class="string">'list'</span>) &#123;</span><br><span class="line">  result += <span class="string">`&lt;ul class="<span class="subst">$&#123;className&#125;</span>-list"&gt;`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>, len = data.length; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">    item = data[i];</span><br><span class="line"></span><br><span class="line">    result += <span class="string">`&lt;li class="<span class="subst">$&#123;className&#125;</span>-list-item"&gt;`</span>;</span><br><span class="line"></span><br><span class="line">    result += <span class="string">`&lt;a class="<span class="subst">$&#123;className&#125;</span>-list-link" href="<span class="subst">$&#123;link(item)&#125;</span>"&gt;`</span>;</span><br><span class="line">    result += transform ? transform(item.name) : item.name;</span><br><span class="line">    result += <span class="string">'&lt;/a&gt;'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (showCount) &#123;</span><br><span class="line">      result += <span class="string">`&lt;span class="<span class="subst">$&#123;className&#125;</span>-list-count"&gt;<span class="subst">$&#123;item.count&#125;</span>&lt;/span&gt;`</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    result += <span class="string">'&lt;/li&gt;'</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    result += <span class="string">`&lt;li class="<span class="subst">$&#123;className&#125;</span>-list-item"&gt;`</span>;</span><br><span class="line">    result += <span class="string">`&lt;a style="text-align: center;font-size: 13px" class="<span class="subst">$&#123;className&#125;</span>-list-link" href="<span class="subst">$&#123;link()&#125;</span>"&gt;`</span>;</span><br><span class="line">    result += <span class="string">'查看更多'</span>;</span><br><span class="line">    result += <span class="string">'&lt;/a&gt;'</span>;</span><br><span class="line">    result += <span class="string">'&lt;/li&gt;'</span>;</span><br><span class="line">  result += <span class="string">'&lt;/ul&gt;'</span>;</span><br></pre></td></tr></table></figure>
+<p>然后你看到的效果大概是这样的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/butterfly/20190919162236.png" alt="归档"></p>
+<h1 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h1>
+<p>以上就是我在<a href="">hexo-theme-butterfly</a>的使用过程中，个人修改的一些记录，如果你也钟意这些修改，不妨试试吧😁</p>
+<p>GL&amp;HF…😜</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/butterfly/" target="_blank" title="Hexo-theme-butterfly修改调整记录教程">https://www.larscheng.com/butterfly/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Hexo/"><i class="fa-fw fa fa-tags"></i> Hexo</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/hexo-principle/">Hexo的工作原理探究</a>
+            
+            
+            <a class="next" rel="next" href="/radix-sort/">排序8：基数排序</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

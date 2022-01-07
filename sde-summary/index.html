@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>2019.11软考软件设计师归来心得体会及复习备考指南 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">2019.11软考软件设计师归来心得体会及复习备考指南</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-11-12&nbsp;&nbsp;14:34:57</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/生活/">生活</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,395</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">7min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<blockquote>
+<p>本文<code>文字量比较大</code>，废话比较多😂。如果感到不适，建议<code>直接阅读各段标题</code>即可<br>
+干货和建议都在标题栏，📢文末有我整理的<code>2019软件设计师考点思维脑图</code>，以及备考<code>资料</code>大全分享</p>
+</blockquote>
+<blockquote>
+<p><code>2019.12.18更新</code>：昨天得知成绩已出，没想到过了，此处省略1W个哈哈哈😁…(<code>58/62</code>,同志们我们高级见~)</p>
+</blockquote>
+<p>上周六(11.09)参加了软考软件设计师的考试，考试分上午场和下午场。总的来说题型比较常规，但是作为<code>战五渣</code>的我还是很担心能否过线😭。（个人感觉这次是下午简单<code>上午难</code>）</p>
+<a id="more"></a> 
+<p>不过不管结果如何，经过这段时间的备考，已经把自己大学落下的基础知识都从头补了一遍，如今回过头复习数据结构、组成原理、软件工程真的就有一种<code>恍然大悟</code>、<code>原来如此</code>的感觉。复习下来，收获还是很多的。</p>
+<p>话不多说，总结下考试心得和备考指南，<code>希望自己的闲言碎语能给你的复习备考带来帮助</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/sde/20191112143014.png" alt="软考知识体系图"></p>
+<h1 id="考试介绍"><a class="markdownIt-Anchor" href="#考试介绍"></a> 考试介绍</h1>
+<blockquote>
+<p>考试全称：全国计算机技术与软件工程专业技术资格考试，分为初、中、高级，详细介绍可以 <a href="https://baike.baidu.com/item/%E8%BD%AF%E4%BB%B6%E6%B0%B4%E5%B9%B3%E8%80%83%E8%AF%95" target="_blank" rel="noopener">百度了解一下</a></p>
+</blockquote>
+<p>软件设计师考试属于软考中的<code>中级考试</code>,一年两次，报名费140元，考试时间一般在<code>5月份和11月份</code>。</p>
+<p>软件设计师考试分<code>上午场</code>和<code>下午场</code>考试，其中上午场：</p>
+<ul>
+<li>考点：综合知识（详细可参考《软件设计师考试冲刺（习题与解答）》）</li>
+<li>题型：75道单项选择，每题1分（<code>其中70~75题为英语完形填空</code>）</li>
+<li>考试时间：9:00-11:30</li>
+<li>及格分数：<code>45及以上</code></li>
+</ul>
+<p>下午场：</p>
+<ul>
+<li>考点：数据流图、UML、ER模型关系模式、算法应用、面向对象编程（<code>包括但不仅限于这5个大类</code>）</li>
+<li>题型：问答题、填空题、代码填空题等，一共6道大题，每题15分，其中第5、6题为选答题，任选其一即可</li>
+<li>考试时间：14:00-16:30</li>
+<li>及格分数：<code>45及以上</code></li>
+</ul>
+<h1 id="考试心得"><a class="markdownIt-Anchor" href="#考试心得"></a> 考试心得</h1>
+<p>说是心得其实就是些爬坑经验，如何准备考试，如何面对考试想必大家比我擅长，随便一位都是身经百战，这里我有几个在复习中发现的问题，作为建议讲给大家。</p>
+<h2 id="1能早考就早考最好不要拖最佳备考时间-大三~大四"><a class="markdownIt-Anchor" href="#1能早考就早考最好不要拖最佳备考时间-大三~大四"></a> <mark>1.能早考就早考！最好不要拖！最佳备考时间 “大三~大四”</mark></h2>
+<p>出名儿要趁早，软考也得趁早，最佳的复习考试时间就是大三到大四，因为软考初级、中级、高级所涉及到的知识点都是大学期间学过的知识。知识点覆盖面广，知识点多而杂，只有在大三这段时间所有的知识你都刚学过，考试大大减少复习的难度。</p>
+<p>就拿<code>中级软件设计师考试内容</code>为例，备考教材中的<code>12个章节的考点</code>正好为为一个<code>计算机科学与技术专业</code>的学生大一到大四所有学过的专业课。</p>
+<p>如果你不幸错过了大三、大四的最佳备考期，<code>别怕！你不是一个人，因为我也是</code>，然后才发现毕业后备考有多痛苦，不说了，说多了都是泪😭😭</p>
+<h2 id="2制定复习计划切勿朝三暮四"><a class="markdownIt-Anchor" href="#2制定复习计划切勿朝三暮四"></a> <mark>2.制定复习计划，切勿朝三暮四</mark></h2>
+<p>软考的考点基本都一个特点：<code>特别多、特别杂、特别容易忘</code></p>
+<p>我是八月中旬（11.9考试）开始复习的，因为白天要上班，所以每天就晚上复习。才开始是下班在家里复习，然后发现效率极差，因为我几乎是<code>复习5分钟玩耍2小时</code>。没办法，第二周开始我就下班后在公司复习（我司几乎<code>没人加班</code>，所以也没人管我）。</p>
+<p>开始在决定在公司复习后，我就详细制定了<a href="https://www.larscheng.com/others/life/">一套复习计划</a>，把复习分成三轮来</p>
+<ul>
+<li>🎈 一轮：基础知识点复习，覆盖面广，知识点杂乱</li>
+<li>🎈 二轮：刷题、通过刷题填补知识漏洞，同时回顾一轮（<code>当时的感觉几乎就是前学后忘</code>）</li>
+<li>🎈 三轮：冲刺</li>
+</ul>
+<p>我因为基础比较差，做计划时一轮复习计划用时45天左右，二轮用一个月，三轮两个礼拜。</p>
+<p>其实当时也只是为了有个复习计划，但是现在回首，没想到自己居然能坚持下来，也是厉害了，这再没考过真实丢人丢到姥姥家😥。</p>
+<p>说这么多，其实就是想说，<strong>既然是备考，就一定得要有复习计划</strong>，我的计划仅仅是一种参考，每个人的复习习惯、学习方式都不同，但是一定要给自己定一个复习计划来约束自己、提醒自己。</p>
+<h2 id="3最好找个队友"><a class="markdownIt-Anchor" href="#3最好找个队友"></a> <mark>3.最好找个队友</mark></h2>
+<p>一个人注定是寂寞的，你想想每天就你一个人深夜复习，多无聊。于是我就怂恿了两个憨憨同事和我一起备考。👯‍👯‍</p>
+<p>其实找个队友，最大的好处就是让你有一个比较好的<code>学习氛围</code>，产生一种竞争，复习竞争。</p>
+<p>当然个体差异，每个人学习习惯不同，<code>此条建议非必选</code></p>
+<h1 id="备考指南"><a class="markdownIt-Anchor" href="#备考指南"></a> 备考指南</h1>
+<p>如果你已经准备好了复习计划、带上了复习的队友，那么我就把我复习时用到的干货全部交予你。</p>
+<h2 id="1考什么"><a class="markdownIt-Anchor" href="#1考什么"></a> <mark>1.考什么？</mark></h2>
+<p>无论你开始复习与否，首先要弄清楚的就是你要考的科目他<code>考什么</code>？下面两个点是最重要的：</p>
+<ul>
+<li>🎈 考试大纲</li>
+<li>🎈 考点分布</li>
+</ul>
+<p>考试大纲直接在网上都可以搜到，一般来说参考上一年的考试大纲就可以，复习前仔细阅读考试大纲是非常有必要的。</p>
+<p>至于各个章节的考点就要通过官方教材作为参考了。</p>
+<h2 id="2教程考点真题足以"><a class="markdownIt-Anchor" href="#2教程考点真题足以"></a> <mark>2.教程+考点+真题足以</mark></h2>
+<p>我用的复习材料就是这三样：</p>
+<ul>
+<li>《软件设计师教程》-第五版（<code>所有知识点，详细！！！多！！！</code>）</li>
+<li>《软件设计师考试冲刺（习题与解答）》（<code>各章节考点梳理及30道历年真题</code>）</li>
+<li>真题套卷（<code>买你喜欢的就好</code>）</li>
+</ul>
+<p>其实买这两本书就够了，其他的书都没必要，第五版教程讲的很多很多、很杂，而《软件设计师考试冲刺（习题与解答）》讲的很精简，他每一章分两部分<code>本章考点归纳</code>和<code>30道真题</code>。</p>
+<p>所以这两本书可以<code>很好的结合</code>：根据<code>《软件设计师考试冲刺（习题与解答）》</code>中的考点去阅读<code>《软件设计师教程》</code>，考点复习完后，回头来完成<code>30道真题</code></p>
+<p>基本我每一章节都是这么个循环过来的</p>
+<p>请记住：<code>《软件设计师教程》</code>你把他当作新华词典就好，千万不要抱着他从头到尾的读，那样是很耗费时间的。</p>
+<p>根据考试的考点有针对性的去看这本书。快速建立知识骨架</p>
+<h2 id="3建立各章节知识体系骨架"><a class="markdownIt-Anchor" href="#3建立各章节知识体系骨架"></a> <mark>3.建立各章节知识体系骨架</mark></h2>
+<p>在我复习的过程中，经常出现一个现象就是<code>前学后忘</code>，一个月前刚过的点，一个国庆节回来忘的一干二净，为此我不免要继续回顾一遍。</p>
+<p>但是这里不是要强调<code>回顾复习</code>，而是要强调<code>建立知识体系骨架</code>，在你一轮复习时，脑海中对于每一个章节建立一个知识体系的简图（你可以像我一样直接<code>画在Process中</code>）。</p>
+<p>一旦你建立了<code>体系骨架</code>后，任何一个知识点遗忘或者做题不确定答案时，你可以<code>第一时间知道</code>这个考点是那个章节，那个部分的知识点。</p>
+<p>就在这个回顾、二次复习的过程中<code>逐渐完善</code>自己的<code>知识体系骨架图</code></p>
+<p>通过这种方式，多而杂的知识点<code>不再是一盘散沙</code>，在你的脑海中他们是<code>分门别类，各有归属的图形</code>。</p>
+<h2 id="4一定要刷真题"><a class="markdownIt-Anchor" href="#4一定要刷真题"></a> <mark>4.一定要刷真题</mark></h2>
+<p>说实话，我一轮复习过完脑袋里还是一片混乱，加上过了一个国庆节，回来之后那些知识点犹如水和面粉在脑袋里一样。</p>
+<p>就酱紫，连续刷了<code>2018-2015的8套真题</code>后，大概到10月底的状态如下：</p>
+<ul>
+<li>🎈 有了一个大体上的考点知识骨架图在脑海里</li>
+<li>🎈 知道常考的题型，和一些惯用套路</li>
+<li>🎈 知道自己已经掌握的部分和未掌握的地方</li>
+</ul>
+<p>效果还是很明显的，做题可以帮你整合知识点，让你查漏补缺。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>以上就是我个人在备考中的一些经历和建议。希望能对您有所帮助。</p>
+<p>下面分享一些总结的知识和用到的一些资源：</p>
+<ul>
+<li>自己总结的<a href="https://www.processon.com/view/link/5d6b8a92e4b0b5cfa9d2aaf2" target="_blank" rel="noopener">2019软件设计师考点体系图</a></li>
+<li>自己总结的<a href="https://www.larscheng.com/tags/%E6%8E%92%E5%BA%8F/">8种排序算法的分析和代码演示</a></li>
+<li>自己总结的<a href="https://www.processon.com/view/link/5d09ee29e4b0955b9363191b#map" target="_blank" rel="noopener">23种设计模式分类和特性介绍</a></li>
+<li><a href="https://www.bilibili.com/video/av19665344/" target="_blank" rel="noopener">B站视频教程</a></li>
+<li><a href="https://pan.baidu.com/s/1HpSICdOgEC571l8YrFysLg" target="_blank" rel="noopener">软件设计师资料包</a>, 提取码：<code>v57u</code> : 内含视频、讲义、教程、真题、模拟题…等等等</li>
+</ul>
+<blockquote>
+<p>哔哔赖赖了半天，还是祝大家备考顺利，一次通过！</p>
+</blockquote>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/sde-summary/" target="_blank" title="2019.11软考软件设计师归来心得体会及复习备考指南">https://www.larscheng.com/sde-summary/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/软考/"><i class="fa-fw fa fa-tags"></i> 软考</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/fastjson-api/">FastJson中JSONString、JavaBean、JSONObject、JSONArray的转换关系及API示例</a>
+            
+            
+            <a class="next" rel="next" href="/commit-log/">你还没用过“约定式提交”吗？那你赶紧来补补知识吧</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

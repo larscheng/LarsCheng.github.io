@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Quartz学习总结 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Quartz学习总结</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2018-08-31&nbsp;&nbsp;21:00:17</a>
+                        </span>
+                    
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,476</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">5min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="quartz学习总结"><a class="markdownIt-Anchor" href="#quartz学习总结"></a> Quartz学习总结</h3>
+<h2 id="常规需求"><a class="markdownIt-Anchor" href="#常规需求"></a> 常规需求</h2>
+<ul>
+<li>每天早上的闹钟</li>
+<li>定时统计数据</li>
+</ul>
+<a id="more"></a> 
+<h3 id="spring自带支持定时器的任务实现-其可通过简单配置来实现定时任务"><a class="markdownIt-Anchor" href="#spring自带支持定时器的任务实现-其可通过简单配置来实现定时任务"></a> spring自带支持定时器的任务实现。其可通过简单配置来实现定时任务。</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Configurable</span></span><br><span class="line"><span class="meta">@EnableScheduling</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledTasks</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Scheduled</span>(cron = <span class="string">"0 */1 *  * * * "</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reportCurrentTimeByCorn</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Cron北京时间："</span>+ <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss:SSS"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="但是当我们的业务需求发生变动比如使用springboot自带的定时器发布的定时任务在运行了一段时间后我们想要修改他的执行时间但又不能关闭项目只能动态修改-怎么办呢"><a class="markdownIt-Anchor" href="#但是当我们的业务需求发生变动比如使用springboot自带的定时器发布的定时任务在运行了一段时间后我们想要修改他的执行时间但又不能关闭项目只能动态修改-怎么办呢"></a> 但是当我们的业务需求发生变动，比如使用springboot自带的定时器发布的定时任务，在运行了一段时间后，我们想要修改他的执行时间，但又不能关闭项目，只能动态修改。怎么办呢？？？</h4>
+<h4 id="quartz任务调度框架就可以解决这种烦恼-让你随意的修改和添加定时任务"><a class="markdownIt-Anchor" href="#quartz任务调度框架就可以解决这种烦恼-让你随意的修改和添加定时任务"></a> Quartz任务调度框架，就可以解决这种烦恼。让你随意的修改和添加定时任务。</h4>
+<h2 id="复杂需求"><a class="markdownIt-Anchor" href="#复杂需求"></a> 复杂需求</h2>
+<ul>
+<li>暂停</li>
+<li>修改</li>
+<li>删除</li>
+<li>管理</li>
+</ul>
+<p>当你在设计定时任务时，遇到了以上几种业务场景时，那么你就可以考虑使用quartz来解决，那么到底什么才是quartz呢？</p>
+<h2 id="quartz框架"><a class="markdownIt-Anchor" href="#quartz框架"></a> quartz框架</h2>
+<p>完全由java开发的开源的任务日程管理系统，即在一个预先确定的时间到达时，负责执行或者通知其他软件组件的系统</p>
+<h3 id="springboot集成quartz小例子"><a class="markdownIt-Anchor" href="#springboot集成quartz小例子"></a> springboot集成quartz小例子</h3>
+<p>我们可以先来看一个springboot中通过quartz实现定时任务的小栗子。</p>
+<h4 id="maven文件"><a class="markdownIt-Anchor" href="#maven文件"></a> maven文件</h4>
+<p>注：springboot2.0以后就已经提供了quartz的依赖支持：<code>spring-boot-starter-quartz</code>,此处我们还是使用官方提供的依赖来举例。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.quartz-scheduler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quartz<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.quartz-scheduler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quartz-jobs<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建一个job"><a class="markdownIt-Anchor" href="#创建一个job"></a> 创建一个Job</h3>
+<p>即定义一个任务类，实现Job接口，告诉quartz当任务任务的执行具体内容，创建SimpleJob类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.quartz.Job;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.quartz.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/8/21 14:37</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleJob</span> <span class="keyword">implements</span> <span class="title">Job</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleJob</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(JobExecutionContext jobExecutionContext)</span> <span class="keyword">throws</span> JobExecutionException </span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"开始执行简单任务"</span>+<span class="keyword">new</span> Date());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="接着创建一个最基础的定时任务套路"><a class="markdownIt-Anchor" href="#接着创建一个最基础的定时任务套路"></a> 接着创建一个最基础的定时任务套路</h4>
+<p>QuartzDemo类，简单概括为5步，注意看代码注释</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.quartz.demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.quartz.Job.SimpleJob;</span><br><span class="line"><span class="keyword">import</span> org.quartz.*;</span><br><span class="line"><span class="keyword">import</span> org.quartz.impl.StdSchedulerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.quartz.SimpleScheduleBuilder.simpleSchedule;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/8/28 09:41</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuartzDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//获取调度器</span></span><br><span class="line">            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//启动调度器：等待执行</span></span><br><span class="line">            scheduler.start();</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">            <span class="comment">//创建任务详情</span></span><br><span class="line">            JobDetail job = JobBuilder.newJob(SimpleJob.class)</span><br><span class="line">                    .withIdentity(<span class="string">"job1"</span>, <span class="string">"group1"</span>)</span><br><span class="line">                    .build();</span><br><span class="line">           </span><br><span class="line">            <span class="comment">//创建触发器：触发事件，触发条件等</span></span><br><span class="line">            Trigger trigger = TriggerBuilder.newTrigger()</span><br><span class="line">                    .withIdentity(<span class="string">"trigger1"</span>, <span class="string">"group1"</span>)</span><br><span class="line">                    .startNow()</span><br><span class="line">                    .withSchedule(simpleSchedule()</span><br><span class="line">                            .withIntervalInSeconds(<span class="number">6</span>)<span class="comment">//每6秒执行一次</span></span><br><span class="line">                            .withRepeatCount(<span class="number">10</span>))<span class="comment">//执行10次（实际是11次）</span></span><br><span class="line">                    .build();</span><br><span class="line">                    </span><br><span class="line">            <span class="comment">//将任务详情+触发器绑定并交给调度器来管理</span></span><br><span class="line">            scheduler.scheduleJob(job, trigger);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SchedulerException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行QuartzDemo，观察控制台，你会发现一个简单的定时任务已经跑起来了！<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029134011.png" alt=""></p>
+<h3 id="quartz中的要素scheduler任务调度-job任务-jobdetail任务详情-trigger触发器"><a class="markdownIt-Anchor" href="#quartz中的要素scheduler任务调度-job任务-jobdetail任务详情-trigger触发器"></a> Quartz中的要素：scheduler任务调度、Job任务、JobDetail任务详情、Trigger触发器</h3>
+<ul>
+<li>Job：任务的逻辑。通过实现Job接口，定义任务的执行内容，简单说就是定义“做什么？”</li>
+<li>JobDetail：任务的定义，通过newJob()绑定Job类。描述自定义的Job实现类，比如任务的名字。另一方面也是为了防止并发问题，简单说就是定义“谁要做？”</li>
+<li>Trigger：定时器，配置定时器的名称，配置定时器的类型触发方式等，简单说就是定义“什么时候做？”</li>
+<li>Scheduler：调度器。接受一组JobDetail+Trigger即可安排一个任务，所有的调度由他控制</li>
+</ul>
+<h3 id="quartz的调度思路"><a class="markdownIt-Anchor" href="#quartz的调度思路"></a> quartz的调度思路：</h3>
+<ol>
+<li>创建一个具体的任务（Job）</li>
+<li>配置任务的触发时间等（Trigger）</li>
+<li>配置任务的具体内容（JobDetail）</li>
+<li>调度器Scheduled根据JobDetail+Trigger安排此任务去执行<br>
+用一幅图简单形容一下quartz的原理<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029134025.png" alt=""></li>
+</ol>
+<h3 id="触发器种类"><a class="markdownIt-Anchor" href="#触发器种类"></a> 触发器种类</h3>
+<p>刚才的小例子中的触发器是以秒为时间间隔来定时调度，Quartz中有多种不同类型的触发器：</p>
+<ul>
+<li>SimpleTrigger：用来存储方法只需用执行一次，或者时给定触发事件并重复执行N次并且每次执行延迟一定时间的任务。</li>
+<li>CronTirgger：按照日历出发，例如每周五，每月十号十点钟，适合于更复杂的任务</li>
+<li>DateIntervalTrigger：指定每天的某个时间段内，以一定的时间间隔执行任务。并且它可以支持指定星期。</li>
+<li>CalendarIntervalTrigger：类似于SimpleTrigger，支持的间隔单位有秒，分钟，小时，天，月，年，星期。</li>
+</ul>
+<h3 id="quartz持久化方式"><a class="markdownIt-Anchor" href="#quartz持久化方式"></a> quartz持久化方式</h3>
+<p>Quartz提供两种基本作业存储类型</p>
+<ul>
+<li>第一种类型叫做RAMJobStore
+<ul>
+<li>最佳的性能，因为内存中数据访问最快<br>
+不足之处是缺乏数据的持久性，当程序路途停止或系统崩溃时，所有运行的信息都会丢失</li>
+</ul>
+</li>
+<li>第二种类型叫做JDBC作业存储
+<ul>
+<li>通过调整其quartz.properties属性文件，持久化任务调度信息<br>
+使用数据库保存任务调度信息后，即使系统崩溃后重新启动，任务的调度信息将得到恢复</li>
+</ul>
+</li>
+</ul>
+<h3 id="quartz中其他知识点"><a class="markdownIt-Anchor" href="#quartz中其他知识点"></a> quartz中其他知识点</h3>
+<p>通过阅读quartz的源码，以及官方的文档发现，quartz的开发者很喜欢用建造者模式。其实这种方式可以使复杂的对象更加清晰，阅读和使用中也更加清楚明了。</p>
+<p>本文其实只是quartz的基础知识的学习和使用入门，springboot2.0之后也对quartz进行了封装，关于quartz更加优雅的使用方式和技巧也会在后面的博文中记录。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/quartz-note/" target="_blank" title="Quartz学习总结">https://www.larscheng.com/quartz-note/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Quartz/"><i class="fa-fw fa fa-tags"></i> Quartz</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/rmb-combination/">算法笔试题：1元，5元，10元，20元，50元、100元面值人民币组合给定x元的问题</a>
+            
+            
+            <a class="next" rel="next" href="/sb2redis/">SpringBoot2.x集成Redis</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

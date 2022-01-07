@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java中equals和HashCode方法的分析 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java中equals和HashCode方法的分析</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-06-17&nbsp;&nbsp;17:43:23</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,059</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">8min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>上一篇文章简单分析了<a href="https://note.youdao.com/" target="_blank" rel="noopener">equals()与==的关系</a>，本文我们再来看看equals()与hashcode()的关系。hashcode的使用还是有很多坑的，一起看看吧~</p>
+<p>本文主要有以下几点来分析：</p>
+<ol>
+<li><strong>hashCode使用中产生的问题</strong></li>
+<li><strong>equals/hashcode的渊源</strong></li>
+<li><strong>产生问题的原因</strong></li>
+<li><strong>正确的使用姿势</strong></li>
+</ol>
+<a id="more"></a> 
+<h3 id="hashcode使用中产生的问题"><a class="markdownIt-Anchor" href="#hashcode使用中产生的问题"></a> hashCode使用中产生的问题</h3>
+<p>注：HashSet是一个无序、不可重复的集合，我们做一个小测试运行如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashEqualsDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String age;</span><br><span class="line"></span><br><span class="line">        Person(String age) &#123;</span><br><span class="line">            <span class="keyword">this</span>.age = age;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"Person&#123;"</span> + <span class="string">"age='"</span> + age + <span class="string">'\''</span> + <span class="string">'&#125;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        HashSet set1 = <span class="keyword">new</span> HashSet();</span><br><span class="line">        set1.add(<span class="string">"1"</span>);</span><br><span class="line">        set1.add(<span class="string">"1"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Object a : set1) &#123;</span><br><span class="line">            System.out.println(a);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        HashSet set2 = <span class="keyword">new</span> HashSet();</span><br><span class="line">        Person p1 = <span class="keyword">new</span> Person(<span class="string">"1"</span>);</span><br><span class="line">        Person p2 = <span class="keyword">new</span> Person(<span class="string">"1"</span>);</span><br><span class="line">        set2.add(p1);</span><br><span class="line">        set2.add(p2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Object a : set2) &#123;</span><br><span class="line">            System.out.println(a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于HashSet是不可重复的集合，所以输出的结果中set1和set2中都应该只有一个元素，那么执行结果是什么呢？如下</p>
+<pre><code>1
+Person{age='1'}
+Person{age='1'}
+</code></pre>
+<p>好吧，又双叒叕和我想象的不一样，set1不重复，set2明显发生了重复现象，这是为什么呢？</p>
+<blockquote>
+<p>这是因为equals、hashCode使用不规范导致的，问题且放在这，我们先看看equals和hashCode的关系</p>
+</blockquote>
+<h3 id="equalshashcode的渊源"><a class="markdownIt-Anchor" href="#equalshashcode的渊源"></a> equals/hashcode的渊源</h3>
+<p>同为Object类中的方法</p>
+<blockquote>
+<p>public boolean equals(Object obj)<br>
+public int hashCode()</p>
+</blockquote>
+<ul>
+<li>equals(): 用来判断两个对象是否相同，再Object类中是通过判断对象间的内存地址来决定是否相同</li>
+<li>hashCode(): 获取哈希码，也称为散列码，返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。</li>
+</ul>
+<p>由于同为Object类中的方法，所以基本上所有Java类都会继承这两个方法，所以通过阅读hashCode方法的注释发现了：</p>
+<img style=" width:50% ; " src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/equalsAndHashCode/20190617160647.png">
+<p>概括为以下几点：</p>
+<ol>
+<li>该方法返回对象的哈希码，支持该方法是为哈希表提供一些优点，例如，HashMap 提供的哈希表。</li>
+<li>同一个对象未发生改变时多次调用hashCode()返回值必须相同，</li>
+<li>两个对象equals不相等，那么两对象的hashCode()返回必定不同（此处可用来提高哈希表性能）</li>
+<li>两个对象的hashCode()返回值相同，两对象不一定相同，还需要通过equals()再次判断</li>
+<li>当equals方法被重写时，通常有必要重写 hashCode 方法</li>
+</ol>
+<p>通过第1点其实可以看出，hashCode() 在散列表中才有用，在其它情况下没用。在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置，当对象不会用来创建像hashMap、hashSet等散列表时，hashCode()实际上用不上。</p>
+<h3 id="产生问题的原因"><a class="markdownIt-Anchor" href="#产生问题的原因"></a> 产生问题的原因</h3>
+<p>了解了两者的关系，我们在回过头来看看产生问题的原因</p>
+<p>分析原因前需要了解哈希表的底层实现，hashCode在哈希表中充当的作用：</p>
+<p>举一个栗子说明下：</p>
+<ul>
+<li>
+<p>假设内存中有0 1 2 3 4 5 6 7 8这8个位置，如果我有个字段叫做ID，那么我要把这个字段存放在以上8个位置之一，如果不用HashCode而任意存放，那么当查找时就需要到8个位置中去挨个查找</p>
+</li>
+<li>
+<p>使用HashCode则效率会快很多，把ID的HashCode%8，然后把ID存放在取得余数的那个位置，然后每次查找该类的时候都可以通过ID的HashCode%8求余数直接找到存放的位置了</p>
+</li>
+<li>
+<p>如果ID的HashCode%8算出来的位置上本身已经有数据了怎么办？这就取决于算法的实现了，比如ThreadLocal中的做法就是从算出来的位置向后查找第一个为空的位置，放置数据；HashMap的做法就是通过链式结构连起来。反正，只要保证放的时候和取的时候的算法一致就行了。</p>
+</li>
+<li>
+<p>如果ID的HashCode%8相等怎么办（这种对应的是第三点说的链式结构的场景）？这时候就需要定义equals了。先通过HashCode%8来判断类在哪一个位置，再通过equals来在这个位置上寻找需要的类。对比两个类的时候也差不多，先通过HashCode比较，假如HashCode相等再判断equals。如果两个类的HashCode都不相同，那么这两个类必定是不同的。</p>
+</li>
+</ul>
+<p>其实在HashSet就是采用的这种存储和获取方式，通过HashCode和equals组合的方式来保证集合无重复。也说明了HashCode()在散列表中是发挥作用的</p>
+<p>ok，我们分析下最开始的代码，找一下输出结果重复的原因（代码片段）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HashSet set1 = <span class="keyword">new</span> HashSet();</span><br><span class="line">set1.add(<span class="string">"1"</span>);</span><br><span class="line">set1.add(<span class="string">"1"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HashSet set2 = <span class="keyword">new</span> HashSet();</span><br><span class="line">Person p1 = <span class="keyword">new</span> Person(<span class="string">"1"</span>);</span><br><span class="line">Person p2 = <span class="keyword">new</span> Person(<span class="string">"1"</span>);</span><br><span class="line">set2.add(p1);</span><br><span class="line">set2.add(p2);</span><br></pre></td></tr></table></figure>
+<p><strong>set1.add(“1”);</strong>：set1集合为空，找到hashCode对应在哈希表中的存储区，直接存入字符串1</p>
+<p><strong>set1.add(“1”);</strong>：首先判断该字符串1的hashCode值对应哈希表中所在的存储区域是否有相同的hashCode，此处调用<code>String类中的hashCode()</code>，显然两次返回了相同的hashCode，接着进行equals()方法的比较，此处调用<code>String类中的equals()</code>,由于两个字符串指向的常量池中的同一个字符串1，所以两个String对象相同，字符串1重复，不进行存储。</p>
+<p><strong>set2.add(p1);</strong>：set2集合为空，找到对象p1的hashCode对应在哈希表中的存储区，直接存入对象p1</p>
+<p><strong>set2.add(p2);</strong>：首先判断该对象p2的hashCode值对应哈希表中所在的存储区域是否有相同的hashCode，Person中未重写hashCode()此处调用<code>Object类中的hashCode()</code>，所以jdk使用默认Object的hashCode方法，返回内存地址转换后的整数，因为p1、p2为不同对象，地址值不同，所以这里不存在与p2相同hashCode值的对象，直接存入对象p2</p>
+<p>看到这里已经知道Set集合中出现重复的原因了。都是因为hashCode、equals的不规范使用。</p>
+<h3 id="正确的使用姿势"><a class="markdownIt-Anchor" href="#正确的使用姿势"></a> 正确的使用姿势</h3>
+<p>从Jdk源码的注释中可以看出，hashCode() 在散列表中才会发挥作用，当对象无需创建像HashMap、HashSet等集合时，可以不用重写hashCode方法，但是如果有使用到对象的哈希集合等操作时，必须重写hashCode()和equals()。</p>
+<p>修改最初的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashEqualsDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String age;</span><br><span class="line"></span><br><span class="line">        Person(String age) &#123;</span><br><span class="line">            <span class="keyword">this</span>.age = age;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//重写equals()</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (obj == <span class="keyword">null</span> || !(obj <span class="keyword">instanceof</span> Person)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//地址相同必相等</span></span><br><span class="line">            <span class="keyword">if</span> (obj == <span class="keyword">this</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Person person = (Person) obj;</span><br><span class="line">            <span class="comment">//地址不同比较值是否相同</span></span><br><span class="line">            <span class="keyword">return</span> person.age.equals(<span class="keyword">this</span>.age);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//重写hashCode()</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> Objects.hash(age);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"Person&#123;"</span> + <span class="string">"age='"</span> + age + <span class="string">'\''</span> + <span class="string">'&#125;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        HashSet set1 = <span class="keyword">new</span> HashSet();</span><br><span class="line">        set1.add(<span class="string">"1"</span>);</span><br><span class="line">        set1.add(<span class="string">"1"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Object a : set1) &#123;</span><br><span class="line">            System.out.println(a);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        HashSet set2 = <span class="keyword">new</span> HashSet();</span><br><span class="line">        Person p1 = <span class="keyword">new</span> Person(<span class="string">"1"</span>);</span><br><span class="line">        Person p2 = <span class="keyword">new</span> Person(<span class="string">"1"</span>);</span><br><span class="line">        set2.add(p1);</span><br><span class="line">        set2.add(p2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Object a : set2) &#123;</span><br><span class="line">            System.out.println(a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重写了equals和hashCode方法之后，执行结果就恢复正常了：</p>
+<pre><code>1
+Person{age='1'}
+</code></pre>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<ul>
+<li>hashCode主要用于提升查询效率提高哈希表性能，来确定在散列结构中对象的存储地址</li>
+<li>重写equals()必须重写hashCode()</li>
+<li>哈希存储结构中，添加元素重复性校验的标准就是先检查hashCode值，后判断equals()</li>
+<li>两个对象equals()相等，hashcode()必定相等</li>
+<li>两个对象hashcode()不等，equals()必定也不等</li>
+<li>两个对象hashcode()相等，对象不一定相等，需要通过equals()进一步判断。</li>
+</ul>
+<h3 id="参考和感谢"><a class="markdownIt-Anchor" href="#参考和感谢"></a> 参考和感谢</h3>
+<p>哈希存储结构中添加元素的逻辑：<a href="https://blog.csdn.net/lijiecao0226/article/details/24609559" target="_blank" rel="noopener">https://blog.csdn.net/lijiecao0226/article/details/24609559</a><br>
+hashcode详解：<a href="https://www.cnblogs.com/whgk/p/6071617.html" target="_blank" rel="noopener">https://www.cnblogs.com/whgk/p/6071617.html</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java-equals-hashcode/" target="_blank" title="Java中equals和HashCode方法的分析">https://www.larscheng.com/java-equals-hashcode/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"><i class="fa-fw fa fa-tags"></i> Java</a>
+                    
+                        <a href="/tags/equals-HashCode/"><i class="fa-fw fa fa-tags"></i> equals&HashCode</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/share20190719/">20190719小组分享</a>
+            
+            
+            <a class="next" rel="next" href="/java-equals==/">Java中==和equals方法的分析</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

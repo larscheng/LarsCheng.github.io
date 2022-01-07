@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java时间处理3---Java8中Instant、Duration、Period、Clock介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java时间处理3---Java8中Instant、Duration、Period、Clock介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2020-06-10&nbsp;&nbsp;17:06:44</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,630</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">11min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>前面文章对Java中的Date和Calendar类进行了介绍，在Java8以前，Javaer处理时间基本都是使用这两个类。</p>
+<p>然鹅在使用过程中一个很尴尬的场景就是Date大部分方法废弃，Calendar又有很多不太友好的设计(月份从0开始)</p>
+<a id="more"></a>
+<p>终于，Java8中提供了一套全新的时间处理库，源码中的目录为<code>java.time</code>，该包中的类都是<code>不可变且线程安全</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/java8date/20200702203642.png" alt=""></p>
+<p>看上图感觉新的<code>time</code>包下好像有很多都是新的类，感觉看着很头大啊，不过不用担心新提供的处理类中方法设计具有规律性，并且模块清晰，上手较快。</p>
+<p>下面对比较常用的类库进行介绍。</p>
+<blockquote>
+<p>本文主要对Instant、Duration、Period、Clock这四个类进行介绍</p>
+</blockquote>
+<ul>
+<li>Instant：时间线上的某一<code>时间点</code></li>
+<li>Duration：两个<code>时间</code>之间的持续时间,存储秒和纳秒</li>
+<li>Period：两个<code>日期</code>之间的持续时间,存储年，月和日</li>
+<li>Clock：表示真实世界的<code>时钟</code>,可通过时钟访问的当前日期和时间</li>
+</ul>
+<h1 id="instant"><a class="markdownIt-Anchor" href="#instant"></a> Instant</h1>
+<p>Instant用于记录时间线上某一瞬间的时间点，顾名思义就是时间戳，但它不同于<code>System.currentTimeMillis();</code>精度为秒</p>
+<p>Instant可以精确到<code>纳秒</code>,它的取值范围为：<code>-1000000000-01-01T00:00Z</code>到<code>1000000000-12-31T23:59:59.999999999Z</code></p>
+<p>下面看下他的常用方法示例：</p>
+<ul>
+<li>now(): 获取基于UTC时间的Instant</li>
+<li>ofEpochMilli(long milli)：根据时间戳(毫秒)创建一个Instant实例</li>
+<li>ofEpochSecond(long second): 根据时间戳(秒)创建一个Instant实例</li>
+<li>parse(): 根据时间字符串转换为Instant实例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//UTC</span><br><span class="line">System.out.println(Instant.now());</span><br><span class="line">//系统时区</span><br><span class="line">System.out.println(Instant.now(Clock.systemDefaultZone()));</span><br><span class="line">//根据时间字符串转换为Instant实例</span><br><span class="line">System.out.println(Instant.parse(&quot;2020-06-06T12:12:12Z&quot;));</span><br><span class="line">Instant instant =Instant.parse(&quot;2020-06-06T12:12:12Z&quot;);</span><br><span class="line">long milli = instant.toEpochMilli();</span><br><span class="line">long second = instant.getEpochSecond();</span><br><span class="line">//给定时间戳转换为Instant实例</span><br><span class="line">System.out.println(Instant.ofEpochMilli(milli));</span><br><span class="line">//给定时间戳转换为Instant实例</span><br><span class="line">System.out.println(Instant.ofEpochSecond(second));</span><br><span class="line">//给定时间戳和纳秒值转换为Instant实例</span><br><span class="line">System.out.println(Instant.ofEpochSecond(second, 111));</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2020-07-10T08:37:52.299Z</span><br><span class="line">2020-07-10T08:37:52.380Z</span><br><span class="line">2020-06-06T12:12:12Z</span><br><span class="line">2020-06-06T12:12:12Z</span><br><span class="line">2020-06-06T12:12:12Z</span><br><span class="line">2020-06-06T12:12:12.000000111Z</span><br></pre></td></tr></table></figure>
+<h1 id="duration"><a class="markdownIt-Anchor" href="#duration"></a> Duration</h1>
+<p>Duration通常用秒或者纳秒相结合来表示一个时间量，最高精度为纳秒<br>
+通常用作表示两个时间之间的间隔,也称作<code>持续时间</code>，例如<code>1s持续时间</code>表示为<code>PT1S</code></p>
+<h2 id="创建一个duration实例"><a class="markdownIt-Anchor" href="#创建一个duration实例"></a> 创建一个Duration实例</h2>
+<ul>
+<li>ofXXX()系列方法: 根据纳秒、毫秒、秒、分、时、天等时间来构造持续时间</li>
+<li>from(TemporalAmount amount)：根据TemporalAmount实例创建Duration对象</li>
+<li>parse(CharSequence text)：根据ISO-8601持续时间格式字符串创建Duration对象</li>
+<li>between(Temporal startInclusive, Temporal endExclusive)：获取两个时间对象之间的持续时间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Duration.ofNanos(1000));</span><br><span class="line">System.out.println(Duration.ofMillis(1000));</span><br><span class="line">System.out.println(Duration.ofSeconds(30));</span><br><span class="line">System.out.println(Duration.ofSeconds(30,12345));</span><br><span class="line">System.out.println(Duration.ofMinutes(1));</span><br><span class="line">System.out.println(Duration.ofHours(1));</span><br><span class="line">System.out.println(Duration.ofDays(1));</span><br><span class="line">System.out.println(Duration.of(1000, ChronoUnit.MILLIS));</span><br><span class="line">System.out.println(Duration.from(ChronoUnit.MINUTES.getDuration()));</span><br><span class="line">System.out.println(Duration.parse(&quot;PT20.345S&quot;));</span><br><span class="line">System.out.println(Duration.between(Instant.parse(&quot;2020-06-23T10:15:30.00Z&quot;), Instant.now()));</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PT0.000001S</span><br><span class="line">PT1S</span><br><span class="line">PT30S</span><br><span class="line">PT30.000012345S</span><br><span class="line">PT1M</span><br><span class="line">PT1H</span><br><span class="line">PT24H</span><br><span class="line">PT1S</span><br><span class="line">PT1M</span><br><span class="line">PT20.345S</span><br><span class="line">PT406H26M35.814S</span><br></pre></td></tr></table></figure>
+<h2 id="duration常用方法"><a class="markdownIt-Anchor" href="#duration常用方法"></a> Duration常用方法</h2>
+<ul>
+<li>getXXX(): 获取持续时间对象具体的秒数或者毫秒数</li>
+<li>plusXXX(): 给Duration对象加上指定精度的值</li>
+<li>minusXXX(): 给Duration对象减去指定精度的值</li>
+<li>withXXX(): 修改Duration对象的秒数or毫秒数</li>
+<li>其他方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Duration d = Duration.parse(&quot;PT20.345S&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(d.getSeconds());</span><br><span class="line">System.out.println(d.getNano());</span><br><span class="line"></span><br><span class="line">System.out.println(d.withNanos(3456789));//修改纳秒值，返回一个新的Duration</span><br><span class="line">System.out.println(d.withSeconds(22));//修改秒值，返回一个新的Duration</span><br><span class="line"></span><br><span class="line">System.out.println(d.plusNanos(1));//加1纳秒，返回一个新的Duration</span><br><span class="line">System.out.println(d.plusMillis(100));//加100毫秒，返回一个新的Duration</span><br><span class="line">System.out.println(d.plusSeconds(1));</span><br><span class="line">System.out.println(d.minusNanos(1));//减去1纳秒，返回一个新的Duration</span><br><span class="line">System.out.println(d.minusMillis(100));//减去10毫秒，返回一个新的Duration</span><br><span class="line">System.out.println(d.minusSeconds(1));</span><br><span class="line"></span><br><span class="line">System.out.println(d.isZero());//是否为0</span><br><span class="line">System.out.println(Duration.ZERO.isZero());//是否为0</span><br><span class="line">System.out.println(d.isNegative());//是否为负</span><br><span class="line">System.out.println(d.negated());//求负</span><br><span class="line">System.out.println(d.negated().abs());//求绝对值</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">20</span><br><span class="line">345000000</span><br><span class="line">PT20.003456789S</span><br><span class="line">PT22.345S</span><br><span class="line">PT20.345000001S</span><br><span class="line">PT20.445S</span><br><span class="line">PT21.345S</span><br><span class="line">PT20.344999999S</span><br><span class="line">PT20.245S</span><br><span class="line">PT19.345S</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">PT-20.345S</span><br><span class="line">PT20.345S</span><br></pre></td></tr></table></figure>
+<h1 id="period"><a class="markdownIt-Anchor" href="#period"></a> Period</h1>
+<p>与Duration类似都是用来表示持续时间<br>
+但是Period是由年月日为单位的时间量，例如<code>1年2个月3天</code><br>
+与Duration相比，Period的用法与之基本相同</p>
+<h2 id="初始化period"><a class="markdownIt-Anchor" href="#初始化period"></a> 初始化Period</h2>
+<ul>
+<li>ofXXX()系列方法: 根据年月日来构造持续时间</li>
+<li>from(TemporalAmount amount)：根据TemporalAmount实例创建Period对象</li>
+<li>parse(CharSequence text)：根据ISO-8601持续时间格式字符串创建Period对象</li>
+<li>between(LocalDate startDateInclusive, LocalDate endDateExclusive)：获取两个<code>日期对象</code>之间的持续时间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Period.of(1, 2, 3));//根据年月日构造Period</span><br><span class="line">System.out.println(Period.ofDays(1));</span><br><span class="line">System.out.println(Period.ofMonths(2));</span><br><span class="line">System.out.println(Period.ofWeeks(3));//根据周数构造</span><br><span class="line">System.out.println(Period.ofYears(1));</span><br><span class="line">System.out.println(Period.from(Period.ofMonths(1)));</span><br><span class="line">System.out.println(Period.parse(&quot;P20Y10M5D&quot;));//根据ISO-8601时间格式字符串进行构造</span><br><span class="line">//计算两个日期对象之间的持续时间</span><br><span class="line">System.out.println(Period.between(LocalDate.now().minusYears(1).minusDays(1),LocalDate.now() ));</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">P1Y2M3D</span><br><span class="line">P1D</span><br><span class="line">P2M</span><br><span class="line">P21D</span><br><span class="line">P1Y</span><br><span class="line">P1M</span><br><span class="line">P20Y10M5D</span><br><span class="line">P1Y1D</span><br></pre></td></tr></table></figure>
+<h2 id="period常用方法"><a class="markdownIt-Anchor" href="#period常用方法"></a> Period常用方法</h2>
+<p>常用方法的使用方式与Duration也基本类似</p>
+<ul>
+<li>getXXX(): 获取持续时间对象具体的年、月、日</li>
+<li>plusXXX(): 给Period对象加上指定精度的值</li>
+<li>minusXXX(): 给Period对象减去指定精度的值</li>
+<li>withXXX(): 修改Period对象的某一精度值</li>
+<li>其他方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Period p = Period.of(1, 2, 3);</span><br><span class="line">//获取年月日</span><br><span class="line">System.out.println(p.getYears()+&quot;年&quot;+p.getMonths()+&quot;月&quot;+p.getDays()+&quot;日&quot;);</span><br><span class="line">//重设Period的年月日</span><br><span class="line">System.out.println(p.withYears(3).withMonths(2).withDays(1));</span><br><span class="line">//加上1天</span><br><span class="line">System.out.println(p.plusDays(1));</span><br><span class="line">//减去1天</span><br><span class="line">System.out.println(p.minusDays(1));</span><br><span class="line">//判断是否为0</span><br><span class="line">System.out.println(p.isZero());</span><br><span class="line">//判断是否为负</span><br><span class="line">System.out.println(p.isNegative());</span><br><span class="line">//取负</span><br><span class="line">System.out.println(p.negated());</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1年2月3日</span><br><span class="line">P3Y2M1D</span><br><span class="line">P1Y2M4D</span><br><span class="line">P1Y2M2D</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">P-1Y-2M-3D</span><br></pre></td></tr></table></figure>
+<h1 id="clock"><a class="markdownIt-Anchor" href="#clock"></a> Clock</h1>
+<p>Clock表示一个时钟，Clock的实例用于查找当前时刻，可以使用存储的时区来解释当前时刻以查找当前日期和时间。某种程度上可以使用时钟代替<code>System.currentTimeMillis()</code>和<code>TimeZone.getDefault()</code>。</p>
+<p>我们可以自定义创建一个指定滴答间隔的时钟，用来获取需要的时间日期</p>
+<p><strong>钟表的滴答间隔(tickDuration)</strong>:规定了提供下一个读数的时间间隔。比如，滴答间隔为 1 秒的钟表，读数的分辨率就到 1 秒。滴答间隔为 5 秒的钟表，读数的&quot;分辨率&quot; 就到 5 秒。这里，5 秒的&quot;分辨率&quot;是指，当实际时间数据是 0 或 1、2、3、4 秒时，从它那里得到的读数都是 0 秒。当实际时间数据是 5 或 6、7、8、9 秒时，从它那里得到的读数都是 5 秒。</p>
+<h2 id="clock的初始化"><a class="markdownIt-Anchor" href="#clock的初始化"></a> Clock的初始化</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Clock clock = Clock.systemUTC();</span><br><span class="line">System.out.println(clock.millis());//打印时钟当前毫秒值</span><br><span class="line">System.out.println(System.currentTimeMillis());//打印当前毫秒值</span><br><span class="line">System.out.println(clock.instant().toEpochMilli());//时钟转换为Instant实例并获取时间戳毫秒值</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1594371253772</span><br><span class="line">1594371253772</span><br><span class="line">1594371253773</span><br></pre></td></tr></table></figure>
+<h2 id="自定义clock的创建"><a class="markdownIt-Anchor" href="#自定义clock的创建"></a> 自定义Clock的创建</h2>
+<p>使用<code>tick()</code>方法创建一个滴答间隔为3s的时钟，每1s钟查看一下它的时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//系统默认时区时钟</span><br><span class="line">Clock clock = Clock.systemDefaultZone();</span><br><span class="line">//滴答时间间隔为3秒的时钟</span><br><span class="line">//当实际时间数据是 0 或 1、2秒时，从它那里得到的读数都是 0 秒。当实际时间数据是 3或 4、5秒时，从它那里得到的读数都是 3 秒。</span><br><span class="line">Clock tick = Clock.tick(clock, Duration.ofSeconds(3));</span><br><span class="line"></span><br><span class="line">for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">    TimeUnit.SECONDS.sleep(1);</span><br><span class="line">    System.out.println(clock.instant()+&quot;---&gt; &quot;+tick.instant());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果如下,可以看到两个时钟每秒钟的计数是不同的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">2020-07-10T08:55:35.182Z---&gt; 2020-07-10T08:55:33Z</span><br><span class="line">2020-07-10T08:55:36.195Z---&gt; 2020-07-10T08:55:36Z</span><br><span class="line">2020-07-10T08:55:37.195Z---&gt; 2020-07-10T08:55:36Z</span><br><span class="line">2020-07-10T08:55:38.196Z---&gt; 2020-07-10T08:55:36Z</span><br><span class="line">2020-07-10T08:55:39.197Z---&gt; 2020-07-10T08:55:39Z</span><br><span class="line">2020-07-10T08:55:40.198Z---&gt; 2020-07-10T08:55:39Z</span><br><span class="line">2020-07-10T08:55:41.198Z---&gt; 2020-07-10T08:55:39Z</span><br><span class="line">2020-07-10T08:55:42.199Z---&gt; 2020-07-10T08:55:42Z</span><br><span class="line">2020-07-10T08:55:43.199Z---&gt; 2020-07-10T08:55:42Z</span><br><span class="line">2020-07-10T08:55:44.200Z---&gt; 2020-07-10T08:55:42Z</span><br></pre></td></tr></table></figure>
+<p>使用<code>tickSeconds()</code>和<code>tickMinutes()</code>创建时钟</p>
+<ul>
+<li>tickSeconds(ZoneId zone) : 创建一个滴答间隔为1秒的时钟</li>
+<li>tickMinutes(ZoneId zone) ：创建一个滴答间隔为1分钟的时钟</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//系统默认时区时钟</span><br><span class="line">Clock clock = Clock.systemDefaultZone();</span><br><span class="line">//获取滴答间隔为1秒的钟表</span><br><span class="line">Clock clock1 = Clock.tickSeconds(ZoneId.systemDefault());</span><br><span class="line">//获取滴答间隔为1分钟的钟表</span><br><span class="line">Clock clock2 = Clock.tickMinutes(ZoneId.systemDefault());</span><br><span class="line"></span><br><span class="line">for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">    TimeUnit.SECONDS.sleep(1);</span><br><span class="line">    System.out.println(clock.instant()+&quot;---&gt; &quot;+clock1.instant()+&quot;---&gt; &quot;+clock2.instant());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果,从左到右依次为，系统默认时钟—&gt;滴答间隔1秒的时钟----&gt;滴答间隔1分钟的时钟</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">2020-07-10T08:58:58.001Z---&gt; 2020-07-10T08:58:58Z---&gt; 2020-07-10T08:58:00Z</span><br><span class="line">2020-07-10T08:58:59.001Z---&gt; 2020-07-10T08:58:59Z---&gt; 2020-07-10T08:58:00Z</span><br><span class="line">2020-07-10T08:59:00.002Z---&gt; 2020-07-10T08:59:00Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:01.002Z---&gt; 2020-07-10T08:59:01Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:02.002Z---&gt; 2020-07-10T08:59:02Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:03.003Z---&gt; 2020-07-10T08:59:03Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:04.004Z---&gt; 2020-07-10T08:59:04Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:05.005Z---&gt; 2020-07-10T08:59:05Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:06.005Z---&gt; 2020-07-10T08:59:06Z---&gt; 2020-07-10T08:59:00Z</span><br><span class="line">2020-07-10T08:59:07.006Z---&gt; 2020-07-10T08:59:07Z---&gt; 2020-07-10T08:59:00Z</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>以上是Java8中针对瞬时时间、持续时间、时钟加入的新工具类，可以看到对于时间的概念区分更加细化、这四个基础的时间概念也是Java8中时间处理比较常用的模块，大家不妨上手敲几段代码试试。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java8time_1/" target="_blank" title="Java时间处理3---Java8中Instant、Duration、Period、Clock介绍">https://www.larscheng.com/java8time_1/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/时间处理/"><i class="fa-fw fa fa-tags"></i> 时间处理</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/java8time_2/">Java时间处理4---Java8中LocalDate、LocalTime、LocalDateTime介绍</a>
+            
+            
+            <a class="next" rel="next" href="/questions/">一些有意思的问答</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

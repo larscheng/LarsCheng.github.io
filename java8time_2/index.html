@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java时间处理4---Java8中LocalDate、LocalTime、LocalDateTime介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java时间处理4---Java8中LocalDate、LocalTime、LocalDateTime介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2020-07-10&nbsp;&nbsp;17:08:40</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,140</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">5min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>在Java8中，对于日期、时间、时间日期有不同的对象来表示，分别就是LocalDate、LocalTime、LocalDateTime</p>
+<p>他们都位于<code>java.time</code>包下，并且他们都仅单纯的表示一个不可变的时间对象，无时区等附加信息的出现</p>
+<a id="more"></a>
+<h2 id="localdate"><a class="markdownIt-Anchor" href="#localdate"></a> LocalDate</h2>
+<p>一个不可变的时间对象用来表示一个日期(<code>年月日</code>)，仅包含日期，例如<code>2020-06-06</code></p>
+<p>它的可表示范围为<code>-999999999-01-01</code>到<code>+999999999-12-31</code></p>
+<h2 id="localtime"><a class="markdownIt-Anchor" href="#localtime"></a> LocalTime</h2>
+<p>一个不可变的时间对象,用来表示一个时间(<code>时分秒</code>)，最高精度为纳秒，例如<code>11:11:11</code><br>
+它的表示范围为：<code>00:00</code>到<code>23:59:59.999999999</code></p>
+<h2 id="localdatetime"><a class="markdownIt-Anchor" href="#localdatetime"></a> LocalDateTime</h2>
+<p>一个不可变的时间对象,用来表示一个日期时间(<code>年月日时分秒</code>)，最高精度为纳秒，例如<code>2020-06-06T13:45:30.123456789</code><br>
+<code>-999999999-01-01T00:00:00</code>到<code>+999999999-12-31T23:59:59.999999999</code></p>
+<h2 id="localdate常用方法示例"><a class="markdownIt-Anchor" href="#localdate常用方法示例"></a> LocalDate常用方法示例</h2>
+<p>LocalDate、LocalTime、LocalDateTime三者的使用方式基本相同，APi设计也类似，可以说掌握其中一个明白其他两个的用法了</p>
+<p>此处以LocalDate的常用方法进行介绍：</p>
+<h2 id="初始化一个localdate"><a class="markdownIt-Anchor" href="#初始化一个localdate"></a> 初始化一个LocalDate</h2>
+<ul>
+<li>now(…)系列: 获取当前日期</li>
+<li>of(…)系列 : 获取指定年月日日期</li>
+<li>parse(…)系列: 将日期字符串转换为LocalDate日期</li>
+<li>from(…)系列：将TemporalAccessor类型对象转换为LocalDate日期</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/*now()*/</span><br><span class="line">System.out.println(LocalDate.now());//获取当前日期</span><br><span class="line">System.out.println(LocalDate.now(ZoneId.systemDefault()));//获取系统时区当前日期</span><br><span class="line">System.out.println(LocalDate.now(Clock.systemDefaultZone()));//获取系统时钟当前日期</span><br><span class="line">/*of()*/</span><br><span class="line">System.out.println(LocalDate.of(2020, 6, 6));//获取指定年月日日期</span><br><span class="line">System.out.println(LocalDate.of(2020, Month.JUNE, 6));//获取指定年月日日期</span><br><span class="line">System.out.println(LocalDate.ofEpochDay(10));//获取大于1970-1-1多少天的日期</span><br><span class="line">System.out.println(LocalDate.ofYearDay(2020, 200));//获取指定年份中的第几天的日期</span><br><span class="line">/*parse()*/</span><br><span class="line">System.out.println(LocalDate.parse(&quot;2017-05-05&quot;));//DateTimeFormatter.ISO_LOCAL_DATE</span><br><span class="line">System.out.println(LocalDate.parse(&quot;2017-05-05&quot;, DateTimeFormatter.ISO_DATE));</span><br><span class="line">System.out.println(LocalDate.parse(&quot;20170505&quot;, DateTimeFormatter.BASIC_ISO_DATE));</span><br><span class="line">System.out.println(LocalDate.parse(&quot;2017-05-05+01:00&quot;, DateTimeFormatter.ISO_OFFSET_DATE));</span><br><span class="line">/*from()*/</span><br><span class="line">LocalDate.from(LocalDate.parse(&quot;2017-05-05&quot;));//将TemporalAccessor类型对象转换为LocalDate日期</span><br></pre></td></tr></table></figure>
+<h2 id="获取localdate中的信息"><a class="markdownIt-Anchor" href="#获取localdate中的信息"></a> 获取LocalDate中的信息</h2>
+<p>从已有的LocalDate中获取年、月、日等具体信息</p>
+<ul>
+<li>get…()系列</li>
+<li>其他</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">LocalDate localDate = LocalDate.now();</span><br><span class="line">System.out.println(localDate.getYear());//获取年</span><br><span class="line">System.out.println(localDate.getMonthValue());//月 </span><br><span class="line">System.out.println(localDate.getDayOfMonth());//日</span><br><span class="line">System.out.println(localDate.getMonth());//月份</span><br><span class="line">System.out.println(localDate.getDayOfWeek());//星期</span><br><span class="line">System.out.println(localDate.getDayOfYear());//本年中的第几天</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;是否闰年：&quot;+localDate.isLeapYear());</span><br><span class="line">System.out.println(&quot;本月天数：&quot;+localDate.lengthOfMonth());</span><br><span class="line">System.out.println(&quot;本年天数：&quot;+localDate.lengthOfYear());</span><br></pre></td></tr></table></figure>
+<h2 id="修改lcoaldate的内容"><a class="markdownIt-Anchor" href="#修改lcoaldate的内容"></a> 修改LcoalDate的内容</h2>
+<p>可以对现有的LcoalDate对象进行修改</p>
+<ul>
+<li>plusxxx()系列</li>
+<li>minusxxx()系列</li>
+<li>withxxx()系列</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">LocalDate localDate = LocalDate.now();</span><br><span class="line">System.out.println(&quot;当前日期：&quot;+localDate);</span><br><span class="line">System.out.println(&quot;3天后：&quot;+localDate.plusDays(3));</span><br><span class="line">System.out.println(&quot;1月后：&quot;+localDate.plusMonths(1));</span><br><span class="line">System.out.println(&quot;1年后：&quot;+localDate.plusYears(1));</span><br><span class="line">System.out.println(&quot;1周后：&quot;+localDate.plusWeeks(1));</span><br><span class="line">System.out.println(&quot;3天前：&quot;+localDate.minusDays(3));</span><br><span class="line">System.out.println(&quot;1月前：&quot;+localDate.minusMonths(1));</span><br><span class="line">System.out.println(&quot;1年前：&quot;+localDate.minusYears(1));</span><br><span class="line">System.out.println(&quot;1周前：&quot;+localDate.minusWeeks(1));</span><br><span class="line"></span><br><span class="line">System.out.println(localDate.withYear(2012));//指定某一年的今天</span><br><span class="line">System.out.println(localDate.withMonth(12));//指定某月的今天</span><br><span class="line">System.out.println(localDate.withDayOfMonth(1));//指定本月的第几天</span><br><span class="line">System.out.println(localDate.withDayOfYear(1));//指定今年的第几天</span><br></pre></td></tr></table></figure>
+<h2 id="三者之间的转化关系"><a class="markdownIt-Anchor" href="#三者之间的转化关系"></a> 三者之间的转化关系</h2>
+<p>既然上面的三个类是分别代表时间、日期、日期时间，那他们必定存在相互转化的关系<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/java8date/20200706110102.png" alt=""><br>
+就这个关系，我们进行代码示例如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">LocalDate localDate = LocalDate.of(2020,1,1);</span><br><span class="line">LocalTime localTime = LocalTime.now();</span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line"></span><br><span class="line">LocalDate ldt2ld = localDateTime.toLocalDate();</span><br><span class="line">LocalTime ldt2lt = localDateTime.toLocalTime();</span><br><span class="line">//localDateTime---&gt;LocalDate</span><br><span class="line">System.out.println(localDateTime+&quot;---&gt; localDateTime.toLocalDate() ---&gt;&quot;+ldt2ld);</span><br><span class="line">//localDateTime---&gt;LocalTime</span><br><span class="line">System.out.println(localDateTime+&quot;---&gt; localDateTime.toLocalTime() ---&gt;&quot;+ldt2lt);</span><br><span class="line"></span><br><span class="line">LocalDateTime atDate = localTime.atDate(localDate);</span><br><span class="line">LocalDateTime atTime = localDate.atTime(localTime);</span><br><span class="line">LocalDateTime dateTime = LocalDateTime.of(localDate, localTime);</span><br><span class="line">//localDate+localTime---&gt;LocalDateTime</span><br><span class="line">System.out.println(&quot;[&quot;+localDate+&quot; + &quot;+localTime+&quot;] localDate.atTime(localTime) ---&gt;&quot;+atTime);</span><br><span class="line">System.out.println(&quot;[&quot;+localDate+&quot; + &quot;+localTime+&quot;] localTime.atDate(localDate) ---&gt;&quot;+atDate);</span><br><span class="line">System.out.println(&quot;[&quot;+localDate+&quot; + &quot;+localTime+&quot;] LocalDateTime.of(localDate, localTime) ---&gt;&quot;+dateTime);</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2020-07-10T17:02:47.711---&gt; localDateTime.toLocalDate() ---&gt;2020-07-10</span><br><span class="line">2020-07-10T17:02:47.711---&gt; localDateTime.toLocalTime() ---&gt;17:02:47.711</span><br><span class="line">[2020-01-01 + 17:02:47.710] localDate.atTime(localTime) ---&gt;2020-01-01T17:02:47.710</span><br><span class="line">[2020-01-01 + 17:02:47.710] localTime.atDate(localDate) ---&gt;2020-01-01T17:02:47.710</span><br><span class="line">[2020-01-01 + 17:02:47.710] LocalDateTime.of(localDate, localTime) ---&gt;2020-01-01T17:02:47.710</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文介绍的三个类，属于java时间库中较为常用的三个类，它代替了java8以前常用的Date和Calendar类，转变为以更加细粒度的时间、日期、时间日期概念进行时间处理。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/java8time_2/" target="_blank" title="Java时间处理4---Java8中LocalDate、LocalTime、LocalDateTime介绍">https://www.larscheng.com/java8time_2/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/时间处理/"><i class="fa-fw fa fa-tags"></i> 时间处理</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/java8time_3/">Java时间处理5---Java8中时区相关类库介绍</a>
+            
+            
+            <a class="next" rel="next" href="/java8time_1/">Java时间处理3---Java8中Instant、Duration、Period、Clock介绍</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

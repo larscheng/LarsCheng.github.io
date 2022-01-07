@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Jupyter Notebooks的安装和使用介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Jupyter Notebooks的安装和使用介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2018-10-17&nbsp;&nbsp;9:10:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Python/">Python</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">1,983</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">6min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>最近又开始重新学习Python，学习中使用到了一款编辑器Jupyter Notebooks ，非常想安利给初学python的同学。<br>
+注：本文内容仅针对windows环境下安装和配置Jupyter Notebooks 。</p>
+<a id="more"></a> 
+<h3 id="1jupyter-notebooks-简介"><a class="markdownIt-Anchor" href="#1jupyter-notebooks-简介"></a> 1.Jupyter Notebooks 简介</h3>
+<p>国际惯例还是来一段官方的介绍：</p>
+<pre><code>Jupyter Notebook是一个Web应用程序，允许您创建和共享包含实时代码，方程，可视化和说明文本的文档。 用途包括：数据清理和转换，数值模拟，统计建模，机器学习等等。
+</code></pre>
+<p>Notebooks其实就像是你的python笔记本一样，不仅可以运行书写的python代码，同时还支持markdown格式的文本显示。<br>
+在Notebooks中不仅可以运行python，它还支持R、Julia 和 JavaScript等其他40余种语言。</p>
+<h3 id="2安装jupyter-notebooks"><a class="markdownIt-Anchor" href="#2安装jupyter-notebooks"></a> 2.安装Jupyter Notebooks</h3>
+<p>安装方式大致分为两种：</p>
+<ul>
+<li>pip 方法</li>
+<li>Anaconda 方法</li>
+</ul>
+<h4 id="pip-方法"><a class="markdownIt-Anchor" href="#pip-方法"></a> pip 方法</h4>
+<p>使用pip命令安装之前需要我们先安装Python。此处以python3.6为例</p>
+<p>1.安装Python</p>
+<p>可以在<a href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener">python下载处</a>，选则对应的系统版本，我这里选择<code>Windows x86-64 executable installer</code>下载安装。</p>
+<p>具体的安装就不再赘述，主要说明一下几点：<br>
+需要注意的是安装时记得勾选<code>Add Python 3.6 to PATH</code>，然后选择<code>Customize installation</code>。<br>
+添加 Path，是为了以后可以在任何目录下使用 cmd 运行 Python，跟 Java 的 path一样。如果安装过程中没有添加 Path，也可以以后再添加。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133451.png" alt=""></p>
+<p>自定义安装可以选择安装路径，这里我的安装路径为<code>E:\MyTools\Python\Python36</code></p>
+<p>2.升级pip到最新版本</p>
+<p>安装python3.6的同时会安装pip，但此时需要升级pip到最新版</p>
+<p>打开命令提示窗，切换到python3.6的安装目录下的<code>Scripts</code>文件夹。</p>
+<p>执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133509.png" alt=""></p>
+<p>3.安装Jupyter Notebooks</p>
+<p>打开命令提示窗，切换到python3.6的安装目录下的<code>Scripts</code>文件夹。执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install jupyter</span><br></pre></td></tr></table></figure>
+<p>安装完成<code>Scripts</code>文件夹如下图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133540.png" alt=""></p>
+<p>4.启动 Jupyter Notebooks</p>
+<p>打开命令提示窗，切换到python3.6的安装目录下的<code>Scripts</code>文件夹。执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>出现如下提示，启动成功，并且浏览器自动打开notebook窗口。此时显示的是<code>Script</code>文件夹下的文件目录。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133558.png" alt=""></p>
+<h4 id="anaconda-方法"><a class="markdownIt-Anchor" href="#anaconda-方法"></a> Anaconda 方法</h4>
+<p>对与初学者而言，还是推荐该使用 Anaconda 来安装 Python 和 Jupyter Notebooks。</p>
+<p>在安装 <code>Anaconda</code> 的同时会安装Python 和 Jupyter Notebooks这两个工具，并且还包含相当多数据科学和机器学习社区常用的软件包。</p>
+<p>可以在<a href="https://www.anaconda.com/download/#windows" target="_blank" rel="noopener">Anaconda官网下载页</a>来下载安装包，它提供了python3.6和python2.7两个版本，可以根据自己的需要来下载对应系统的安装文件。具体的安装步骤可以参考<a href="https://www.jianshu.com/p/62f155eb6ac5" target="_blank" rel="noopener">Windows系统安装Anaconda</a></p>
+<h3 id="修改jupyter-notebook工作空间"><a class="markdownIt-Anchor" href="#修改jupyter-notebook工作空间"></a> 修改jupyter notebook工作空间</h3>
+<p>在我们第一次启动Notebooks时，默认显示的是<code>Script</code>文件夹下的文件目录。因为此时notebooks默认的工作空间是安装目录。</p>
+<p>当然了，你也可以自定义一个专属的工作空间，操作如下：</p>
+<p>1.创建一个文件夹，此处我创建了一个<code>jupyter-notebook</code>文件夹，他的目录是<code>E:\MyTools\Python\jupyter-notebook</code></p>
+<p>2.获取jupyter notebook的配置文件<br>
+打开命令提示窗口，执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook --generate-config</span><br></pre></td></tr></table></figure>
+<p>此处需要注意的是，如果你已经配置过notebooks的相关信息，执行此命令会提示你是否覆盖原有配置。如果是首次执行此命令，则生成配置到相应目录。如下图所示，输入<code>y</code>直接覆盖</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133620.png" alt=""></p>
+<p>3.修改配置文件</p>
+<p>打开生成的配置文件，修改<code>#c.NotebookApp.notebook_dir = ''</code>此条配置，在单引号中填入我们刚才创建的专属工作空间，此处我这里是<code>E:\MyTools\Python\jupyter-notebook</code>，此条配置默认是注释掉的，所以我们需要删除第一个<code>#</code>，ok,保存配置文件。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133642.png" alt=""></p>
+<p>好了，现在打开命令提示窗口，执行<code>jupyter notebook</code>重新启动notebooks，浏览器相应会打开notebooks主页，主页中相应会显示工作空间中的文件目录。</p>
+<p><strong>注意：启动notebooks之后，不要不要不要关闭该命令提示窗口，因为一旦关闭该窗口就会与本地服务器断开连接</strong></p>
+<h3 id="jupyter-notebook-基本使用"><a class="markdownIt-Anchor" href="#jupyter-notebook-基本使用"></a> jupyter notebook 基本使用</h3>
+<p>如果按照上面的操作进行配置后，启动notebooks后的首页应该是这个样子的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133701.png" alt=""></p>
+<p>下面对首页上的功能按钮进行基本说明：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133739.png" alt=""><br>
+第一部分介绍：</p>
+<ul>
+<li>Files：列出所有文件</li>
+<li>Running：展示你当前打开的终端和笔记本</li>
+<li>Clusters：由 IPython 并行提供的（emmmmm，暂时也没使用过）</li>
+</ul>
+<p>第二部分介绍：<br>
+点击右侧的<code>New</code>按钮可展开如图的下拉列表按钮，其内包括了可创建的四种工作环境：</p>
+<ul>
+<li>Python3：创建一个可以执行python代码的文件（<code>后面详细介绍</code>）</li>
+<li>Text File：创建文本类型的文件，后缀名为<code>.txt</code></li>
+<li>Folder：创建一个文件夹</li>
+<li>Teminal：在浏览器中打开一的命令窗口</li>
+</ul>
+<p>第三部分介绍：<br>
+这里的按钮其实就是对当前工作空间内的文件进行复制、重命名等的一系列操作：</p>
+<ul>
+<li>Duplicate：复制文件</li>
+<li>Rename：重命名</li>
+<li>Move：移动文件</li>
+<li>Download：下载文件</li>
+<li>View：在浏览器中预览文件内容</li>
+<li>Edit：编辑文件</li>
+<li>Delete(小图标)：删除选中的文件</li>
+</ul>
+<h3 id="jupyter-notebook-中编写并执行python代码"><a class="markdownIt-Anchor" href="#jupyter-notebook-中编写并执行python代码"></a> jupyter notebook 中编写并执行python代码</h3>
+<p>在首页右侧点击<code>New</code>，选择点击<code>Python3</code>,页面即跳转到一个新的窗口，此时已经创建了一个新的文件，红色区域为该文件的名称(默认为Untitled)，点击即可修改文件名，此处我们命名为<code>test</code>，如下所示，<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133806.png" alt=""></p>
+<p>在<code>In [ ] :</code>后面的输入框中我们可以输入一段python代码进行测试，点击Run按钮执行,也可以快捷键<code>Ctrl+Enter</code>执行代码，结果如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133830.png" alt=""></p>
+<p>Jupyter Notebooks 的强大之处在于除了能够输入代码之外，你还可以用 Markdown 添加叙述性和解释性文本。比如我想添加一个文字说明，在代码上面添加了一个单元格，并以 Markdown 输入了一个文本。按下<code>Ctrl+Enter</code>，效果如下:<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133850.png" alt=""></p>
+<h3 id="jupyter-notebook-中的快捷键介绍"><a class="markdownIt-Anchor" href="#jupyter-notebook-中的快捷键介绍"></a> jupyter notebook 中的快捷键介绍</h3>
+<p>当你熟练使用notebooks的基本功能后，掌握他的快捷键是十分必要的，这样可以大大提高你的工作效率。下面是一些比较常用的快捷键：</p>
+<p>编辑模式：点击单元格按下<code>Enter</code><br>
+命令模式（退出编辑模式）：<code>Esc</code></p>
+<p>进入命令模式之后（此时你没有活跃单元），有以下快捷键：</p>
+<ul>
+<li><code>A</code>：在所选单元之上插入一个新的单元</li>
+<li><code>B</code>：在所选单元之下插入一个新的单元</li>
+<li><code>D</code>：连续按两次删除所选的单元</li>
+<li><code>Z</code>：撤销被删除的单元</li>
+<li><code>Y</code>：将当前选中的单元变成一个代码单元</li>
+<li><code>F</code>：查找和替换</li>
+<li><code>Shift +上或下箭头</code>：可选择多个单元。</li>
+<li><code>Shift + M</code>：在多选模式时，可合并你的选择。</li>
+</ul>
+<p>处于编辑模式时（在命令模式时按 Enter 会进入编辑模式），下列快捷键很有用：</p>
+<ul>
+<li><code>Ctrl + Home</code> ：到达单元起始位置</li>
+<li><code>Ctrl + S</code> ：保存进度</li>
+<li><code>Ctrl + Enter</code> ：会运行你的整个单元块</li>
+<li><code>Alt + Enter</code> ：不止会运行你的单元块，还会在下面添加一个新单元</li>
+<li><code>Ctrl + Shift + F</code> ：打开命令面板</li>
+</ul>
+<p>可在命令模式按 <code>H</code> 或进入<code>Help &gt; Keyboard Shortcuts</code>。可以查看键盘快捷键完整列表。如下：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029133909.png" alt=""></p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>关于notebooks的安装和基本用法就先介绍到这里了，有兴趣的朋友不妨动手安装一个试试。</p>
+<h3 id="参考和感谢"><a class="markdownIt-Anchor" href="#参考和感谢"></a> 参考和感谢</h3>
+<p><a href="https://baijiahao.baidu.com/s?id=1601883438842526311&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1601883438842526311&amp;wfr=spider&amp;for=pc</a><br>
+<a href="http://www.cnblogs.com/zlslch/p/6984403.html" target="_blank" rel="noopener">http://www.cnblogs.com/zlslch/p/6984403.html</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/jupyter-install/" target="_blank" title="Jupyter Notebooks的安装和使用介绍">https://www.larscheng.com/jupyter-install/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/工具介绍/"><i class="fa-fw fa fa-tags"></i> 工具介绍</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/select-info/">毕设选题项目本地运行环境搭建教程</a>
+            
+            
+            <a class="next" rel="next" href="/rmb-combination/">算法笔试题：1元，5元，10元，20元，50元、100元面值人民币组合给定x元的问题</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

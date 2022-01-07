@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>SpringBoot2.x集成MongoDB | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SpringBoot2.x集成MongoDB</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2018-08-09&nbsp;&nbsp;21:16:45</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SpringBoot/">SpringBoot</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">2,937</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">15min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="mongodb"><a class="markdownIt-Anchor" href="#mongodb"></a> MongoDB</h1>
+<p>MongoDB（来自于英文单词“Humongous”，中文含义为“庞大”）是可以应用于各种规模的企业、各个行业以及各类应用程序的开源数据库。基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据存储解决方案。MongoDB是一个高性能，开源，无模式的文档型数据库，是当前NoSql数据库中比较热门的一种。</p>
+<a id="more"></a> 
+<p>MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。他支持的数据结构非常松散，是类似json的bjson格式，因此可以存储比较复杂的数据类型。Mongo最大的特点是他支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引。</p>
+<p>传统的关系数据库一般由数据库（database）、表（table）、记录（record）三个层次概念组成，MongoDB是由数据库（database）、集合（collection）、文档对象（document）三个层次组成。MongoDB对于关系型数据库里的表，但是集合中没有列、行和关系概念，这体现了模式自由的特点。</p>
+<table>
+<thead>
+<tr>
+<th>MySql</th>
+<th>MongoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据库</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>表</td>
+<td>集合</td>
+</tr>
+<tr>
+<td>行</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>记录</td>
+<td>字段</td>
+</tr>
+</tbody>
+</table>
+<h1 id="开发环境"><a class="markdownIt-Anchor" href="#开发环境"></a> 开发环境</h1>
+<p>IDEA、Maven、SpringBoot2.0.4、Jdk1.8、MongoDB4.0、MongoDB Compass Community、PostMan</p>
+<h1 id="配置开始"><a class="markdownIt-Anchor" href="#配置开始"></a> 配置开始</h1>
+<ol>
+<li>Maven 相关配置<br>
+在pox.xml文件中添加spring-boot-starter-data-mongodb引用</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-mongodb<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>资源文件yml配置<br>
+笔者这里使用yml配置方式，配置时要注意缩进！！！！</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8031</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">spirng-boot-mongodb</span></span><br><span class="line"><span class="attr">  data:</span></span><br><span class="line"><span class="attr">    mongodb:</span></span><br><span class="line"><span class="attr">      host:</span> <span class="string">localhost</span>   <span class="comment">#同127.0.0.1</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">27017</span></span><br><span class="line"><span class="attr">      database:</span> <span class="string">test</span>    <span class="comment">#指定操作的数据库</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>创建实体类</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.data.annotation.Id;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:图书实体类</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/8/9 10:28</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="comment">//价格</span></span><br><span class="line">    <span class="keyword">private</span> Integer price;</span><br><span class="line">    <span class="comment">//书名</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="comment">//简介</span></span><br><span class="line">    <span class="keyword">private</span> String info;</span><br><span class="line">    <span class="comment">//出版社</span></span><br><span class="line">    <span class="keyword">private</span> String publish;</span><br><span class="line">    <span class="comment">//创建时间</span></span><br><span class="line">    <span class="keyword">private</span> Date createTime;</span><br><span class="line">    <span class="comment">//修改时间</span></span><br><span class="line">    <span class="keyword">private</span> Date updateTime;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Getter、Setter省略....</span></span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>创建service类</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.MongoTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.query.Criteria;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.query.Query;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.query.Update;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 描述:</span></span><br><span class="line"><span class="comment"> * mongo</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zhengql</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/8/9 10:24</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MongoDbService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(MongoDbService.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存对象</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> book</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">saveObj</span><span class="params">(Book book)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB save start]"</span>);</span><br><span class="line">        book.setCreateTime(<span class="keyword">new</span> Date());</span><br><span class="line">        book.setUpdateTime(<span class="keyword">new</span> Date());</span><br><span class="line">        mongoTemplate.save(book);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"添加成功"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Book&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB find start]"</span>);</span><br><span class="line">        <span class="keyword">return</span> mongoTemplate.findAll(Book.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/***</span></span><br><span class="line"><span class="comment">     * 根据id查询</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Book <span class="title">getBookById</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB find start]"</span>);</span><br><span class="line">        Query query = <span class="keyword">new</span> Query(Criteria.where(<span class="string">"_id"</span>).is(id));</span><br><span class="line">        <span class="keyword">return</span> mongoTemplate.findOne(query, Book.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据名称查询</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Book <span class="title">getBookByName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB find start]"</span>);</span><br><span class="line">        Query query = <span class="keyword">new</span> Query(Criteria.where(<span class="string">"name"</span>).is(name));</span><br><span class="line">        <span class="keyword">return</span> mongoTemplate.findOne(query, Book.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新对象</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> book</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">updateBook</span><span class="params">(Book book)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB update start]"</span>);</span><br><span class="line">        Query query = <span class="keyword">new</span> Query(Criteria.where(<span class="string">"_id"</span>).is(book.getId()));</span><br><span class="line">        Update update = <span class="keyword">new</span> Update().set(<span class="string">"publish"</span>, book.getPublish())</span><br><span class="line">                .set(<span class="string">"info"</span>, book.getInfo())</span><br><span class="line">                .set(<span class="string">"updateTime"</span>, <span class="keyword">new</span> Date());</span><br><span class="line">        <span class="comment">//updateFirst 更新查询返回结果集的第一条</span></span><br><span class="line">        mongoTemplate.updateFirst(query, update, Book.class);</span><br><span class="line">        <span class="comment">//updateMulti 更新查询返回结果集的全部</span></span><br><span class="line"><span class="comment">//        mongoTemplate.updateMulti(query,update,Book.class);</span></span><br><span class="line">        <span class="comment">//upsert 更新对象不存在则去添加</span></span><br><span class="line"><span class="comment">//        mongoTemplate.upsert(query,update,Book.class);</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/***</span></span><br><span class="line"><span class="comment">     * 删除对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> book</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteBook</span><span class="params">(Book book)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB delete start]"</span>);</span><br><span class="line">        mongoTemplate.remove(book);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据id删除</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteBookById</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"---------------------&gt;[MongoDB delete start]"</span>);</span><br><span class="line">        <span class="comment">//findOne</span></span><br><span class="line">        Book book = getBookById(id);</span><br><span class="line">        <span class="comment">//delete</span></span><br><span class="line">        deleteBook(book);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>controller</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">import com.example.mqdemo.mongo.Book;</span><br><span class="line">import com.example.mqdemo.mongo.MongoDbService;</span><br><span class="line">import org.slf4j.Logger;</span><br><span class="line">import org.slf4j.LoggerFactory;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/***</span><br><span class="line"> * @author zhengql</span><br><span class="line"> * @date 2018/8/9 10:38</span><br><span class="line"> */</span><br><span class="line">@RestController</span><br><span class="line">public class BaseController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private MongoDbService mongoDbService;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/mongo/save&quot;)</span><br><span class="line">    public String saveObj(@RequestBody Book book) &#123;return mongoDbService.saveObj(book);&#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/mongo/findAll&quot;)</span><br><span class="line">    public List&lt;Book&gt; findAll() &#123;return mongoDbService.findAll();&#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/mongo/findOne&quot;)</span><br><span class="line">    public Book findOne(@RequestParam String id) &#123;return mongoDbService.getBookById(id);&#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/mongo/findOneByName&quot;)</span><br><span class="line">    public Book findOneByName(@RequestParam String name) &#123;return mongoDbService.getBookByName(name);&#125;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/mongo/update&quot;)</span><br><span class="line">    public String update(@RequestBody Book book) &#123;return mongoDbService.updateBook(book);&#125;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/mongo/delOne&quot;)</span><br><span class="line">    public String delOne(@RequestBody Book book) &#123;return mongoDbService.deleteBook(book);&#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/mongo/delById&quot;)</span><br><span class="line">    public String delById(@RequestParam String id) &#123;return mongoDbService.deleteBookById(id);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>运行测试<br>
+启动项目，打开postman开始接口调试，可以看到成功添加book对象。返回添加成功。<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029134156.png" alt=""></li>
+</ol>
+<p>打开MongoDB Compass Community，连接本地MongoDB，可以看到刚才添加的信息。<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/docker/20191029134215.png" alt=""></p>
+<p>其他接口这里就不一一测试了。</p>
+<h1 id="优化使用"><a class="markdownIt-Anchor" href="#优化使用"></a> 优化使用</h1>
+<p>完成以上配置，我们springBoot集成MongoDB环境基本已经搭建好了。</p>
+<p>但是在使用中会发现一个问题，假如要对数据库操作多个对象，那岂不是每一个对象Service都需要写一套增删查改的方法。</p>
+<p>为了解决这一问题我们可以封装一个通用的操作类来提高效率。</p>
+<p>创建MongoDbDao类如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br></pre></td><td class="code"><pre><span class="line">import org.slf4j.Logger;</span><br><span class="line">import org.slf4j.LoggerFactory;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.data.mongodb.core.MongoTemplate;</span><br><span class="line">import org.springframework.data.mongodb.core.query.Criteria;</span><br><span class="line">import org.springframework.data.mongodb.core.query.Query;</span><br><span class="line">import org.springframework.data.mongodb.core.query.Update;</span><br><span class="line"></span><br><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 描述:</span><br><span class="line"> * mongoDB基础方法封装</span><br><span class="line"> *</span><br><span class="line"> * @author zhengql</span><br><span class="line"> * @date 2018/8/9 14:01</span><br><span class="line"> */</span><br><span class="line">public abstract class MongoDbDao&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    protected Logger logger = LoggerFactory.getLogger(MongoDbDao.class);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 反射获取泛型类型</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    protected abstract Class&lt;T&gt; getEntityClass();</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 保存一个对象</span><br><span class="line">     * @param t</span><br><span class="line">     */</span><br><span class="line">    public void save(T t) &#123;</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB save start&quot;);</span><br><span class="line">        this.mongoTemplate.save(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 根据id从几何中查询对象</span><br><span class="line">     * @param id</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public T queryById(Integer id) &#123;</span><br><span class="line">        Query query = new Query(Criteria.where(&quot;_id&quot;).is(id));</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB find start&quot;);</span><br><span class="line">        return this.mongoTemplate.findOne(query, this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据条件查询集合</span><br><span class="line">     *</span><br><span class="line">     * @param object</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public List&lt;T&gt; queryList(T object) &#123;</span><br><span class="line">        Query query = getQueryByObject(object);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB find start&quot;);</span><br><span class="line">        return mongoTemplate.find(query, this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据条件查询只返回一个文档</span><br><span class="line">     *</span><br><span class="line">     * @param object</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public T queryOne(T object) &#123;</span><br><span class="line">        Query query = getQueryByObject(object);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB find start&quot;);</span><br><span class="line">        return mongoTemplate.findOne(query, this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 根据条件分页查询</span><br><span class="line">     * @param object</span><br><span class="line">     * @param start 查询起始值</span><br><span class="line">     * @param size  查询大小</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public List&lt;T&gt; getPage(T object, int start, int size) &#123;</span><br><span class="line">        Query query = getQueryByObject(object);</span><br><span class="line">        query.skip(start);</span><br><span class="line">        query.limit(size);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB queryPage start&quot;);</span><br><span class="line">        return this.mongoTemplate.find(query, this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 根据条件查询库中符合条件的记录数量</span><br><span class="line">     * @param object</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public Long getCount(T object) &#123;</span><br><span class="line">        Query query = getQueryByObject(object);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB Count start&quot;);</span><br><span class="line">        return this.mongoTemplate.count(query, this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 删除对象</span><br><span class="line">     * @param t</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public int delete(T t) &#123;</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB delete start&quot;);</span><br><span class="line">        return (int) this.mongoTemplate.remove(t).getDeletedCount();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据id删除</span><br><span class="line">     *</span><br><span class="line">     * @param id</span><br><span class="line">     */</span><br><span class="line">    public void deleteById(Integer id) &#123;</span><br><span class="line">        Criteria criteria = Criteria.where(&quot;_id&quot;).is(id);</span><br><span class="line">        if (null != criteria) &#123;</span><br><span class="line">            Query query = new Query(criteria);</span><br><span class="line">            T obj = this.mongoTemplate.findOne(query, this.getEntityClass());</span><br><span class="line">            logger.info(&quot;--------------&gt;MongoDB deleteById start&quot;);</span><br><span class="line">            if (obj != null) &#123;</span><br><span class="line">                this.delete(obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /*MongoDB中更新操作分为三种</span><br><span class="line">    * 1：updateFirst     修改第一条</span><br><span class="line">    * 2：updateMulti     修改所有匹配的记录</span><br><span class="line">    * 3：upsert  修改时如果不存在则进行添加操作</span><br><span class="line">    * */</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 修改匹配到的第一条记录</span><br><span class="line">     * @param srcObj</span><br><span class="line">     * @param targetObj</span><br><span class="line">     */</span><br><span class="line">    public void updateFirst(T srcObj, T targetObj)&#123;</span><br><span class="line">        Query query = getQueryByObject(srcObj);</span><br><span class="line">        Update update = getUpdateByObject(targetObj);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB updateFirst start&quot;);</span><br><span class="line">        this.mongoTemplate.updateFirst(query,update,this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 修改匹配到的所有记录</span><br><span class="line">     * @param srcObj</span><br><span class="line">     * @param targetObj</span><br><span class="line">     */</span><br><span class="line">    public void updateMulti(T srcObj, T targetObj)&#123;</span><br><span class="line">        Query query = getQueryByObject(srcObj);</span><br><span class="line">        Update update = getUpdateByObject(targetObj);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB updateFirst start&quot;);</span><br><span class="line">        this.mongoTemplate.updateMulti(query,update,this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 修改匹配到的记录，若不存在该记录则进行添加</span><br><span class="line">     * @param srcObj</span><br><span class="line">     * @param targetObj</span><br><span class="line">     */</span><br><span class="line">    public void updateInsert(T srcObj, T targetObj)&#123;</span><br><span class="line">        Query query = getQueryByObject(srcObj);</span><br><span class="line">        Update update = getUpdateByObject(targetObj);</span><br><span class="line">        logger.info(&quot;--------------&gt;MongoDB updateInsert start&quot;);</span><br><span class="line">        this.mongoTemplate.upsert(query,update,this.getEntityClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将查询条件对象转换为query</span><br><span class="line">     *</span><br><span class="line">     * @param object</span><br><span class="line">     * @return</span><br><span class="line">     * @author Jason</span><br><span class="line">     */</span><br><span class="line">    private Query getQueryByObject(T object) &#123;</span><br><span class="line">        Query query = new Query();</span><br><span class="line">        String[] fileds = getFiledName(object);</span><br><span class="line">        Criteria criteria = new Criteria();</span><br><span class="line">        for (int i = 0; i &lt; fileds.length; i++) &#123;</span><br><span class="line">            String filedName = (String) fileds[i];</span><br><span class="line">            Object filedValue = getFieldValueByName(filedName, object);</span><br><span class="line">            if (filedValue != null) &#123;</span><br><span class="line">                criteria.and(filedName).is(filedValue);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        query.addCriteria(criteria);</span><br><span class="line">        return query;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将查询条件对象转换为update</span><br><span class="line">     *</span><br><span class="line">     * @param object</span><br><span class="line">     * @return</span><br><span class="line">     * @author Jason</span><br><span class="line">     */</span><br><span class="line">    private Update getUpdateByObject(T object) &#123;</span><br><span class="line">        Update update = new Update();</span><br><span class="line">        String[] fileds = getFiledName(object);</span><br><span class="line">        for (int i = 0; i &lt; fileds.length; i++) &#123;</span><br><span class="line">            String filedName = (String) fileds[i];</span><br><span class="line">            Object filedValue =getFieldValueByName(filedName, object);</span><br><span class="line">            if (filedValue != null) &#123;</span><br><span class="line">                update.set(filedName, filedValue);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return update;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 获取对象属性返回字符串数组</span><br><span class="line">     * @param o</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private static String[] getFiledName(Object o) &#123;</span><br><span class="line">        Field[] fields = o.getClass().getDeclaredFields();</span><br><span class="line">        String[] fieldNames = new String[fields.length];</span><br><span class="line"></span><br><span class="line">        for (int i = 0; i &lt; fields.length; ++i) &#123;</span><br><span class="line">            fieldNames[i] = fields[i].getName();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return fieldNames;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /***</span><br><span class="line">     * 根据属性获取对象属性值</span><br><span class="line">     * @param fieldName</span><br><span class="line">     * @param o</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private static Object getFieldValueByName(String fieldName, Object o) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            String e = fieldName.substring(0, 1).toUpperCase();</span><br><span class="line">            String getter = &quot;get&quot; + e + fieldName.substring(1);</span><br><span class="line">            Method method = o.getClass().getMethod(getter, new Class[0]);</span><br><span class="line">            return method.invoke(o, new Object[0]);</span><br><span class="line">        &#125; catch (Exception var6) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们将mongoDB常用的CURD操作封装为通用的父类，然后在不同的业务场景下继承该类，通过泛型和反射获取到正在操作的实体类。</p>
+<p>比如我们可以将之前的Book实体类的CURD类进行改造</p>
+<p>创建BookMongoDbDao类继承MongoDbDao</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 描述:</span><br><span class="line"> *</span><br><span class="line"> * @author zhengql</span><br><span class="line"> * @date 2018/8/9 20:46</span><br><span class="line"> */</span><br><span class="line">@Repository</span><br><span class="line">public class BookMongoDbDao extends MongoDbDao&lt;Book&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected Class&lt;Book&gt; getEntityClass() &#123;</span><br><span class="line">        return Book.class;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我们可以改造Book的Service类<br>
+原始版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class BookMongoDbService &#123;</span><br><span class="line">    private static final Logger logger = LoggerFactory.getLogger(BookMongoDbService.class);</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 保存对象</span><br><span class="line">     *</span><br><span class="line">     * @param book</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public String saveObj(Book book) &#123;</span><br><span class="line">        logger.info(&quot;---------------------&gt;[MongoDB save start]&quot;);</span><br><span class="line">        book.setCreateTime(new Date());</span><br><span class="line">        book.setUpdateTime(new Date());</span><br><span class="line">        mongoTemplate.save(book);</span><br><span class="line">        return &quot;添加成功&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //其他操作方法......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改造后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class BookMongoDbService &#123;</span><br><span class="line">    private static final Logger logger = LoggerFactory.getLogger(BookMongoDbService.class);</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private BookMongoDbDao bookMongoDbDao;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 保存对象</span><br><span class="line">     *</span><br><span class="line">     * @param book</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public String saveObj(Book book) &#123;</span><br><span class="line">        logger.info(&quot;---------------------&gt;[MongoDB save start]&quot;);</span><br><span class="line">        book.setCreateTime(new Date());</span><br><span class="line">        book.setUpdateTime(new Date());</span><br><span class="line">        mongoTemplate.save(book);</span><br><span class="line">        return &quot;添加成功&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String saveObj2(Book book) &#123;</span><br><span class="line">        book.setCreateTime(new Date());</span><br><span class="line">        book.setUpdateTime(new Date());</span><br><span class="line">        bookMongoDbDao.save(book);</span><br><span class="line">        return &quot;添加成功&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改造后的saveObj2方法的效果与以前的一致，但是大大的提高了开发效率。不需要重复的编写CURD的方法。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>通过以上的配置已经完成springboot与mongoDB集成环境的初步搭建，当然了MongoDB在springboot中的使用不仅于此，还有更多的功能和更优雅的使用方式等待着我们去发掘。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/sb2mongoDB/" target="_blank" title="SpringBoot2.x集成MongoDB">https://www.larscheng.com/sb2mongoDB/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/SpringBoot/"><i class="fa-fw fa fa-tags"></i> SpringBoot</a>
+                    
+                        <a href="/tags/MongoDB/"><i class="fa-fw fa fa-tags"></i> MongoDB</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/sb2redis/">SpringBoot2.x集成Redis</a>
+            
+            
+            <a class="next" rel="next" href="/microservice-note/">[SpringCloud学习] - 浅谈微服务架构</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

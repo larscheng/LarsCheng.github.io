@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>Java中“附近的人”实现方案讨论及代码实现 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java中“附近的人”实现方案讨论及代码实现</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2019-12-18&nbsp;&nbsp;19:53:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">3,251</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">13min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>在我们平时使用的许多app中有<code>附近的人</code>这一功能，像微信、qq附近的人，哈罗、街兔附近的车辆。这些功能就在我们日常生活中出现。</p>
+<blockquote>
+<p>像类似于附近的人这一类业务，在Java中是如何实现的呢？</p>
+</blockquote>
+<p>本文就简单介绍下目前的几种解决方案，并提供简单的示例代码</p>
+<p>注: 本文仅涉及<code>附近的人</code>这一业务场景的解决方案讨论，并未涉及到相关的技术细节和方案优化，各位看官可以放心阅读。</p>
+<a id="more"></a> 
+<h1 id="基本套路和方案"><a class="markdownIt-Anchor" href="#基本套路和方案"></a> 基本套路和方案</h1>
+<p>目前业内的解决方案大都依据geoHash展开，考虑到不同的数据量以及不同的业务场景，本文主要讨论以下3种方案</p>
+<ul>
+<li><strong>Mysql+外接正方形</strong></li>
+<li><strong>Mysql+geohash</strong></li>
+<li><strong>Redis+geohash</strong></li>
+</ul>
+<h1 id="mysql外接正方形"><a class="markdownIt-Anchor" href="#mysql外接正方形"></a> Mysql+外接正方形</h1>
+<p><code>外接矩形</code>的实现方式是相对较为简单的一种方式。</p>
+<p>假设给定某用户的位置坐标, 求在该用户指定范围内的其他用户信息</p>
+<blockquote>
+<p>此时可以将位置信息和距离范围简化成平面几何题来求解</p>
+</blockquote>
+<h2 id="实现思路"><a class="markdownIt-Anchor" href="#实现思路"></a> 实现思路</h2>
+<p>以当前用户为圆心，以给定距离为半径画圆，那么在这个圆内的所有用户信息就是符合结果的信息，直接检索圆内的用户坐标难以实现，我们可以通过获取这个圆的<code>外接正方形</code>。</p>
+<p>通过外接正方形，获取<code>经度和纬度的最大最小值</code>，根据最大最小值可以将坐标在正方形内的用户信息搜索出来。</p>
+<p>此时在外接正方形中不属于圆形区域的部分就属于多余的部分，这部分用户信息距离当前用户（圆心）的距离必定是大于给定半径的，故可以将其剔除，最终获得指定范围内的附近的人</p>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/nearbysearch/20191210200831.png" style="zoom:67%;">
+<h2 id="代码实现"><a class="markdownIt-Anchor" href="#代码实现"></a> 代码实现</h2>
+<blockquote>
+<p>这里只贴出部分核心代码，详细的代码可见源码：<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/NearbySearch" target="_blank" rel="noopener">NearBySearch</a></p>
+</blockquote>
+<p>在实现附近的人搜索中，需要根据位置经纬度点，进行一些距离和范围的计算，比如求球面外接正方形的坐标点，球面两坐标点的距离等，可以引入<a href="http://locationtech.github.io/spatial4j/apidocs/" target="_blank" rel="noopener">Spatial4j</a>库。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.spatial4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spatial4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>首先创建一张数据表<code>user</code></li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`user`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'名称'</span>,</span><br><span class="line">  <span class="string">`longitude`</span> <span class="keyword">double</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'经度'</span>,</span><br><span class="line">  <span class="string">`latitude`</span> <span class="keyword">double</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'纬度'</span>,</span><br><span class="line">  <span class="string">`create_time`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CURRENT_TIMESTAMP</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>假设已插入足够的测试数据，只要我们获取到外接正方形的四个关键点，就可以直接直接查询</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">private</span> SpatialContext spatialContext = SpatialContext.GEO;    </span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 获取附近x米的人</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> distance 距离范围 单位km</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> userLng  当前经度</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> userLat  当前纬度</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> json</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@GetMapping</span>(<span class="string">"/nearby"</span>)</span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">nearBySearch</span><span class="params">(@RequestParam(<span class="string">"distance"</span>)</span> <span class="keyword">double</span> distance,</span></span><br><span class="line"><span class="function">                              @<span class="title">RequestParam</span><span class="params">(<span class="string">"userLng"</span>)</span> <span class="keyword">double</span> userLng,</span></span><br><span class="line"><span class="function">                              @<span class="title">RequestParam</span><span class="params">(<span class="string">"userLat"</span>)</span> <span class="keyword">double</span> userLat) </span>&#123;</span><br><span class="line">       <span class="comment">//1.获取外接正方形</span></span><br><span class="line">       Rectangle rectangle = getRectangle(distance, userLng, userLat);</span><br><span class="line">       <span class="comment">//2.获取位置在正方形内的所有用户</span></span><br><span class="line">       List&lt;User&gt; users = userMapper.selectUser(rectangle.getMinX(), rectangle.getMaxX(), rectangle.getMinY(), rectangle.getMaxY());</span><br><span class="line">       <span class="comment">//3.剔除半径超过指定距离的多余用户</span></span><br><span class="line">       users = users.stream()</span><br><span class="line">           .filter(a -&gt; getDistance(a.getLongitude(), a.getLatitude(), userLng, userLat) &lt;= distance)</span><br><span class="line">           .collect(Collectors.toList());</span><br><span class="line">       <span class="keyword">return</span> JSON.toJSONString(users);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">private</span> Rectangle <span class="title">getRectangle</span><span class="params">(<span class="keyword">double</span> distance, <span class="keyword">double</span> userLng, <span class="keyword">double</span> userLat)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> spatialContext.getDistCalc()</span><br><span class="line">           .calcBoxByDistFromPt(spatialContext.makePoint(userLng, userLat), </span><br><span class="line">                                distance * DistanceUtils.KM_TO_DEG, spatialContext, <span class="keyword">null</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>这里给出查询的sql</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id="selectUser" resultMap="BaseResultMap"&gt;</span><br><span class="line">    <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span></span><br><span class="line">    <span class="keyword">WHERE</span> <span class="number">1</span>=<span class="number">1</span></span><br><span class="line">    <span class="keyword">and</span> (longitude <span class="keyword">BETWEEN</span> $&#123;minlng&#125; <span class="keyword">AND</span> $&#123;maxlng&#125;)</span><br><span class="line">    <span class="keyword">and</span> (latitude <span class="keyword">BETWEEN</span> $&#123;minlat&#125; <span class="keyword">AND</span> $&#123;maxlat&#125;)</span><br><span class="line">&lt;/<span class="keyword">select</span>&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="mysqlgeohash"><a class="markdownIt-Anchor" href="#mysqlgeohash"></a> Mysql+geohash</h1>
+<p>前面介绍了通过Mysql存储用户的信息和gps坐标，通过计算外接正方形的坐标点来粗略筛选结果集，最终剔除超过范围的用户。</p>
+<blockquote>
+<p>而现在要提到的<code>Mysql+geohash</code>方案，同样是以Mysql为基础，只不过引入了geohash算法，同时在查询上借助索引。</p>
+</blockquote>
+<p>geohash被广泛应用于位置搜索类的业务中，本文不对它进行展开说明，有兴趣的同学可以看一下这篇博客:<a href="https://www.cnblogs.com/LBSer/p/3310455.html" target="_blank" rel="noopener">[GeoHash核心原理解析]</a>，这里简单对它做一个描述：</p>
+<p>GeoHash算法将经纬度坐标点编码成一个字符串,距离越近的坐标，转换后的<code>geohash字符串越相似</code>,例如下表数据：</p>
+<table>
+<thead>
+<tr>
+<th>用户</th>
+<th>经纬度</th>
+<th>Geohash字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小明</td>
+<td>116.402843,39.999375</td>
+<td>wx4g8c9v</td>
+</tr>
+<tr>
+<td>小华</td>
+<td>116.3967,39.99932</td>
+<td>wx4g89tk</td>
+</tr>
+<tr>
+<td>小张</td>
+<td>116.40382,39.918118</td>
+<td>wx4g0ffe</td>
+</tr>
+</tbody>
+</table>
+<p>其中根据经纬度计算得到的geohash字符串，不同精度（字符串长度）代表了不同的距离误差。具体的不同精度的距离误差可参考下表：</p>
+<table>
+<thead>
+<tr>
+<th>geohash码长度</th>
+<th>宽度</th>
+<th>高度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>5,009.4km</td>
+<td>4,992.6km</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1,252.3km</td>
+<td>624.1km</td>
+</tr>
+<tr>
+<td>3</td>
+<td>156.5km</td>
+<td>156km</td>
+</tr>
+<tr>
+<td>4</td>
+<td>39.1km</td>
+<td>19.5km</td>
+</tr>
+<tr>
+<td>5</td>
+<td>4.9km</td>
+<td>4.9km</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1.2km</td>
+<td>609.4m</td>
+</tr>
+<tr>
+<td>7</td>
+<td>152.9m</td>
+<td>152.4m</td>
+</tr>
+<tr>
+<td>8</td>
+<td>38.2m</td>
+<td>19m</td>
+</tr>
+<tr>
+<td>9</td>
+<td>4.8m</td>
+<td>4.8m</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1.2m</td>
+<td>59.5cm</td>
+</tr>
+<tr>
+<td>11</td>
+<td>14.9cm</td>
+<td>14.9cm</td>
+</tr>
+<tr>
+<td>12</td>
+<td>3.7cm</td>
+<td>1.9cm</td>
+</tr>
+</tbody>
+</table>
+<h2 id="实现思路-2"><a class="markdownIt-Anchor" href="#实现思路-2"></a> 实现思路</h2>
+<p>使用Mysql存储用户信息，其中包括用户的经纬度信息和geohash字符串。</p>
+<ol>
+<li>添加新用户时计算该用户的geohash字符串，并存储到用户表中</li>
+<li>当要查询某一gps附近指定距离的用户信息时，通过比对geohash误差表确定需要的geohash字符串精度</li>
+<li>计算获得某一精度的当前坐标的geohash字符串，通过<code>WHERE geohash Like 'geohashcode%'</code>来查询数据集</li>
+<li>如果geohash字符串的精度远大于给定的距离范围时，查询出的结果集中必然存在在范围之外的数据</li>
+<li>计算两点之间距离，对于超出距离的数据进行剔除。</li>
+</ol>
+<h2 id="代码实现-2"><a class="markdownIt-Anchor" href="#代码实现-2"></a> 代码实现</h2>
+<blockquote>
+<p>这里只贴出部分核心代码，详细的代码可见源码：<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/NearbySearch" target="_blank" rel="noopener">NearBySearch</a></p>
+</blockquote>
+<p>同样的要涉及到坐标点的计算和geohash的计算，开始之前先导入<code>spatial4j</code></p>
+<ol>
+<li>创建数据表<code>user_geohash</code>,给geohash码添加索引</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`user_geohash`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'名称'</span>,</span><br><span class="line">  <span class="string">`longitude`</span> <span class="keyword">double</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'经度'</span>,</span><br><span class="line">  <span class="string">`latitude`</span> <span class="keyword">double</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'纬度'</span>,</span><br><span class="line">  <span class="string">`geo_code`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'经纬度所计算的geohash码'</span>,</span><br><span class="line">  <span class="string">`create_time`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CURRENT_TIMESTAMP</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`index_geo_hash`</span> (<span class="string">`geo_code`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>添加用户信息和范围搜索逻辑</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> SpatialContext spatialContext = SpatialContext.GEO;</span><br><span class="line"></span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * 添加用户</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/addUser"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(@RequestBody UserGeohash user)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//默认精度12位</span></span><br><span class="line">    String geoHashCode = GeohashUtils.encodeLatLon(user.getLatitude(),user.getLongitude());</span><br><span class="line">    <span class="keyword">return</span> userGeohashService.save(user.setGeoCode(geoHashCode).setCreateTime(LocalDateTime.now()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取附近指定范围的人</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> distance 距离范围 单位km</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> len      geoHash的精度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> userLng  当前经度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> userLat  当前纬度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> json</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/nearby"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">nearBySearch</span><span class="params">(@RequestParam(<span class="string">"distance"</span>)</span> <span class="keyword">double</span> distance,</span></span><br><span class="line"><span class="function">                           @<span class="title">RequestParam</span><span class="params">(<span class="string">"len"</span>)</span> <span class="keyword">int</span> len,</span></span><br><span class="line"><span class="function">                           @<span class="title">RequestParam</span><span class="params">(<span class="string">"userLng"</span>)</span> <span class="keyword">double</span> userLng,</span></span><br><span class="line"><span class="function">                           @<span class="title">RequestParam</span><span class="params">(<span class="string">"userLat"</span>)</span> <span class="keyword">double</span> userLat) </span>&#123;</span><br><span class="line">    <span class="comment">//1.根据要求的范围，确定geoHash码的精度，获取到当前用户坐标的geoHash码</span></span><br><span class="line">    String geoHashCode = GeohashUtils.encodeLatLon(userLat, userLng, len);</span><br><span class="line">    QueryWrapper&lt;UserGeohash&gt; queryWrapper = <span class="keyword">new</span> QueryWrapper&lt;UserGeohash&gt;()</span><br><span class="line">            .likeRight(<span class="string">"geo_code"</span>,geoHashCode);</span><br><span class="line">    <span class="comment">//2.匹配指定精度的geoHash码</span></span><br><span class="line">    List&lt;UserGeohash&gt; users = userGeohashService.list(queryWrapper);</span><br><span class="line">    <span class="comment">//3.过滤超出距离的</span></span><br><span class="line">    users = users.stream()</span><br><span class="line">            .filter(a -&gt;getDistance(a.getLongitude(),a.getLatitude(),userLng,userLat)&lt;= distance)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    <span class="keyword">return</span> JSON.toJSONString(users);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * 球面中，两点间的距离</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> longitude 经度1</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> latitude  纬度1</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> userLng   经度2</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> userLat   纬度2</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回距离，单位km</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getDistance</span><span class="params">(Double longitude, Double latitude, <span class="keyword">double</span> userLng, <span class="keyword">double</span> userLat)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> spatialContext.calcDistance(spatialContext.makePoint(userLng, userLat),</span><br><span class="line">            spatialContext.makePoint(longitude, latitude)) * DistanceUtils.DEG_TO_KM;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面几步，就可以实现这一业务场景，不仅提高了查询效率，并且保护了用户的隐私，不对外暴露坐标位置。并且对于同一位置的频繁请求，如果是同一个geohash字符串，可以加上缓存，减缓数据库的压力。</p>
+<h2 id="边界问题优化"><a class="markdownIt-Anchor" href="#边界问题优化"></a> 边界问题优化</h2>
+<p>geohash算法将地图分为一个个矩形，对每个矩形进行编码，得到geohash码，但是<code>当前点与待搜索点距离很近但是恰好在两个区域</code>，用上面的方法则就不适用了。</p>
+<blockquote>
+<p>解决这一问题的办法：获取当前点所在区域附近的8个区域的geohash码，一并进行筛选。</p>
+</blockquote>
+<p>如何求解<code>附近的8个区域的geohash码</code>可参考<a href="https://blog.csdn.net/dokd229933/article/details/47021515" target="_blank" rel="noopener">Geohash求当前区域周围8个区域编码的一种思路</a></p>
+<p>了解了思路，这里我们可以使用第三方开源库<code>ch.hsr.geohash</code>来计算，通过maven引入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.hsr<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>geohash<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.10<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>对上一章节的<code>nearBySearch</code>方法进行修改如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取附近指定范围的人</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> distance 距离范围 单位km</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> len      geoHash的精度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> userLng  当前经度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> userLat  当前纬度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> json</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/nearby"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">nearBySearch</span><span class="params">(@RequestParam(<span class="string">"distance"</span>)</span> <span class="keyword">double</span> distance,</span></span><br><span class="line"><span class="function">                           @<span class="title">RequestParam</span><span class="params">(<span class="string">"len"</span>)</span> <span class="keyword">int</span> len,</span></span><br><span class="line"><span class="function">                           @<span class="title">RequestParam</span><span class="params">(<span class="string">"userLng"</span>)</span> <span class="keyword">double</span> userLng,</span></span><br><span class="line"><span class="function">                           @<span class="title">RequestParam</span><span class="params">(<span class="string">"userLat"</span>)</span> <span class="keyword">double</span> userLat) </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//1.根据要求的范围，确定geoHash码的精度，获取到当前用户坐标的geoHash码</span></span><br><span class="line">    GeoHash geoHash = GeoHash.withCharacterPrecision(userLat, userLng, len);</span><br><span class="line">    <span class="comment">//2.获取到用户周边8个方位的geoHash码</span></span><br><span class="line">    GeoHash[] adjacent = geoHash.getAdjacent();</span><br><span class="line"></span><br><span class="line">    QueryWrapper&lt;UserGeohash&gt; queryWrapper = <span class="keyword">new</span> QueryWrapper&lt;UserGeohash&gt;()</span><br><span class="line">        .likeRight(<span class="string">"geo_code"</span>,geoHash.toBase32());</span><br><span class="line">    Stream.of(adjacent).forEach(a -&gt; queryWrapper.or().likeRight(<span class="string">"geo_code"</span>,a.toBase32()));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3.匹配指定精度的geoHash码</span></span><br><span class="line">    List&lt;UserGeohash&gt; users = userGeohashService.list(queryWrapper);</span><br><span class="line">    <span class="comment">//4.过滤超出距离的</span></span><br><span class="line">    users = users.stream()</span><br><span class="line">            .filter(a -&gt;getDistance(a.getLongitude(),a.getLatitude(),userLng,userLat)&lt;= distance)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    <span class="keyword">return</span> JSON.toJSONString(users);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="redisgeohash"><a class="markdownIt-Anchor" href="#redisgeohash"></a> Redis+GeoHash</h1>
+<p>基于前两种方案，我们可以发现gps这类数据属于<code>读多写少</code>的情况，如果使用redis来实现附近的人，想必效率会大大提高。</p>
+<blockquote>
+<p>自Redis 3.2开始，Redis基于<a href="https://en.wikipedia.org/wiki/Geohash" target="_blank" rel="noopener">geohash</a>和<a href="http://redisdoc.com/sorted_set/index.html" target="_blank" rel="noopener">有序集合Zset</a>提供了地理位置相关功能</p>
+</blockquote>
+<p>Redis提供6条命令，来帮助我们我完成大部分业务的需求，关于Redis提供的geohash操作命令介绍可阅读博客：<a href="https://juejin.im/post/5da40462f265da5baf410a11" target="_blank" rel="noopener">Redis 到底是怎么实现“附近的人”这个功能的呢？</a></p>
+<p>本文主要介绍下，我们示例代码中用到的两个命令：</p>
+<ul>
+<li><code>GEOADD key longitude latitude member</code>：将给定的空间元素（纬度、经度、名字）添加到指定的键里面
+<ul>
+<li>例如添加小明的经纬度信息：GEOADD location 119.98866180732716	30.27465803229662  小明</li>
+</ul>
+</li>
+<li><code>GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [ASC|DESC] [COUNT count]</code>: 根据给定地理位置坐标获取指定范围内的地理位置集合(附近的人)
+<ul>
+<li>例如查询某gps附近500m的用户坐标：GEORADIUS location 119.98866180732716	30.27465803229662 500 m WITHCOORD</li>
+</ul>
+</li>
+</ul>
+<h2 id="实现思路-3"><a class="markdownIt-Anchor" href="#实现思路-3"></a> 实现思路</h2>
+<ul>
+<li>添加用户坐标信息到redis（<code>GEOADD</code>），redis会将经纬度参数值转换为52位的geohash码，</li>
+<li>Redis以geohash码为score，将其他信息以Zset有序集合存入key中</li>
+<li>通过调用<code>GEORADIUS</code>命令，获取指定坐标点某一范围内的数据</li>
+<li>因geohash存在精度误差，剔除超过指定距离的数据</li>
+</ul>
+<h2 id="实现代码"><a class="markdownIt-Anchor" href="#实现代码"></a> 实现代码</h2>
+<blockquote>
+<p>这里只贴出部分核心代码，详细的代码可见源码：<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/NearbySearch" target="_blank" rel="noopener">NearBySearch</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   <span class="meta">@Autowired</span></span><br><span class="line">   <span class="keyword">private</span> RedisTemplate&lt;String, Object&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="comment">//GEO相关命令用到的KEY</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String KEY = <span class="string">"user_info"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">save</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">       Long flag = redisTemplate.opsForGeo().add(KEY, <span class="keyword">new</span> RedisGeoCommands.GeoLocation&lt;&gt;(</span><br><span class="line">               user.getName(), </span><br><span class="line">               <span class="keyword">new</span> Point(user.getLongitude(), user.getLatitude()))</span><br><span class="line">       );</span><br><span class="line">       <span class="keyword">return</span> flag != <span class="keyword">null</span> &amp;&amp; flag &gt; <span class="number">0</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 根据当前位置获取附近指定范围内的用户</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> distance 指定范围 单位km ，可根据&#123;<span class="doctag">@link</span> org.springframework.data.geo.Metrics&#125; 进行设置</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> userLng 用户经度</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> userLat 用户纬度</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">nearBySearch</span><span class="params">(<span class="keyword">double</span> distance, <span class="keyword">double</span> userLng, <span class="keyword">double</span> userLat)</span> </span>&#123;</span><br><span class="line">       List&lt;User&gt; users = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="comment">// 1.GEORADIUS获取附近范围内的信息</span></span><br><span class="line">       GeoResults&lt;RedisGeoCommands.GeoLocation&lt;Object&gt;&gt; reslut = </span><br><span class="line">           redisTemplate.opsForGeo().radius(KEY, </span><br><span class="line">                       <span class="keyword">new</span> Circle(<span class="keyword">new</span> Point(userLng, userLat), <span class="keyword">new</span> Distance(distance, Metrics.KILOMETERS)),</span><br><span class="line">                       RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs()</span><br><span class="line">                               .includeDistance()</span><br><span class="line">                               .includeCoordinates().sortAscending());</span><br><span class="line">       <span class="comment">//2.收集信息，存入list</span></span><br><span class="line">       List&lt;GeoResult&lt;RedisGeoCommands.GeoLocation&lt;Object&gt;&gt;&gt; content = reslut.getContent();</span><br><span class="line">       <span class="comment">//3.过滤掉超过距离的数据</span></span><br><span class="line">       content.forEach(a-&gt; users.add(</span><br><span class="line">               <span class="keyword">new</span> User().setDistance(a.getDistance().getValue())</span><br><span class="line">               .setLatitude(a.getContent().getPoint().getX())</span><br><span class="line">               .setLongitude(a.getContent().getPoint().getY())));</span><br><span class="line">       <span class="keyword">return</span> JSON.toJSONString(users);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="方案总结"><a class="markdownIt-Anchor" href="#方案总结"></a> 方案总结</h1>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优势</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mysql外接正方形</td>
+<td>逻辑清晰，实现简单，支持多条件筛选</td>
+<td>效率较低，不适合大数据量，不支持按距离排序</td>
+</tr>
+<tr>
+<td>Mysql+Geohash</td>
+<td>借助索引有效提高效率，支持多条件筛选</td>
+<td>不支持按距离排序，存在数据库瓶颈</td>
+</tr>
+<tr>
+<td>Redis+Geohash</td>
+<td>效率高，集成便捷，支持距离排序</td>
+<td>不适合复杂对象存储，不支持多条件查询</td>
+</tr>
+</tbody>
+</table>
+<p>总结以上三种方案，各有优劣，在不同的业务场景下，可选择不同的方案来实现。</p>
+<p>当然目前附近的人的解决方案并不仅仅这三种，以上权当是这一功能的入门引子，希望对大家有所帮助。</p>
+<blockquote>
+<p>本文的三种方案均有源码提供，<a href="https://github.com/larscheng/larscheng-learning-demo/tree/master/NearbySearch" target="_blank" rel="noopener">源码地址</a></p>
+</blockquote>
+<h1 id="参考文章"><a class="markdownIt-Anchor" href="#参考文章"></a> 参考文章</h1>
+<p><a href="https://juejin.im/post/5da40462f265da5baf410a11" target="_blank" rel="noopener">Redis 到底是怎么实现“附近的人”这个功能的呢？</a></p>
+<p><a href="https://blog.csdn.net/dokd229933/article/details/47021515" target="_blank" rel="noopener">Geohash求当前区域周围8个区域编码的一种思路</a></p>
+<p><a href="https://www.cnblogs.com/LBSer/p/3310455.html" target="_blank" rel="noopener">GeoHash核心原理解析</a></p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/nearby-search/" target="_blank" title="Java中“附近的人”实现方案讨论及代码实现">https://www.larscheng.com/nearby-search/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/附近的人/"><i class="fa-fw fa fa-tags"></i> 附近的人</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019-summary/">菜鸡程序员的2019年度总结</a>
+            
+            
+            <a class="next" rel="next" href="/javadate2/">Java时间处理2----时区TimeZone类方法探究(Java8以前)</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>

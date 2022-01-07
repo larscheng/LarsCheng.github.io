@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>设计模式(2)-工厂模式图文介绍 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">设计模式(2)-工厂模式图文介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2020-08-30&nbsp;&nbsp;12:53:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/设计模式/">设计模式</a>
+                            
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">3,009</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">11min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="工厂模式"><a class="markdownIt-Anchor" href="#工厂模式"></a> 工厂模式</h1>
+<p>工厂模式（Factory Pattern）是 Java 中最常用的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。</p>
+<p>在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
+<a id="more"></a> 
+<h1 id="模拟需求1"><a class="markdownIt-Anchor" href="#模拟需求1"></a> 模拟需求①</h1>
+<p>假设现有一个口罩生产工厂，可以生产防霾口罩、医用一次性口罩、N95口罩<br>
+客户可以通过口罩直营店根据自己的需求下单购买口罩<br>
+使用代码实现这一流程</p>
+<h1 id="传统实现方式"><a class="markdownIt-Anchor" href="#传统实现方式"></a> 传统实现方式</h1>
+<p>根据给出的需求，结合面向对象思想，大概有以下几个类</p>
+<ul>
+<li>BaseMask 抽象口罩类</li>
+<li>HazeMask 防霾口罩类</li>
+<li>MedicalMask 医用口罩类</li>
+<li>N95Mask N95口罩类</li>
+<li>MaskStore 直营店类</li>
+<li>Client 客户类</li>
+</ul>
+<p>简单类图如下：<br>
+<img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/softexam/20201009151251.png" alt=""></p>
+<h2 id="实现代码"><a class="markdownIt-Anchor" href="#实现代码"></a> 实现代码</h2>
+<p>HazeMask、MedicalMask、N95Mask继承自BaseMask，分别实现prepare方法，并调用setName方法设置name属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseMask</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">processing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(name+<span class="string">"开始加工..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bale</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(name+<span class="string">"打包完成..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>MaskStore类，实现了口罩直营店根据用户需求进行下单的流程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MaskStore</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">order</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BaseMask mask = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> maskType;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            maskType = getType();</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1</span> == maskType)&#123;</span><br><span class="line">                mask = <span class="keyword">new</span> HazeMask();</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">2</span> == maskType)&#123;</span><br><span class="line">                mask = <span class="keyword">new</span> MedicalMask();</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">3</span> == maskType)&#123;</span><br><span class="line">                mask = <span class="keyword">new</span> N95Mask();</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"不支持的产品类型"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            mask.prepare();</span><br><span class="line">            mask.processing();</span><br><span class="line">            mask.bale();</span><br><span class="line">        &#125; <span class="keyword">while</span> (<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**接收用户要下单的产品类型</span></span><br><span class="line"><span class="comment">     * 1：防霾口罩</span></span><br><span class="line"><span class="comment">     * 2：医用口罩</span></span><br><span class="line"><span class="comment">     * 3：n95口罩</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BufferedReader typeReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">            System.out.println(<span class="string">"输入需要下单的类型: "</span>);</span><br><span class="line">            <span class="keyword">return</span> Integer.parseInt(typeReader.readLine());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Client的实现就相对简单，模拟用户下单操作，直接调用直营店暴露的下单order方法</p>
+<h2 id="优缺点分析"><a class="markdownIt-Anchor" href="#优缺点分析"></a> 优缺点分析</h2>
+<p>根据场景需求我们有了如上的代码方案，其中涉及到的类和方法都比较好理解，核心主要是通过用户需要下单的type来进行产品的创建，但优缺点需要细细捋一捋</p>
+<p>优点：思路清晰，便于理解<br>
+缺点：违反开闭原则，也就是扩展性差，如果添加一个新的口罩类型，涉及到的修改点过多</p>
+<p>举个栗子：<br>
+如果这时候添加一个新的口罩类型，那所有的口罩直营店类中的代码都需要同步修改</p>
+<p>这时候有一种解决方案：<strong>将根据类型创建产品的方法单独封装起来</strong>，当有新产品加入时，只需要修改单独封装过的这部分代码，而调用方可以做到无感知接入，这种方式也叫做<code>简单工厂模式</code>。但他并不属于23种设计模式，简单工厂仅仅指一种创建类的解决方案</p>
+<h1 id="简单工厂模式"><a class="markdownIt-Anchor" href="#简单工厂模式"></a> 简单工厂模式</h1>
+<p>相对于传统方案中多出一个简单工厂类SimpleMaskFactory，同时对MaskStore进行了重构，简单类图如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/softexam/20201009155326.png" alt=""></p>
+<h2 id="代码实现"><a class="markdownIt-Anchor" href="#代码实现"></a> 代码实现</h2>
+<p>与传统方案不同的是，之前的口罩产品创建是在MaskStore中，使用简单工厂模式后，将创建口罩产品的工作封装到了SimpleMaskFactory中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMaskFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BaseMask <span class="title">createMask</span><span class="params">(<span class="keyword">int</span> maskType)</span> </span>&#123;</span><br><span class="line">        BaseMask mask = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> == maskType) &#123;</span><br><span class="line">            mask = <span class="keyword">new</span> HazeMask();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">2</span> == maskType) &#123;</span><br><span class="line">            mask = <span class="keyword">new</span> MedicalMask();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">3</span> == maskType) &#123;</span><br><span class="line">            mask = <span class="keyword">new</span> N95Mask();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mask;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>MaskStore只需要持有工厂类和需要下单的产品类型，发起下单操作即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MaskStore</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SimpleMaskFactory factory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MaskStore</span><span class="params">(SimpleMaskFactory factory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.factory = factory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">order</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BaseMask mask = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> maskType;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            maskType = getType();</span><br><span class="line">            mask = factory.createMask(maskType);</span><br><span class="line">            <span class="keyword">if</span> (!Objects.isNull(mask))&#123;</span><br><span class="line">                mask.prepare();</span><br><span class="line">                mask.processing();</span><br><span class="line">                mask.bale();</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"不支持的产品类型..."</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">while</span> (<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BufferedReader typeReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">            System.out.println(<span class="string">"----------------"</span>);</span><br><span class="line">            System.out.println(<span class="string">"输入需要下单的类型: "</span>);</span><br><span class="line">            <span class="keyword">return</span> Integer.parseInt(typeReader.readLine());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Client客户端的调用也更加方便</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> MaskStore(<span class="keyword">new</span> SimpleMaskFactory()).order();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="模拟需求2"><a class="markdownIt-Anchor" href="#模拟需求2"></a> 模拟需求②</h1>
+<p>假设现有多个口罩生产工厂，大致分为杭州制造和上海制造，可以生产防霾口罩、医用一次性口罩，<br>
+客户可以通过自己的需求下单购买某个地址制造的某一种口罩<br>
+使用代码实现这一流程</p>
+<p>此时的需求不仅有地域区分，同时还有种类区分，这种场景该如何处理呢？</p>
+<ul>
+<li>方案1
+<ul>
+<li>使用简单工厂模式，根据地域创建不同的工厂类，通过不同的工厂类来进行不同的产品创建</li>
+<li>扩展性差，可维护性差</li>
+</ul>
+</li>
+<li>方案2
+<ul>
+<li>使用工厂方法模式，将创建产品的方法抽象化，创建对象的操作交给子类自己来完成，即将对象实例化推迟到子类</li>
+</ul>
+</li>
+</ul>
+<h1 id="工厂方法模式"><a class="markdownIt-Anchor" href="#工厂方法模式"></a> 工厂方法模式</h1>
+<p>与简单工厂模式所不同，工厂方法模式将定义一个创建对象的抽象方法，根据实际需求整理到所涉及的类有</p>
+<ul>
+<li>BaseMask 抽象的口罩类</li>
+<li>HangzhouHazeMask 杭州制造-防霾口罩</li>
+<li>HangzhouMedicalMask 杭州制造-医用口罩</li>
+<li>ShanghaiHazeMask 上海制造-防霾口罩</li>
+<li>ShanghaiMedicalMask 上海制造-医用口罩</li>
+<li>BaseMaskFactory 抽象口罩工厂类，定义了一个创建对象的抽象方法，将对象创建延缓到子类进行</li>
+<li>HangzhouMaskFactory 杭州制造工厂类</li>
+<li>ShanghaiMaskFactory 上海制造工厂类</li>
+<li>Client 客户类</li>
+</ul>
+<p>简单的类图如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/softexam/20201009191546.png" alt=""></p>
+<h2 id="代码实现-2"><a class="markdownIt-Anchor" href="#代码实现-2"></a> 代码实现</h2>
+<p>HangzhouHazeMask、HangzhouMedicalMask、ShanghaiHazeMask、ShanghaiMedicalMask继承自BaseMask，分别实现prepare方法，并调用setName方法设置name属性</p>
+<p>HangzhouMaskFactory、ShanghaiMaskFactory继承自BaseMaskFactory类，重写了抽象方法createMask方法实现自己的对象创建逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseMaskFactory</span> </span>&#123;</span><br><span class="line">    <span class="comment">//抽象方法，子类自己实现对象的创建</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> BaseMask <span class="title">createMask</span><span class="params">(<span class="keyword">int</span> maskType)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BaseMaskFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BaseMask mask = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> maskType;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="comment">//1：防霾口罩 2：医用口罩</span></span><br><span class="line">            maskType = getType();</span><br><span class="line">            mask = createMask(maskType);</span><br><span class="line">            <span class="keyword">if</span> (!Objects.isNull(mask)) &#123;</span><br><span class="line">                mask.prepare();</span><br><span class="line">                mask.processing();</span><br><span class="line">                mask.bale();</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"不支持的产品类型..."</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">while</span> (<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HangzhouMaskFactory</span> <span class="keyword">extends</span> <span class="title">BaseMaskFactory</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">BaseMask <span class="title">createMask</span><span class="params">(<span class="keyword">int</span> maskType)</span> </span>&#123;</span><br><span class="line">        BaseMask mask = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span>==maskType)&#123;</span><br><span class="line">            mask = <span class="keyword">new</span> HangzhouHazeMask();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">2</span>==maskType)&#123;</span><br><span class="line">            mask = <span class="keyword">new</span> HangzhouMedicalMask();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mask;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时的客户调用，可以有选择性的指定某一地区来进行下单</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        System.out.println(<span class="string">"请选择要购买的产品产地，1:杭州，2:上海"</span>);</span><br><span class="line">        <span class="keyword">int</span> location = Integer.parseInt(scanner.nextLine());</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> == location) &#123;</span><br><span class="line">            <span class="keyword">new</span> HangzhouMaskFactory();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">2</span> == location) &#123;</span><br><span class="line">            <span class="keyword">new</span> ShanghaiMaskFactory();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"暂无该地区产品"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="模拟需求3"><a class="markdownIt-Anchor" href="#模拟需求3"></a> 模拟需求③</h1>
+<p>假设现有两种产品要进行生产：口罩和酒精，并且有杭州和上海两个工厂都可以生产这两种产品<br>
+客户可以通过自己的需求下单购买某个地址制造的某一种产品<br>
+使用代码实现这一流程</p>
+<p>这次的需求不同以往，产品类型出现了多种，即一个工厂可以生产多种不同类型的产品，这种涉及到多个产品簇，比较推荐使用抽象工厂模式</p>
+<h1 id="抽象工厂模式"><a class="markdownIt-Anchor" href="#抽象工厂模式"></a> 抽象工厂模式</h1>
+<p><strong>抽象工厂模式</strong>是一种为访问类提供一个创建一组相关或相互依赖对象的接口，<br>
+且访问类无须指定所要产品的具体类就能得到同族的不同等级的产品的模式结构。</p>
+<p>抽象工厂模式是工厂方法模式的升级版本，工厂方法模式中一个工厂只生产一种产品，而在抽象工厂模式中，一个工厂生产多种产品，并且存在多个工厂</p>
+<p>抽象工厂模式中有这两个概念</p>
+<ul>
+<li>产品等级：产品等级可以理解为同一类产品属于一个等级，比如防霾口罩、与医用外科口罩都属于口罩类，属于一个产品等级，但口罩和酒精明显不是一个产品等级</li>
+<li>产品族：同一个具体工厂所生产的位于不同产品等级的所有产品称作一个产品族。比如杭州工厂生产的杭州口罩和酒精就属于一个产品族</li>
+</ul>
+<p>上面的需求用抽象工厂模式的思路得到的简单类图如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/larscheng/myImg/blogImg/softexam/20201010112724.png" alt=""></p>
+<h2 id="代码实现-3"><a class="markdownIt-Anchor" href="#代码实现-3"></a> 代码实现</h2>
+<p>其中HangzhouMask、ShanghaiMask都继承自BaseMask，HangzhouAlcohol、ShanghaiAlcohol继承自BaseAlcohol</p>
+<p>通过定义抽象工厂接口AbstractMaskFactory，定义创建产品的方法，交由子类工厂进行实现。这里的产品创建方法可以覆盖到所有的产品等级</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AbstractFactory</span> </span>&#123;</span><br><span class="line">    <span class="function">BaseMask <span class="title">createMask</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">BaseAlcohol <span class="title">createAlcohol</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HangzhouFactory</span> <span class="keyword">implements</span> <span class="title">AbstractFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BaseMask <span class="title">createMask</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HangzhouHazeMask();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BaseAlcohol <span class="title">createAlcohol</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HangzhouAlcohol();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShanghaiFactory</span> <span class="keyword">implements</span> <span class="title">AbstractFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BaseMask <span class="title">createMask</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ShanghaiHazeMask();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BaseAlcohol <span class="title">createAlcohol</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ShanghaiAlcohol();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建了工厂类后，客户可以通过某一工厂进行指定产品的下单操作，这些逻辑封装在了Store类中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AbstractFactory factory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Store</span><span class="params">(AbstractFactory factory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.factory = factory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">orderMask</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BaseMask mask = <span class="keyword">null</span>;</span><br><span class="line">        mask = factory.createMask();</span><br><span class="line">        <span class="keyword">if</span> (!Objects.isNull(mask)) &#123;</span><br><span class="line">            mask.prepare();</span><br><span class="line">            mask.processing();</span><br><span class="line">            mask.bale();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"不支持的产品类型..."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">orderAlcohol</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BaseAlcohol alcohol = <span class="keyword">null</span>;</span><br><span class="line">        alcohol = factory.createAlcohol();</span><br><span class="line">        <span class="keyword">if</span> (!Objects.isNull(alcohol)) &#123;</span><br><span class="line">            alcohol.prepare();</span><br><span class="line">            alcohol.processing();</span><br><span class="line">            alcohol.bale();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"不支持的产品类型..."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="3种工厂模式的总结"><a class="markdownIt-Anchor" href="#3种工厂模式的总结"></a> 3种工厂模式的总结</h1>
+<p>本文一共提到了三种工厂模式，简单工厂模式、工厂方法模式、抽象工厂模式，也根据模拟场景对其进行了简单的说明</p>
+<p>从上面的介绍中可以简单做下总结</p>
+<ul>
+<li>简单工厂模式
+<ul>
+<li>实现对象的创建和对象的使用分离，将对象的创建交给专门的工厂类负责</li>
+<li>工厂类不够灵活，增加新的具体产品需要修改工厂类的判断逻辑代码</li>
+<li>而且产品较多时，工厂方法代码逻辑将会非常复杂</li>
+</ul>
+</li>
+<li>工厂方法模式
+<ul>
+<li>定义一个抽象的核心工厂类，并定义创建产品对象的接口，创建具体产品实例的工作延迟到其工厂子类去完成</li>
+<li>系统需要新增一个产品是，无需修改现有系统代码，只需要添加一个具体产品类和其对应的工厂子类</li>
+<li>系统的扩展性变得很好，符合面向对象编程的开闭原则</li>
+</ul>
+</li>
+<li>抽象工厂模式
+<ul>
+<li>工厂模式的升级版，工厂方法模式中一个工厂负责生产一类产品，而抽象工厂模式中一个工厂可以生产多种产品</li>
+<li>扩展性更强，无论是增加工厂，还是增加产品，抽象工厂模式都比工厂方法模式更为便捷</li>
+</ul>
+</li>
+</ul>
+<p>关于工厂方法模式和抽象工厂模式的几点区别如下：</p>
+<ul>
+<li>工厂方法模式利用继承，抽象工厂模式利用组合</li>
+<li>工厂方法模式产生一个对象，抽象工厂模式产生一族对象</li>
+<li>工厂方法模式利用子类创造对象，抽象工厂模式利用接口的实现创造对象</li>
+</ul>
+<h1 id="常见的工厂模式的运用"><a class="markdownIt-Anchor" href="#常见的工厂模式的运用"></a> 常见的工厂模式的运用</h1>
+<ul>
+<li>JDK中Calendar的getlnstance方法</li>
+<li>JDBC中的Connection对象的获取</li>
+<li>Spring中IOC容器创建管理bean对象</li>
+<li>反射中Class对象的newlnstance方法</li>
+</ul>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/factory/" target="_blank" title="设计模式(2)-工厂模式图文介绍">https://www.larscheng.com/factory/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/设计模式/"><i class="fa-fw fa fa-tags"></i> 设计模式</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/prototype/">设计模式(3)-原型模式与浅拷贝和深拷贝</a>
+            
+            
+            <a class="next" rel="next" href="/singleton/">设计模式(1)-带你了解3类8种单例模式</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>
