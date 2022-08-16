@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+
+    <meta name="description" content="分享Java技术, 记录点滴生活">
+
+
+    <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
+
+
+<title>系统稳定性建设实践总结【转载】 | LarsCheng</title>
+
+
+
+    <link rel="shortcut icon" href="/img/001.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="/css/insight.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/codecopy.js"></script>
+    
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<script>
+    var GLOBAL_CONFIG = {
+        root: '/',
+        highlight_copy: 'true',
+        copy: {
+            success: '复制成功',
+            error: '复制错误',
+            noSupport: '浏览器不支持'
+        },
+        runtime_unit: '天'
+    }
+</script>
+
+
+
+    <link rel="dns-prefetch" href="https://hm.baidu.com">
+    <script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?3cd636d3a39efbd09d9efec885746ed1";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+
+<!--baidu push-->
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+
+<!--fancybox-->
+<script>
+    $(function () {
+        function isEmpty(obj){
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+            $("img").each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                $(element).attr("data-caption", $(this).attr("alt"));
+                $(this).wrap(element);
+                var alt = $(this).attr("alt");
+                if(!isEmpty(alt)){
+                    $(this).after('<div class="img-alt">' + $(this).attr("alt") + '</div>');
+                }
+
+            });
+        })
+</script>
+
+
+
+
+<meta name="baidu-site-verification" content="D4I16dt1c4">
+<meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LarsCheng</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+
+                
+                    <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                
+
+
+
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn" style="display: none"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LarsCheng</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/friends">友链</a>
+                
+                    <a class="menu-item" href="/mood">心情</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开目录</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">到达底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: true,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "收起目录"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: true,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开目录"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">系统稳定性建设实践总结【转载】</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LarsCheng</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">2022-08-01&nbsp;&nbsp;21:00:17</a>
+                        </span>
+                    
+                    
+                    
+                        <span class="post-category">
+                            Words:<a href="#">3,229</a>
+                        </span>
+                        <span class="post-category">
+                            Times:<a href="#">10min</a>
+                        </span>
+
+                        <span class="post-category">
+                            User:<a href="#"><span id="busuanzi_value_page_pv"></span></a>
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>本文转载自 <a href="https://developer.aliyun.com/profile/expert/z4su4rxoyqypk" target="_blank" rel="noopener">架构精进之路</a> 的博客：<a href="https://developer.aliyun.com/article/947539?spm=a2c6h.24874632.expert-profile.67.6b746afd7Klncm" target="_blank" rel="noopener">《系统稳定性建设实践总结》</a></p>
+</blockquote>
+<p>2020年，注定是个不平凡的一年。疫情的蔓延打乱了大家既定的原有的计划，同时也催生了一些在线业务办理能力的应用诉求，作为技术同学，需要在短时间内快速支持建设系统能力并保障其运行系统稳定性。恰逢年终月份，正好梳理总结下自己的系统稳定性建设经验和思考。</p>
+<h1 id="开篇"><a class="markdownIt-Anchor" href="#开篇"></a> 开篇</h1>
+<p>在开始介绍服务稳定性之前，我们先聊一下<strong>SLA</strong>。<strong>SLA</strong>（service-level agreement，即 服务级别协议）也称服务等级协议，经常被用来衡量服务稳定性指标。通常被称作“几个9”，9越多代表服务全年可用时间越长服务也就越可靠，即停机时间越短。通常作为服务提供商与受服务用户之间具体达成承诺的服务指标——质量、可用性，责任。</p>
+<blockquote>
+<p>3个9，即99.9%，全年可停服务时间：365 * 24 * 60 *（1-99.9%）= 525.6min</p>
+<p>4个9，即99.99%，全年可停服务时间：365 * 24 * 60 *（1-99.99%）= 52.56min</p>
+<p>5个9，即99.999%，全年可停服务时间：365 * 24 * 60 *（1-99.999%）= 5.256min</p>
+</blockquote>
+<p>在严苛的服务级别协议背后，其实是一些列规范要求来进行保障。</p>
+<h1 id="一-系统稳定性建设是指什么"><a class="markdownIt-Anchor" href="#一-系统稳定性建设是指什么"></a> 一、系统稳定性建设是指什么？</h1>
+<p>关于系统稳定性是指什么这一问题，相信好多开发同学都会有自己的理解和认知，但可能会存在是否理解片面或者是否标准的疑惑，那到底有什么判定标准和划分边界呢？</p>
+<p>我们不妨看下来自于维基百科的解释：</p>
+<blockquote>
+<p>稳定性是数学或工程上的用语，判别一系统在有界的输入是否也产生有界的输出。</p>
+<p>若是，称系统为稳定；若否，则称系统为不稳定。</p>
+</blockquote>
+<p>简单理解，系统稳定性****本质上是系统的确定性应答****。</p>
+<p>从另一个角度解释，服务稳定性建设就是如何保障系统能够满足SLA所要求的服务等级协议。</p>
+<h1 id="二-为什么需要系统稳定性建设"><a class="markdownIt-Anchor" href="#二-为什么需要系统稳定性建设"></a> 二、为什么需要系统稳定性建设？</h1>
+<p>可以确定的一点，服务稳定性建设是非常必要的，不管是满足日常系统正常运行还是重大节庆活动的稳定有序运营。</p>
+<p>我们来看几个由于服务稳定性故障造成影响的案例：</p>
+<blockquote>
+<p>1）2020年国庆前一天，受“2020年最难打车日”的需求影响，滴滴平台和嘀嗒平台相继出现宕机故障；</p>
+<p>2）2018年亚马逊prime day：亚马逊会员日故障（顾客无法将商品添加到购物车结账），导致公司损失高达9900万美元。</p>
+<p>3）2015年由于中国工商银行部分地区因计算机系统升级，造成柜面和电子渠道业务办理缓慢，甚至不能受理业务；</p>
+<p>4）2012年12306铁路订票网站因机房空调系统故障，导致暂停互联网售票、退票、改签业务。</p>
+</blockquote>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9aMmJWYUZLNkNnUk1pYkRzSk9NRmdheWlhYmliWVFLNGxDTWc3ZHhMSlNHMll4T2s1b3hGcmtpYXkyTDEwVmFjT1NjcEZVMlJITEhDVVpYazBQeXBjcFFGYmcvNjQw?x-oss-process=image/format,png" alt="微信图片_20220607232130.png"></p>
+<p>服务稳定性对于企业来说非常重要，不仅仅会对企业带来直接的经济损失，甚至会对行业、人们的生活造成非常严重的影响。所以说服务稳定性建设的意义非常重大。</p>
+<h1 id="三-系统稳定性建设为什么难"><a class="markdownIt-Anchor" href="#三-系统稳定性建设为什么难"></a> 三、系统稳定性建设为什么难？</h1>
+<p>关于稳定性以及如何提升稳定性指标，我们可以想到很多的优化项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eg. 加服务器、扩容、超时重试、服务降级、资源隔离&amp;备份、代码逻辑优化、异步事件化...</span><br></pre></td></tr></table></figure>
+<p>那系统稳定性建设的主要难点是什么呢？</p>
+<h2 id="31-面对的挑战比较大"><a class="markdownIt-Anchor" href="#31-面对的挑战比较大"></a> 3.1 面对的挑战比较大</h2>
+<ul>
+<li><em><strong>流量未知</strong></em></li>
+</ul>
+<p>尤其对于一个新改革上线的新业务而言，系统稳定性建设主要是流量洪峰的是个未知数，由于没有经验可以参考，我不确定是百万级别还是千万级别，还是更高级别？</p>
+<ul>
+<li><em><strong>改动量大</strong></em></li>
+</ul>
+<p>往往这种系统稳定性建设需要考虑需求主要是短时间内支持XX能力的上线，这其中往往涉及系统层面从下到上的多处变更，包括底层数据结构调整、业务逻辑改造以及用户交互方式的优化等等。时间短，改动大，质量难以保证。</p>
+<ul>
+<li><em><strong>不确定性</strong></em></li>
+</ul>
+<p>软件工程往往被用来描述“研究用工程化方法构建和维护有效的、实用的和高质量的软件”。其包括软件建设的方方面面，凡事事无巨细，任何细微的疏忽都可能造成全盘故障问题，不确定性问题尤其严重。</p>
+<h2 id="32-系统稳定性建设是一个系统性的大工程"><a class="markdownIt-Anchor" href="#32-系统稳定性建设是一个系统性的大工程"></a> 3.2 系统稳定性建设是一个系统性的大工程</h2>
+<p>多环节分工精细复杂，不容一点疏忽。</p>
+<p>从系统构成来看，可以区分为单服务系统稳定性和多服务集群稳定性。</p>
+<ul>
+<li><strong>单服务稳定性</strong></li>
+</ul>
+<p>主要包括：功能配置可控、缓存加速（利器） 、服务隔离（第三方）、场景异常兜底方案、服务监控与及时响应等等</p>
+<ul>
+<li><strong>集群稳定性</strong></li>
+</ul>
+<p>主要包括：合理的系统架构、优秀的集群部署、科学的熔断限流、压测机制、精细的监控体系等等</p>
+<h1 id="四-系统稳定性建设如何入手"><a class="markdownIt-Anchor" href="#四-系统稳定性建设如何入手"></a> 四、系统稳定性建设如何入手？</h1>
+<h2 id="41-系统稳定性建设前提"><a class="markdownIt-Anchor" href="#41-系统稳定性建设前提"></a> 4.1 系统稳定性建设前提</h2>
+<p>在提出系统稳定性建设解决方案之前，我们需要明确一下前提条件：</p>
+<ul>
+<li>
+<p><strong>业务熟悉</strong> 需要对业务全貌流程熟悉，具备较强的掌控力；</p>
+</li>
+<li>
+<p><strong>架构明确</strong> 需要对系统技术架构熟知并具有一定的实操经验。</p>
+</li>
+</ul>
+<p>只有这样，对业务、架构都具备掌控能力之后，才谈得上去做稳定性建设的拆解和优化，才有基本的保障。</p>
+<h2 id="42-流程划分"><a class="markdownIt-Anchor" href="#42-流程划分"></a> 4.2 流程划分</h2>
+<p>一般情况下，我们提到系统稳定性建设，更像将系统稳定性作为一个专项Topic来搞，从其运行流程来看，主要存在以下几个方面：</p>
+<ul>
+<li>
+<p><strong>前提</strong> 目标明确（基准）</p>
+</li>
+<li>
+<p><strong>事前</strong> 请求链路优化、服务性能优化&amp;压测、应急预案制定、故障演练</p>
+</li>
+<li>
+<p><strong>事中</strong> 故障监控、定位问题、故障止损、问题修复</p>
+</li>
+<li>
+<p><strong>事后</strong> 故障复盘、整改优化、经验总结沉淀</p>
+</li>
+</ul>
+<p>服务稳定性建设其实是一个系统性的大工程，包括了方方面面。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9aMmJWYUZLNkNnUk1pYkRzSk9NRmdheWlhYmliWVFLNGxDTTdDaWJsSjE5WGZJYVJNVURTMHEwZ0hhZkdjQXM5c1AxalVtcnJmTWV4M0RIaWM3UGppY1htS21pYlEvNjQw?x-oss-process=image/format,png" alt="微信图片_20220607232133.png"></p>
+<h1 id="五-系统稳定性建设的关键动作"><a class="markdownIt-Anchor" href="#五-系统稳定性建设的关键动作"></a> 五、系统稳定性建设的关键动作</h1>
+<p>从上一Part工作拆解来看，稳定性建设囊括的点比较多，而且杂。更多情况下，我们会做服务稳定性专项，针对某些特定场景下的特定问题而梳理出对应的方案。</p>
+<p>那我们可以以小见大，从单服务系统本身出发，提炼看看存在哪些稳定性建设的关键点。其实只有每个单服务环节都稳定可靠，那集群系统乃至整个工程系统的稳定性才有保障。</p>
+<p>假如系统面对突增的请求流量情况下，如何做好服务稳定性建设呢？</p>
+<p><strong>稳定性建设关键动作</strong>拆分如下几类：</p>
+<h2 id="51-削峰限流"><a class="markdownIt-Anchor" href="#51-削峰限流"></a> 5.1 削峰限流</h2>
+<p>例如，经典的秒杀场景，春节的火车票抢购、电商平台的双11秒杀等等，都是短时间上亿的用户涌入，瞬间流量巨大（高并发）。</p>
+<p>不管前期对服务器资源做了如何的扩容，都会存在一个处理上限，所以一定要进行必要的削峰限流策略，类似于城市早晚高峰错峰限行的解决方案。同样，秒杀场景也需要类似的解决方案。</p>
+<p>那具体如何来实现呢？</p>
+<ul>
+<li><strong>利用<code>消息队列</code>来削峰</strong></li>
+</ul>
+<p>消息队列来缓冲瞬时流量，把同步的直接调用转换成异步的间接推送，中间通过一个队列在一端承接瞬时的流量洪峰，在另一端平滑地将消息推送出去。</p>
+<p>消息队列就像“水库”一样，拦蓄上游的洪水，削减进入下游河道的洪峰流量，从而达到减免洪水灾害的目的。</p>
+<ul>
+<li><strong>利用挡板过滤无效请求</strong></li>
+</ul>
+<p>流量挡板过滤，主要是建立<strong>一种验证机制过滤掉无效请求，保障核心服务避免受更多外界无效请求的影响</strong>。比较常用的方案就是“布隆过滤器”。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9aMmJWYUZLNkNnUk1pYkRzSk9NRmdheWlhYmliWVFLNGxDTW1tMU5rVG5uTEFZZkhKZ3lhc1prSXQzSHBmRE50dGljTWJ1TFhJRGNRU3hLbTZVWUFGNEhVZ3cvNjQw?x-oss-process=image/format,png" alt="微信图片_20220607232138.png"></p>
+<ul>
+<li><strong>产品策略的调整</strong></li>
+</ul>
+<p>产品策略调整是一种特别有效的手段，效果甚至会优于技术层面的改进优化。</p>
+<p>例如：利用排队策略，有效打散高并发请求；调整活动宣传时间分散点，避免同一时刻出现高并发请求…</p>
+<h2 id="52-缓存加速"><a class="markdownIt-Anchor" href="#52-缓存加速"></a> 5.2 缓存加速</h2>
+<p>缓存是解决并发的利器，可以有效的提高系统的吞吐量。按照业务以及技术的纬度必要时可以增加多级缓存来保证其命中率。</p>
+<p>主要应用思路：在数据库与服务端之间利用 Redis 做缓存服务，减少请求直接冲击到数据库。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9aMmJWYUZLNkNnUk1pYkRzSk9NRmdheWlhYmliWVFLNGxDTTNTald3MGlhOWFtYll2U2hPdmNKeEcxcjR6bVJXdW1ueFppY1RNOWJLQUJqOFM2ajZUUEgwVXpBLzY0MA?x-oss-process=image/format,png" alt="微信图片_20220607232141.png"></p>
+<h2 id="53-异步化处理"><a class="markdownIt-Anchor" href="#53-异步化处理"></a> 5.3 异步化处理</h2>
+<p>与异步对应的就是同步，即所有事情排队一件件的有序进行，等上件事情完成后才会去做下一件事情。有点像一根签子串起来的糖葫芦。需要实时处理并响应，一旦超过时间会结束会话，在该过程中调用方一直在等待响应方处理完成并返回。</p>
+<p>异步处理不用阻塞当前线程来等待处理完成，而是允许后续操作，直至其它线程将处理完成，并回调通知此线程。</p>
+<blockquote>
+<p>需要强调一点：异步是一种设计理念，异步操作不等于多线程，常见的消息中间件、发布订阅的广播模式等，都可以实现异步处理的方式。</p>
+</blockquote>
+<h1 id="六-稳定性建设过程中的一些经验"><a class="markdownIt-Anchor" href="#六-稳定性建设过程中的一些经验"></a> 六、稳定性建设过程中的一些经验</h1>
+<h2 id="61-做好压测"><a class="markdownIt-Anchor" href="#61-做好压测"></a> 6.1 做好压测</h2>
+<p>提前做好系统压测，做到心中有数，防患于未然，压力预估要切合实际，不要盲目过大。对于性能瓶颈点，尽量提前做好改<strong>进优化</strong>或者<strong>重点关注布防</strong></p>
+<h2 id="62-应急预案必备"><a class="markdownIt-Anchor" href="#62-应急预案必备"></a> 6.2 应急预案必备</h2>
+<p><strong>应急预案一定要有</strong>，研发人员往往比较自信，这是好事也是坏事，我们需要做最坏的打算。因为经验再丰富的工程师，也无法穷举未来可能发生的意外事件，而故障往往出现在预案之外的地方（墨菲定律）。</p>
+<h2 id="63-完善监控体系"><a class="markdownIt-Anchor" href="#63-完善监控体系"></a> 6.3 完善监控体系</h2>
+<p>建立完善的监控、告警机制，尽量让我们第一时间发现问题点，保障报错及时感知。在监控点的设置上，主要原则是：<strong>所有的依赖都是不可信的！</strong></p>
+<h2 id="64-快速响应能力"><a class="markdownIt-Anchor" href="#64-快速响应能力"></a> 6.4 快速响应能力</h2>
+<p>类似于在行驶的飞机上换引擎，过程中无论发生什么样的故障，立即要动用一切力量“快速”止损。服务要有等级划分，保障抓大放小，保护核心服务原则，如确实存在不能快速定位问题时，可逐层降级。主要目标：<strong>防止问题扩大，故障止损，快速恢复</strong>。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<h2 id="稳定性建设关键点"><a class="markdownIt-Anchor" href="#稳定性建设关键点"></a> 稳定性建设关键点</h2>
+<ul>
+<li>
+<p><strong>削峰限流</strong> 面对资源上限，做技术、业务层面的处理，达到流量削峰保障服务稳定性；</p>
+</li>
+<li>
+<p><strong>缓存加速</strong> 利用缓存解决并发，有效提升系统的吞吐量，同时需注意避免热Key、大Key问题；</p>
+</li>
+<li>
+<p><strong>异步化处理</strong>（同步-&gt;异步），有效提升响应效率，保障数据的最终一致性。</p>
+</li>
+</ul>
+<h2 id="技术服务于业务"><a class="markdownIt-Anchor" href="#技术服务于业务"></a> 技术服务于业务</h2>
+<p><strong>技术还是要解决实际问题来落地</strong>。应用场景很关键，所有的优化工作不要单纯为了技术而技术，技术归根结底还是为应用场景和产业落地服务。</p>
+<p>可以尝试将业务视角目标做为最终目标，通过一切技术手段来保障目标的达成，从而实现技术价值最大化。</p>
+<h2 id="不拘泥于形式灵活运用"><a class="markdownIt-Anchor" href="#不拘泥于形式灵活运用"></a> 不拘泥于形式，灵活运用</h2>
+<p>稳定性方案需要视场景而灵活调整应用，切忌生搬硬套。在具体实现过程中，关键要把控主要行动路径，多条路径情况下选取投入产出比最高的那一条。推进一个行动路径：问题驱动（问题感知-&gt;问题分析-&gt;问题控制-&gt;问题解决）。</p>
+
+        </div>
+
+
+        <div style="text-align:center;color:#ccc;font-size:14px;margin:10px">
+            ---------- 😏本文结束&nbsp;&nbsp;感谢您的阅读😏 ----------
+        </div>
+
+        
+            <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>文章作者:  </strong>LarsCheng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>文章链接:  </strong>
+          <a href="/stable-summary-reprint/" target="_blank" title="系统稳定性建设实践总结【转载】">https://www.larscheng.com/stable-summary-reprint/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>，
+            转载请注明来自 LarsCheng！
+          </li>
+         
+        </ul>
+</div>
+
+        
+
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/stable/"><i class="fa-fw fa fa-tags"></i> stable</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>&nbsp;&nbsp; /&nbsp;&nbsp; </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/comment-fix/">valine访问leancloud国际版异常,评论失效修复</a>
+            
+        </section>
+
+        <div class="post-content">
+            
+            
+<section style="font-size: 20px;font-weight: 700;margin-bottom: 10px;margin-top: 20px;">
+    <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+    <span>评论</span>
+</section>
+<div id="vcomment"></div>
+        <!-- <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script> -->
+        <script src="//code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+        <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+        <script>
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = 'false' == true;
+            var verify = 'false' == true;
+            var valine = new Valine();
+            valine.init({
+                el: '#vcomment',
+                notify: notify,
+                verify: verify,
+                appId: "D86RRzHUPcf6pPu7X9Vtx7Ua-MdYXbMMI",
+                appKey: "YNtewKHU5mdv7zm73Ua5Q25H",
+                placeholder: "📢📢📢留下邮箱可以收到回复提醒哦~",
+                pageSize:'10',
+                avatar:'monsterid',
+                serverURLs:'https://d86rrzhu.api.lncldglobal.com',
+                lang:'zh-cn'
+            })
+        </script>
+</section>
+            
+        </div>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+
+    <div class="copyright">
+        <span>© LarsCheng | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a
+                    href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+    <div class="visit">
+        访客数：<span id="busuanzi_value_site_uv"></span>&nbsp;&nbsp;|&nbsp;
+        访问量：<span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+
+        <div class="visit">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                <img  style="vertical-align: text-bottom;" src="/img/beian.png">
+                <span>浙ICP备19034503号-1</span>
+            </a>
+        </div>
+    
+</footer>
+
+    </div>
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":350},"mobile":{"show":false},"log":false});</script></body>
+</html>
