@@ -15,7 +15,7 @@
     <meta name="keywords" content="Lars,LarsCheng,个人博客,Java,Java开发,SpringBoot,SpringCloud,Docker,Mysql,Redis,MongoDB">
 
 
-<title>匆匆忙忙的2021 | LarsCheng</title>
+<title>生产故障处理SOP分享 | LarsCheng</title>
 
 
 
@@ -139,9 +139,6 @@
 
 <meta name="baidu-site-verification" content="D4I16dt1c4">
 <meta name="google-site-verification" content="zqC6zNeS6v0MEPI5Fn3e1sTwSK-eeAX8UMiO8d8Y9to">
-<link rel="stylesheet" href="/assets/css/APlayer.min.css" class="aplayer-style-marker">
-<script src="/assets/js/APlayer.min.js" class="aplayer-script-marker"></script>
-<script src="/assets/js/Meting.min.js" class="meting-script-marker"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -324,7 +321,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">匆匆忙忙的2021</h1>
+            <h1 class="post-title">生产故障处理SOP分享</h1>
             
                 <div class="post-meta">
                     
@@ -333,23 +330,16 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">2022-01-02&nbsp;&nbsp;15:47:12</a>
+                        Date: <a href="#">2022-09-08&nbsp;&nbsp;11:00:17</a>
                         </span>
                     
                     
-                        <span class="post-category">
-                    Category:
-                            
-                                <a href="/categories/生活/">生活</a>
-                            
-                        </span>
-                    
                     
                         <span class="post-category">
-                            Words:<a href="#">1,433</a>
+                            Words:<a href="#">799</a>
                         </span>
                         <span class="post-category">
-                            Times:<a href="#">4min</a>
+                            Times:<a href="#">2min</a>
                         </span>
 
                         <span class="post-category">
@@ -361,75 +351,131 @@
         </header>
 
         <div class="post-content">
-            <h2 id="碎碎念"><a class="markdownIt-Anchor" href="#碎碎念"></a> 碎碎念</h2>
-<blockquote>
-<p>感觉像被按下了快进键一样，2021年无论身边的人或事都转瞬即逝…</p>
-</blockquote>
-<p>不知不觉又过了一年，老了一岁，自己也逐渐从一个刚毕业的懵懂少年，变成了现在职场上的老油条～</p>
-<p>时间真的是个奇妙的东西，时间是毒药也是解药、时间是让人猝不及防的，2021年的时间现在回想就是像是突然给丢了一样，一起丢的还有很多老朋友、很多自己以前的想法…</p>
-<p>记忆中的2021就好像只有前半年，后半年基本上都是一个基调。话虽如此但这一年还是学到了很多新的东西，遇到了很多值得的人。</p>
-<blockquote>
-<p>可能我写的像是流水账</p>
-</blockquote>
-<h2 id="年度关键字"><a class="markdownIt-Anchor" href="#年度关键字"></a> 年度关键字</h2>
+            <h2 id="一-背景"><a class="markdownIt-Anchor" href="#一-背景"></a> 一、背景</h2>
+<p>在日常的需求变更和技术变更中，测试用例覆盖率很难达到100%，再加上变更过程中的各种原因，可能会导致生产环境出现故障。</p>
+<p>针对生产故障处理，每位开发同学可能都会有不同的处理方式，如果处理方式得当，故障能够快速止血顺利恢复，反之可能会错上加错！！！</p>
+<p><em>基于以往经验，在这里推荐一套通用的<code>生产故障处理SOP</code>，他可能无法帮你快速定位问题，但是可以尽可能缩短恢复时间，降低故障影响！</em></p>
+<h2 id="二-参考流程"><a class="markdownIt-Anchor" href="#二-参考流程"></a> 二、参考流程</h2>
+<h4 id="阶段一快速处理故障发现故障止血1-5-15"><a class="markdownIt-Anchor" href="#阶段一快速处理故障发现故障止血1-5-15"></a> 阶段一：快速处理（故障发现–&gt;故障止血）【1-5-15】</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">步骤</th>
+<th style="text-align:left">内容</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">故障发现时间</th>
+<th style="text-align:left">注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">步骤1</td>
+<td style="text-align:left">拉故障处理群、拉电话会议</td>
+<td style="text-align:left">先拉自己的直属Leader、运维人员</td>
+<td style="text-align:left">1min内</td>
+<td style="text-align:left"><code>【第一时间执行！】，避免信息差！</code></td>
+</tr>
+<tr>
+<td style="text-align:left">步骤2</td>
+<td style="text-align:left">识别故障类型、影响范围</td>
+<td style="text-align:left">执行预案、快速恢复（兜底、降级、灾备等等）</td>
+<td style="text-align:left">5min内</td>
+<td style="text-align:left"><code>【无法快速定位时】，直接进行步骤3</code></td>
+</tr>
+<tr>
+<td style="text-align:left">步骤3</td>
+<td style="text-align:left">梳理相关变更项（自身+上游）</td>
+<td style="text-align:left">执行变更回滚、故障止血恢复</td>
+<td style="text-align:left">10min内</td>
+<td style="text-align:left"><code>【无法恢复故障时】，直接进行步骤4</code></td>
+</tr>
+<tr>
+<td style="text-align:left">步骤4</td>
+<td style="text-align:left">联系业务、运营进行业务恢复</td>
+<td style="text-align:left">通过产品侧、运营侧的业务手段止血</td>
+<td style="text-align:left">15min内</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="阶段二排查恢复根因定位故障恢复"><a class="markdownIt-Anchor" href="#阶段二排查恢复根因定位故障恢复"></a> 阶段二：排查恢复（根因定位–&gt;故障恢复）</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">步骤</th>
+<th style="text-align:left">内容</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">故障发现时间</th>
+<th style="text-align:left">注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">步骤5</td>
+<td style="text-align:left">定位问题，根因排查</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>切勿在【阶段一】埋头查原因</code></td>
+</tr>
+<tr>
+<td style="text-align:left">步骤6</td>
+<td style="text-align:left">修复验证，故障恢复</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>做好验证再执行</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="阶段三总结复盘故障总结故障复盘"><a class="markdownIt-Anchor" href="#阶段三总结复盘故障总结故障复盘"></a> 阶段三：总结复盘（故障总结–&gt;故障复盘）</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">步骤</th>
+<th style="text-align:left">内容</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">故障发现时间</th>
+<th style="text-align:left">注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">步骤7</td>
+<td style="text-align:left">梳理时间线、原因和处理方案等</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">步骤8</td>
+<td style="text-align:left">故障复盘，总结经验教训</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="三-总结"><a class="markdownIt-Anchor" href="#三-总结"></a> 三、总结</h2>
+<p>以上是基于 <strong>快速恢复快速止血</strong> 为宗旨的故障处理SOP，不同的业务和团队可参考其中的处理流程，但需要注意以下几点：</p>
 <ul>
-<li>心态</li>
-<li>得失</li>
-<li>遗憾</li>
-<li>贵人</li>
-<li>匆匆忙忙</li>
-</ul>
-<h2 id="新年伊始"><a class="markdownIt-Anchor" href="#新年伊始"></a> 新年伊始</h2>
-<p>牛年是第一次在外过年，那时候疫情紧张，杭州提倡就地过年，很多同事都响应政府号召，当然我也不例外。因为就地过年政府给发红包呀！</p>
-<p>欢欢喜喜过大年的同时当然也在面试看机会，种种原因吧，拿到了叮咚的offer之后便决定过去了，于是开始了2021年的第一次搬家</p>
-<h2 id="上海"><a class="markdownIt-Anchor" href="#上海"></a> 上海</h2>
-<p>杭州是个很不错的城市，在杭州呆了三年，突然要离开，追求新生活新工作的我当时其实并没有什么感觉，于是开始了浩浩荡荡的跨省搬家操作。</p>
-<p>有时候也挺佩服自己，在杭州有一起拼搏（摸鱼）三载的小伙伴们，而上海…那也没关系，谁还没年轻过，没必要和钱过意不去吧，舒适圈呆久了，就想去经历经历互联网的毒、打体验体验奋斗B的生活。也可能从那开始我就自动离队了吧。</p>
-<h2 id="围城"><a class="markdownIt-Anchor" href="#围城"></a> 围城</h2>
-<blockquote>
-<p>每个人都会经历这个阶段，看见一座山，就想知道山后面是什么。我很想告诉他，可能翻过去山后面，你会发觉没有什么特别，回头看会觉得这边更好。但是他不会相信，以他的性格，自己不试试是不会甘心</p>
-</blockquote>
-<p>其实现在对这句话略有体会，当然人都是有好奇心的，也只有经历过这个阶段才会有不一样的体验</p>
-<p>之前听到过一句话说的是进了大厂基本上就是失踪人口了，新公司对比我上一家公司可以算是大厂了，当然不能和BAT对比。但是失踪人口是我本人了。</p>
-<p>新工作带给我更多的是心态的变化，从一开始的斗志昂扬，伴随着高强度的工作整个人已经疲惫不堪、工作和生活的节奏也彻底混乱，说实话那段时间天天都在离职的边缘徘徊，工作和生活无法平衡让我不得已要在二者之间做出选择。得失得失，有失才有得，你想要拿高薪总得拿点东西来换。</p>
-<p>强行被投喂了大量工作的同时疯狂吸收了大量的新知识，也在那段时间遇到了让自己受益良多的职场贵人。</p>
-<h2 id="稳定性"><a class="markdownIt-Anchor" href="#稳定性"></a> 稳定性</h2>
-<p>记得刚入职时，每个月基本都会听到有某某同学某某团队出现了P级故障，作为新人那时候还没什么感觉。但是故障的频发本身就不正常。<br>
-在当时，团队服务的稳定性预案基本聊聊无几，可以说稍有不慎就喜提大礼包。</p>
-<p>在BOSS的牵头下，开始着手稳定性建设，当然我也是新兵上阵，头一次干这个，但起码没吃过猪肉见过猪跑。基于团队服务的特殊性，截止目前下游依赖至少40+，主要从几个方面入手</p>
+<li><code>信息同步</code>：第一时间拉群同步信息，避免信息差
 <ul>
-<li>监控大盘</li>
-<li>故障告警</li>
-<li>灾备数据</li>
-<li>超时控制</li>
-<li>降级方案</li>
-<li>故障演练</li>
+<li>很多时候，很多简单的问题都是因为信息差，开发盲目排查，导致故障升级，酿成大错！！！</li>
 </ul>
-<p>目前基本可以做到弱依赖故障无需人工干预，降级预案覆盖90%场景，截止12.31号，没有喜提P级故障，当然这也是一直抓稳定性的一部分成果</p>
-<h2 id="提升"><a class="markdownIt-Anchor" href="#提升"></a> 提升</h2>
-<p>大公司就是如此，不像小公司一个人就可以接触到整个流程，你可以有精力去钻研你感兴趣的内容。大公司好比一个精密机械，它可以被拆分到很小的模块，而每一个人在里面都只是不知疲倦的一颗齿轮。</p>
-<p>这一年技术能力上基本上原地踏步，更多的是软技能的提升。</p>
-<p>所在团队的特殊性，向上与用户直接对接，向下需要统筹所有依赖方。需要强沟通能力。所以日常的工作基本上就是沟通、会议、方案、业务…真正落地开发其实很少，更多的是系统稳定性方案和保障上。</p>
-<p>小半年下来若说提升可能就在四方面</p>
+</li>
+<li><code>快速止血</code>：率先考虑应急预案、降级、开关逻辑等止血操作，<strong>切记勿要闷头排查！！！</strong>
 <ul>
-<li>系统稳定性</li>
-<li>团队沟通</li>
-<li>项目管理</li>
-<li>方案设计</li>
+<li>开发的通病：遇到问题总是想要定位问题，此时一定要转变思想，应该<strong>第一时间进行止血操作，减少资损</strong></li>
+<li>这里也需要加强日常开发中的稳定性意识，没有稳定性预案，可能当故障发生时只能通过回滚来恢复</li>
 </ul>
-<p>现在一想技术提升基本为0，当然整年投入精力最多的就是在稳定性上</p>
-<h2 id="博客"><a class="markdownIt-Anchor" href="#博客"></a> 博客</h2>
-<p>失踪人口今年博客的产出为0，这个羞耻的成绩实在是难以启齿</p>
-<h2 id="工作之外的flag"><a class="markdownIt-Anchor" href="#工作之外的flag"></a> 工作之外的flag</h2>
+</li>
+<li><code>故障复盘</code>：故障无法100%避免，所以一定要做好故障复盘，避免同类问题二次踩坑！
 <ul>
-<li>保持身体健康</li>
-<li>继续技术提升</li>
-<li>稳定博客分享</li>
+<li>吃一堑长一智，不怕犯错，但是不能犯同样的错</li>
 </ul>
-<h2 id="2022"><a class="markdownIt-Anchor" href="#2022"></a> 2022</h2>
-<p>希望疫情早日结束，希望自己能够不忘初心，希望远方的朋友都能心想事成，希望梦想成真～加油！</p>
+</li>
+</ul>
+<p>最后提一嘴，生产故障无法预知，无法避免，所以作为开发同学一定要 <code>敬畏生产敬畏生产敬畏生产</code>！！！</p>
 
-    <div id="aplayer-XkLcjeiA" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="1410647903" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-volume="0.3"></div>
         </div>
 
 
@@ -445,7 +491,7 @@
           </li>
           <li class="post-copyright-link">
           <strong>文章链接:  </strong>
-          <a href="/2020-summary/" target="_blank" title="匆匆忙忙的2021">https://www.larscheng.com/2020-summary/</a>
+          <a href="/fault-sop/" target="_blank" title="生产故障处理SOP分享">https://www.larscheng.com/fault-sop/</a>
           </li>
           <li class="post-copyright-license">
             <strong>版权声明:   </strong>
@@ -464,7 +510,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/生活/"><i class="fa-fw fa fa-tags"></i> 生活</a>
+                        <a href="/tags/稳定性/"><i class="fa-fw fa fa-tags"></i> 稳定性</a>
                     
                         
                 </span>
@@ -478,10 +524,8 @@
 
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/comment-fix/">valine访问leancloud国际版异常,评论失效修复</a>
             
-            
-            <a class="next" rel="next" href="/find-job/">聊一下换工作</a>
+            <a class="next" rel="next" href="/stable-summary-reprint/">系统稳定性建设实践总结【转载】</a>
             
         </section>
 
